@@ -19,6 +19,9 @@ endif()
 # Dependency management
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules" ${CMAKE_MODULE_PATH})
 
+# Includes Catch in the project:
+add_subdirectory(${CMAKE_MODULE_PATH}/catch)
+
 # Projects
 add_subdirectory(${project_path})
 add_subdirectory(${test_path})

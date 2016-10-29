@@ -1,14 +1,11 @@
 #include "test.hpp"
 #include <iostream>
+#include <catch_with_main.hpp>
 
-int main() 
-{
+TEST_CASE("test.sum()", "Pass valid args") {
 	test t;
-	auto val = t.sum(1, 2);
 
-	auto success = (val == 3);
+	auto sum = t.sum(1, 2);
 
-	std::cout << "Success: " << success << std::endl;
-
-	return 0;
+	REQUIRE(sum == 5);
 }
