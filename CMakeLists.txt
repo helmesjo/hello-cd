@@ -1,6 +1,8 @@
 cmake_minimum_required( VERSION 3.6 )
 
-set(PROJECT_NAME "hello-ci")
+set(PROJECT_NAME "hello-cmake")
+set(SOURCE_PATH "src/")
+set(TESTSOURCE_PATH "test/src/")
 
 project(${PROJECT_NAME})
 
@@ -16,11 +18,13 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 endif()
 
 # Folders to include
-include_directories( src )
-include_directories( test )
+include_directories( ${SOURCE_PATH} )
+include_directories( ${TESTSOURCE_PATH} )
 
 # Files to compile
-file(GLOB_RECURSE sources src/*.cpp src/*.hpp )
+file(GLOB_RECURSE sources ${SOURCE_PATH}*.cpp ${SOURCE_PATH}*.hpp )
+file(GLOB_RECURSE testsources ${TESTSOURCE_PATH}*.cpp ${TESTSOURCE_PATH}*.hpp )
 
 # Main executable
 add_library(${PROJECT_NAME} STATIC ${sources})
+add_executable(${PROJECT_NAME}.Tests ${testsources})
