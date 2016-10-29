@@ -3,7 +3,7 @@ cmake_minimum_required( VERSION 3.6 )
 project("hello-cmake")
 
 set(project_path "src/")
-set(test_path "test/")
+set(test_path "test/src")
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   # using Visual Studio C++
