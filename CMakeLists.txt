@@ -1,27 +1,15 @@
 cmake_minimum_required( VERSION 3.6 )
 
-project("hello-cmake")
+project(hello_solution)
 
-set(project_path "src/")
-set(test_path "test/")
-
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-  # using Visual Studio C++
-  
-  # Force to always compile with W4
-  if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
-    string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-  else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
-  endif()
-endif()
-
-# Dependency management
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules" ${CMAKE_MODULE_PATH})
+# Setup paths
+set(SRC_PATH ${CMAKE_SOURCE_DIR}/src)
+set(TEST_PATH ${CMAKE_SOURCE_DIR}/test)
+set(MODULES_PATH ${CMAKE_SOURCE_DIR}/modules ${CMAKE_MODULE_PATH})
 
 # Includes Catch in the project:
-add_subdirectory(${CMAKE_MODULE_PATH}/catch)
+add_subdirectory(${MODULES_PATH}/catch)
 
 # Projects
-add_subdirectory(${project_path})
-add_subdirectory(${test_path})
+add_subdirectory(${SRC_PATH})
+add_subdirectory(${TEST_PATH})
