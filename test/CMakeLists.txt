@@ -1,4 +1,5 @@
 set(source "src/")
+set(testProjectName ${PROJECT_NAME}.UnitTests)
 
 # Folders to include
 include_directories(
@@ -12,4 +13,7 @@ include_directories(
 file(GLOB_RECURSE sources ${source}*.cpp ${source}*.hpp )
 
 # Output
-add_executable(${PROJECT_NAME}.Tests ${sources})
+add_executable(${testProjectName} ${sources})
+
+# Make available
+target_link_libraries(${testProjectName} ${PROJECT_NAME})
