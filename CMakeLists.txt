@@ -16,6 +16,9 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   endif()
 endif()
 
-# Folders to include
+# Dependency management
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules" ${CMAKE_MODULE_PATH})
+
+# Projects
 add_subdirectory(${project_path})
 add_subdirectory(${test_path})
