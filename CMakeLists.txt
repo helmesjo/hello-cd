@@ -1,8 +1,8 @@
 cmake_minimum_required( VERSION 3.6 )
 
-project( hello-ci )
+set(PROJECT_NAME "hello-ci")
 
-set(EXECUTABLE_NAME "hello-ci")
+project(${PROJECT_NAME})
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   # using Visual Studio C++
@@ -17,10 +17,10 @@ endif()
 
 # Folders to include
 include_directories( src )
-include_directories( unit_tests )
+include_directories( test )
 
 # Files to compile
 file(GLOB_RECURSE sources src/*.cpp src/*.hpp )
 
 # Main executable
-add_executable(${EXECUTABLE_NAME} ${sources})
+add_library(${PROJECT_NAME} STATIC ${sources})
