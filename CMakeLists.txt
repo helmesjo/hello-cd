@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.6 )
 
-project(hello_solution)
+project("hello_root")
 
 # Setup paths
 set(SRC_PATH ${CMAKE_SOURCE_DIR}/src)
