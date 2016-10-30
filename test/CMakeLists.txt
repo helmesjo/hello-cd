@@ -1,6 +1,4 @@
-project(${SRC_NAME}.Tests)
-
-message(${SRC_NAME})
+project(${HELLO_CMAKE_NAME}.Tests)
 	
 # Files to compile
 file(GLOB_RECURSE sources *.cpp *.hpp)
@@ -14,5 +12,5 @@ add_dependencies(${PROJECT_NAME} catch)
 enable_testing(true)  # Enables unit-testing.
 
 # Include tested project
-include_directories(${SRC_PATH})
-target_link_libraries(${PROJECT_NAME} ${SRC_NAME})
+include_directories(${HELLO_CMAKE_DIR})
+target_link_libraries(${PROJECT_NAME} ${HELLO_CMAKE_NAME})

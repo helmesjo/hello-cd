@@ -2,14 +2,14 @@ cmake_minimum_required( VERSION 3.6 )
 
 project("hello_root")
 
-# Setup paths
-set(SRC_PATH ${CMAKE_SOURCE_DIR}/src)
-set(TEST_PATH ${CMAKE_SOURCE_DIR}/test)
-set(MODULES_PATH ${CMAKE_SOURCE_DIR}/modules ${CMAKE_MODULE_PATH})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+set(MODULES_DIR ${CMAKE_SOURCE_DIR}/modules)
 
-# Includes Catch in the project:
-add_subdirectory(${MODULES_PATH}/catch)
+# Add external modules
+add_subdirectory(${MODULES_DIR}/catch)
 
-# Projects
-add_subdirectory(${SRC_PATH})
-add_subdirectory(${TEST_PATH})
+# Add projects
+add_subdirectory(src)
+add_subdirectory(test)
