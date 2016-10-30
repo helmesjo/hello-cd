@@ -5,6 +5,7 @@ file(GLOB_RECURSE sources *.cpp *.hpp)
 
 # Output
 add_executable(${PROJECT_NAME} ${sources})
+set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 
 # Includes Catch in the project:
 include_directories(${CATCH_INCLUDE_DIR} ${COMMON_INCLUDES})

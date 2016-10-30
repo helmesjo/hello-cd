@@ -2,7 +2,7 @@
 #include <iostream>
 #include <catch_with_main.hpp>
 
-TEST_CASE("calculator.sum()", "Pass valid args") {
+TEST_CASE("sum()", "calculator") {
 	calculator t;
 
 	auto sum = t.sum(1, 2);
