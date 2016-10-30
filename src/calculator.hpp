@@ -1,6 +1,6 @@
 #pragma once
 
-class test {
+class calculator {
 public:
 	int sum(int a, int b);
 };

@@ -1,4 +1,4 @@
-project(${HELLO_CMAKE_NAME}.Tests)
+project(${HELLO_CMAKE_NAME}.tests)
 	
 # Files to compile
 file(GLOB_RECURSE sources *.cpp *.hpp)
