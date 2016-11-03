@@ -15,3 +15,6 @@ message(${CMAKE_CFG_INTDIR})
 # Add projects
 add_subdirectory(src)
 add_subdirectory(test)
+
+enable_testing()
+add_test(TEST_PROJECT_NAME MAIN_PROJECT_NAME)
