@@ -2,11 +2,13 @@ environment:
   matrix:
     - BUILD_TYPE: nmake
 
-script:
-  - New-Item build
+build_script:
+  - md build
   - cd build
   - cmake ..
   - nmake
+  
+test_script:
   - ctest --output-on-failure
 
 deploy: off
