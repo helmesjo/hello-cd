@@ -12,18 +12,17 @@ install:
 apt:
   addons:
     sources:
-      - ubuntu-toolchain-r-test
       - cmake
+      - ubuntu-toolchain-r-test
     packages:
       - kalakris-cmake
       - gcc-4.8
       - g++-4.8
       - clang
     
-before_script:
+script:
   - mkdir build
   - cd build
   - cmake ..
-script:
   - make
-  - test --output-on-failure
+  - test
