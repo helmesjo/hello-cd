@@ -3,7 +3,7 @@ environment:
     - BUILD_TYPE: nmake
 
 script:
-  - mkdir build
+  - New-Item build
   - cd build
   - cmake ..
   - nmake
