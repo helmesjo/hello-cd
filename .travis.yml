@@ -1,5 +1,6 @@
-sudo: false
 dist: trusty
+sudo: false
+group: beta
 
 language: cpp
 
