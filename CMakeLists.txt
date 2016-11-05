@@ -3,9 +3,9 @@ cmake_minimum_required( VERSION 2.8.7 )
 project("hello_root")
 
 # Compile flags
-set(CMAKE_CXX_STANDARD 11) # C++11...
-set(CMAKE_CXX_STANDARD_REQUIRED ON) #...is required...
-set(CMAKE_CXX_EXTENSIONS ON) #...without compiler extensions like gnu++11
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+endif()
 
 # Add external modules
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules)
