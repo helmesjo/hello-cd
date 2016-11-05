@@ -1,2 +1,11 @@
 language: cpp
-script: cmake && make && test
+compiler:
+ - clang
+ - gcc
+before_script:
+ - mkdir build
+ - cd build
+ - cmake ..
+script:
+ - make
+ - test
