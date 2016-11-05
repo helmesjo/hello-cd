@@ -7,7 +7,7 @@ build_script:
   - md build
   - cd build
   - cmake ..
-  - msbuild .\hello_root.sln /p:Configuration=Release
+  - msbuild .\Solution.sln /p:Configuration=Release
   
 test_script:
   - ctest -C Release

@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.2.2 )
 
-project("hello_root")
+project("Solution")
 
 # Compile flags
 set(CMAKE_CXX_STANDARD 11) # C++11...
