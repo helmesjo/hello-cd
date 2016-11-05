@@ -1,10 +1,16 @@
 sudo: false
 language: cpp
+script: 
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
+  - test
 compiler:
-   - gcc
-   - clang
+  - gcc
+  - clang
 install:
-   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
 addons:
 apt:
   sources:
