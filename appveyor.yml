@@ -1,14 +1,15 @@
 environment:
   matrix:
-    - BUILD_TYPE: nmake
+    - BUILD_TYPE: cmake
+      VS_VERSION: Visual Studio 14
 
 build_script:
   - md build
   - cd build
-  - cmake .. -G "NMake Makefiles"
-  - nmake
+  - cmake ..
+  - msbuild .\hello_root.sln /p:Configuration=Release
   
 test_script:
-  - ctest --output-on-failure
+  - ctest -C Release
 
 deploy: off
