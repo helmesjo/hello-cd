@@ -26,4 +26,4 @@ before_script:
   - cmake ..
 script:
   - make
-  - (test --output-on-failure)
+  - test
