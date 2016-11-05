@@ -7,5 +7,5 @@ TEST_CASE("sum()", "calculator") {
 
 	auto sum = t.sum(1, 2);
 
-	REQUIRE(sum == 5);
+	REQUIRE(sum == 3);
 }
