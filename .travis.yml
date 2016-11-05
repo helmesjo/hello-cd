@@ -18,14 +18,14 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.4
+            - llvm-toolchain-precise-3.6
           packages:
-            - clang-3.4
-      env: COMPILER=clang++-3.4
+            - clang-3.6
+      env: COMPILER=clang++-3.6
 
 script:
   - mkdir build
   - cd build
   - cmake ..
   - make
-  - test
+  - ctest --output-on-failure
