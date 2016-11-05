@@ -6,8 +6,8 @@ environment:
 build_script:
   - md build
   - cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=Release
-  - msbuild .\hello_root.sln
+  - cmake ..
+  - msbuild .\hello_root.sln /p:Configuration=Release
   
 test_script:
   - ctest -C Release
