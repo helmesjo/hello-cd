@@ -1,0 +1,12 @@
+environment:
+  matrix:
+    - BUILD_TYPE: nmake
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - nmake
+  - ctest --output-on-failure
+
+deploy: off
