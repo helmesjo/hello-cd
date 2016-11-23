@@ -1,3 +1,9 @@
 #pragma once
 
-#define PROJECT_NAMESPACE @PROJECT_NAMESPACE@
+namespace @META_PROJECT_NAMESPACE@ {
+	using ConstChar = const char * const;
+	
+	namespace config {
+		ConstChar PROJECT_NAME = "@META_PROJECT_NAME@";
+	}
+}

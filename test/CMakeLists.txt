@@ -1,5 +1,9 @@
-project(${MAIN_PROJECT_NAME}.tests)
-set(PROJECT_NAMESPACE "tests")
+project(${MAIN_PROJECT_NAME}_tests)
+
+set(META_PROJECT_NAME ${PROJECT_NAME})
+set(META_PROJECT_NAMESPACE ${META_PROJECT_NAME})
+set(META_OUTPUT_NAME ${META_PROJECT_NAME})
+set(META_OUTPUT_PATH "path/to/output")
 
 # Files to compile
 file(GLOB_RECURSE sources *.cpp *.hpp)
@@ -16,14 +20,29 @@ source_group(Resources FILES ${resources})
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
 		"${PROJECT_SOURCE_DIR}/resources"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>/resources)
+        ${META_OUTPUT_PATH}/resources)
 
 set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 
-# Includes Catch in the project:
+# Configure header
+configure_file(
+    ${PROJECT_SOURCE_DIR}/config/config.h.in
+    ${PROJECT_SOURCE_DIR}/config/config.h
+    )
+# Resource header
+configure_file(
+    ${PROJECT_SOURCE_DIR}/resources/resources.h.in
+    ${PROJECT_SOURCE_DIR}/resources/resources.h
+    )
+
+# Includes External libs
+# - CATCH
 include_directories(${CATCH_INCLUDE_DIR} ${COMMON_INCLUDES})
 add_dependencies(${PROJECT_NAME} catch)
 enable_testing(true)  # Enables unit-testing.
+# - CPPLOCATE NOT WORKING YET
+#include_directories(${CPPLOCATE_INCLUDE_DIR} ${COMMON_INCLUDES})
+#add_dependencies(${PROJECT_NAME} cpplocate)
 
 # Include tested project
 include_directories(${MAIN_PROJECT_DIR})

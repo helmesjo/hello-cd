@@ -3,11 +3,12 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "resources.h"
+#include "resources\resources.h"
 #include <filesystem>
 
 using namespace std::string_literals;
 using namespace std::experimental;
+using namespace hellocmake_tests;
 
 TEST_CASE("calculator.sum()", "calculator") {
 	calculator t;
@@ -20,7 +21,7 @@ TEST_CASE("calculator.sum()", "calculator") {
 TEST_CASE("Read file from test resource", "calculator") {
 	auto workingDir = filesystem::current_path();
 	auto exeDir = workingDir.string() + "/Debug/"; // <--- Fix relative paths to exe (need some plugin... This is madness!)
-	std::ifstream file(exeDir + tests::resources::TEXTFILE, std::fstream::in);
+	std::ifstream file(exeDir + resources::RESOURCE1, std::fstream::in);
 
 	std::cout << "Current Path: " << exeDir << std::endl;
 

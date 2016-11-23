@@ -10,6 +10,7 @@ set(CMAKE_CXX_EXTENSIONS OFF) #...without compiler extensions like gnu++11
 # Add external modules
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules)
 add_subdirectory(${CMAKE_MODULE_PATH}/catch)
+#add_subdirectory(${CMAKE_MODULE_PATH}/cpplocate) # need to fix cpplocate here. Builds, but linking issues
 
 # Add projects
 add_subdirectory(src)
