@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "config\resources.h"
+#include "resources.h"
 #include <filesystem>
 
 using namespace std::string_literals;
@@ -19,6 +19,8 @@ TEST_CASE("calculator.sum()", "calculator") {
 }
 
 TEST_CASE("Read file from test resource", "calculator") {
+	//const cpplocate::ModuleInfo moduleInfo = cpplocate::findModule("examplelib");
+	//const std::string moduleInfoPath = moduleInfo.value("dataPath");
 	auto workingDir = filesystem::current_path();
 	auto exeDir = workingDir.string() + "/Debug/"; // <--- Fix relative paths to exe (need some plugin... This is madness!)
 	std::ifstream file(exeDir + resources::RESOURCE1, std::fstream::in);
