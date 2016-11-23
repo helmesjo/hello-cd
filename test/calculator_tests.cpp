@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "resources\resources.h"
+#include "config\resources.h"
 #include <filesystem>
 
 using namespace std::string_literals;

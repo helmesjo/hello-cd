@@ -5,5 +5,7 @@ namespace @META_PROJECT_NAMESPACE@ {
 	
 	namespace config {
 		ConstChar PROJECT_NAME = "@META_PROJECT_NAME@";
+		ConstChar PROJECT_BINARY_NAME = "@META_BINARY_NAME@";
+		ConstChar PROJECT_BINARY_PATH = "@META_BINARY_PATH@";
 	}
 }

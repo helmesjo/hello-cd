@@ -2,8 +2,8 @@ project(${MAIN_PROJECT_NAME}_tests)
 
 set(META_PROJECT_NAME ${PROJECT_NAME})
 set(META_PROJECT_NAMESPACE ${META_PROJECT_NAME})
-set(META_OUTPUT_NAME ${META_PROJECT_NAME})
-set(META_OUTPUT_PATH "path/to/output")
+set(META_BINARY_NAME ${META_PROJECT_NAME})
+set(META_BINARY_PATH "path/to/output")
 
 # Files to compile
 file(GLOB_RECURSE sources *.cpp *.hpp)
@@ -31,8 +31,8 @@ configure_file(
     )
 # Resource header
 configure_file(
-    ${PROJECT_SOURCE_DIR}/resources/resources.h.in
-    ${PROJECT_SOURCE_DIR}/resources/resources.h
+    ${PROJECT_SOURCE_DIR}/config/resources.h.in
+    ${PROJECT_SOURCE_DIR}/config/resources.h
     )
 
 # Includes External libs

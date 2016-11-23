@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../config/config.h"
+#include "config.h"
 
 namespace @META_PROJECT_NAMESPACE@ {
 	ConstChar RESOURCE_FOLDER_PATH = "@META_OUTPUT_PATH@";

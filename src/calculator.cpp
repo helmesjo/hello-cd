@@ -1,5 +1,5 @@
 #include "calculator.hpp"
-#include "resources\resources.h"
+#include "config\resources.h"
 
 int calculator::sum(int a, int b)
 {

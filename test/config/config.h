@@ -5,5 +5,7 @@ namespace hellocmake_tests {
 	
 	namespace config {
 		ConstChar PROJECT_NAME = "hellocmake_tests";
+		ConstChar PROJECT_BINARY_NAME = "hellocmake_tests";
+		ConstChar PROJECT_BINARY_PATH = "path/to/output";
 	}
 }
