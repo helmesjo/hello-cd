@@ -1,6 +1,5 @@
 #include <catch_with_main.hpp>
 #include "calculator.hpp"
-#include "filereader.h"
 #include <iostream>
 #include <fstream>
 #include <string>
