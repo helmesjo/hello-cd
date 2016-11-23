@@ -1,6 +1,9 @@
-namespace tests::resources {
-	using ID = const char* const;
+#include "config\config.h"
 
-	ID RESOURCE1 = "res/resource1.bmp";
-	ID RESOURCE2 = "res/resource2.txt";
+namespace tests {
+	namespace resources {
+		using RES = const char* const;
+
+		RES TEXTFILE = "resources/test.txt";
+	}
 }

@@ -1,8 +1,10 @@
-#define PROJECT_NAME derp
+#include "config\config.h"
 
-namespace PROJECT_NAME::resources {
-	using ID = const char* const;
+namespace PROJECT_NAMESPACE {
+	namespace resources {
+		using RES = const char* const;
 
-	ID RESOURCE1 = "resource1.bmp";
-	ID RESOURCE2 = "resource2.txt";
+		RES RESOURCE1 = "resources/resource1.bmp";
+		RES RESOURCE2 = "resources/resource2.txt";
+	}
 }

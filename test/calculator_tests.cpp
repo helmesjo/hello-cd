@@ -1,13 +1,16 @@
 #include <catch_with_main.hpp>
 #include "calculator.hpp"
+#include "filereader.h"
 #include <iostream>
 #include <fstream>
 #include <string>
 #include "resources.h"
+#include <filesystem>
 
 using namespace std::string_literals;
+using namespace std::experimental;
 
-TEST_CASE("sum()", "calculator") {
+TEST_CASE("calculator.sum()", "calculator") {
 	calculator t;
 
 	auto sum = t.sum(1, 2);
@@ -15,11 +18,16 @@ TEST_CASE("sum()", "calculator") {
 	REQUIRE(sum == 3);
 }
 
-TEST_CASE("Read file from resource", "calculator") {
-	std::ifstream file(resources::RESOURCE2);
+TEST_CASE("Read file from test resource", "calculator") {
+	auto workingDir = filesystem::current_path();
+	auto exeDir = workingDir.string() + "/Debug/"; // <--- Fix relative paths to exe (need some plugin... This is madness!)
+	std::ifstream file(exeDir + tests::resources::TEXTFILE, std::fstream::in);
+
+	std::cout << "Current Path: " << exeDir << std::endl;
 
 	auto string = ""s;
 	std::getline(file, string);
 
-	REQUIRE(string == "First line");
+	REQUIRE(file.is_open() == true);
+	REQUIRE(string == "Tezzzt");
 }

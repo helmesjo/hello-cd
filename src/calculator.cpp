@@ -3,6 +3,6 @@
 
 int calculator::sum(int a, int b)
 {
-	resources::RESOURCE1;
+	PROJECT_NAMESPACE::resources::RESOURCE1;
 	return a + b;
 }

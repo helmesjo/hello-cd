@@ -1,9 +1,10 @@
 project(${MAIN_PROJECT_NAME}.tests)
-	
+set(PROJECT_NAMESPACE "tests")
+
 # Files to compile
 file(GLOB_RECURSE sources *.cpp *.hpp)
 # Resources
-file(GLOB_RECURSE resources res/*)
+file(GLOB_RECURSE resources resources/*)
 
 # Output
 add_executable(${PROJECT_NAME} ${sources} ${resources})
@@ -14,8 +15,8 @@ source_group(Resources FILES ${resources})
 # On build, copy resource-files to output folder
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-		"${PROJECT_SOURCE_DIR}/res"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>/res)
+		"${PROJECT_SOURCE_DIR}/resources"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/resources)
 
 set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 
