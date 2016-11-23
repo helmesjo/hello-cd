@@ -29,5 +29,5 @@ script:
   - mkdir build
   - cd build
   - cmake ..
-  - make -D CMAKE_BUILD_TYPE=Release
+  - make
   - ctest --output-on-failure

@@ -7,9 +7,9 @@ build_script:
   - md build
   - cd build
   - cmake ..
-  - msbuild .\Solution.sln /p:Configuration=Debug
+  - msbuild .\Solution.sln /p:Configuration=Release
   
 test_script:
-  - ctest --output-on-failure -C Debug
+  - ctest --output-on-failure -C Release
 
 deploy: off
