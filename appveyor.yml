@@ -10,6 +10,6 @@ build_script:
   - msbuild .\Solution.sln /p:Configuration=Release
   
 test_script:
-  - ctest -C Release
+  - ctest --output-on-failure -C Release
 
 deploy: off
