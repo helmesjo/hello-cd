@@ -2,18 +2,20 @@ find_package(cpplocate REQUIRED)
 
 project(${MAIN_PROJECT_NAME}_tests)
 
+# ---------------	METADATA
+
 set(META_PROJECT_NAME ${PROJECT_NAME})
 set(META_PROJECT_NAMESPACE ${META_PROJECT_NAME})
 set(META_BINARY_NAME ${META_PROJECT_NAME})
 set(META_BINARY_PATH ${CMAKE_BINARY_DIR})
 
-# Files to compile
-file(GLOB_RECURSE sources *.cpp *.hpp)
-# Resources
-file(GLOB_RECURSE resources resources/*)
+# ---------------	PROJECT
 
-# Output
+file(GLOB_RECURSE sources *.cpp *.hpp)
+file(GLOB_RECURSE resources resources/*)
 add_executable(${PROJECT_NAME} ${sources} ${resources})
+enable_testing(true)
+# Set as startup project
 set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 
 # Move resource files into sub-dir in project
@@ -35,19 +37,23 @@ configure_file(
     ${PROJECT_SOURCE_DIR}/config/resources.h.in
     ${PROJECT_BINARY_DIR}/config/resources.h
 )
-include_directories(${PROJECT_BINARY_DIR}/config)
+
+# ---------------	INCLUDES
+
+include_directories(
+	${PROJECT_BINARY_DIR}/config
+	${MAIN_PROJECT_DIR}
+	${CATCH_INCLUDE_DIR}
+)
+
+# ---------------	LINKING
 
 # Includes External libs
-# - CATCH
-include_directories(${CATCH_INCLUDE_DIR} ${COMMON_INCLUDES})
 add_dependencies(${PROJECT_NAME} catch)
-enable_testing(true)  # Enables unit-testing.
 # - CPPLOCATE
-target_link_libraries(${PROJECT_NAME} cpplocate)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+	${MAIN_PROJECT_NAME}
+	cpplocate
+)
 
-# Include tested project
-include_directories(${MAIN_PROJECT_DIR})
-target_link_libraries(${PROJECT_NAME} ${MAIN_PROJECT_NAME})
-
-set(TEST_PROJECT_NAME ${PROJECT_NAME} PARENT_SCOPE)
-set(TEST_PROJECT_DIR ${PROJECT_SOURCE_DIR} PARENT_SCOPE)
+add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})

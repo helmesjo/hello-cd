@@ -17,6 +17,3 @@ set(cpplocate_DIR ${CMAKE_MODULE_PATH}/cpplocate)
 # Add projects
 add_subdirectory(src)
 add_subdirectory(test)
-
-enable_testing()
-add_test(NAME ${TEST_PROJECT_NAME} COMMAND ${TEST_PROJECT_NAME})
