@@ -1,3 +1,5 @@
+find_package(cpplocate REQUIRED)
+
 project(${MAIN_PROJECT_NAME}_tests)
 
 set(META_PROJECT_NAME ${PROJECT_NAME})
@@ -40,10 +42,8 @@ include_directories(${PROJECT_BINARY_DIR}/config)
 include_directories(${CATCH_INCLUDE_DIR} ${COMMON_INCLUDES})
 add_dependencies(${PROJECT_NAME} catch)
 enable_testing(true)  # Enables unit-testing.
-# - CPPLOCATE NOT WORKING YET
-#include_directories(${CPPLOCATE_INCLUDE_DIR} ${COMMON_INCLUDES})
-#target_link_libraries(${PROJECT_NAME} cpplocate)
-#add_dependencies(${PROJECT_NAME} cpplocate)
+# - CPPLOCATE
+target_link_libraries(${PROJECT_NAME} cpplocate)
 
 # Include tested project
 include_directories(${MAIN_PROJECT_DIR})
