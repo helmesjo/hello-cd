@@ -4,11 +4,9 @@
 #include <fstream>
 #include <string>
 #include "resources.h"
-#include <filesystem>
 #include "cpplocate\cpplocate.h"
 
 using namespace std::string_literals;
-using namespace std::experimental;
 using namespace hellocmake_tests;
 
 TEST_CASE("calculator.sum()", "calculator") {
