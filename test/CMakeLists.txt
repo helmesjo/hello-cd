@@ -39,11 +39,11 @@ configure_file(
 )
 
 # ---------------	INCLUDES
-
 include_directories(
 	${PROJECT_BINARY_DIR}/config
 	${MAIN_PROJECT_DIR}
 	${CATCH_INCLUDE_DIR}
+	${cpplocate_SOURCE_DIR}
 )
 
 # ---------------	LINKING
@@ -52,8 +52,8 @@ include_directories(
 add_dependencies(${PROJECT_NAME} catch)
 # - CPPLOCATE
 target_link_libraries(${PROJECT_NAME} PRIVATE
-	${MAIN_PROJECT_NAME}
 	cpplocate
+	${MAIN_PROJECT_NAME}
 )
 
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
