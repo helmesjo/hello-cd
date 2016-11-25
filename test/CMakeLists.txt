@@ -46,7 +46,6 @@ target_include_directories(${PROJECT_NAME}
 	${PROJECT_BINARY_DIR}/config
 	${MAIN_PROJECT_DIR}
 	${CATCH_INCLUDE_DIR}
-	${cpplocate_SOURCE_DIR}
 	${COMMON_INCLUDES}
 )
 
