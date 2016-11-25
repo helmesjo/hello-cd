@@ -1,28 +1,25 @@
+language: cpp
+
 dist: trusty
 sudo: false
 group: beta
 
-language: cpp
-
 matrix:
   include:
-    - compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
-      env: COMPILER=g++-5
+    - os: linux
+        compiler: gcc
+        addons:
+            apt:
+                sources: ['ubuntu-toolchain-r-test']
+                packages: ['g++-4.9']
+        env: COMPILER=g++-4.9
       
-    - compiler: clang
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.6
-          packages:
-            - clang-3.6
+    - os: linux
+        compiler: clang
+        addons:
+            apt:
+                sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-precise-3.6']
+                packages: ['clang-3.6']
       env: COMPILER=clang++-3.6
 
 script:
