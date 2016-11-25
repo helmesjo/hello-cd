@@ -1,10 +1,10 @@
 #include <catch_with_main.hpp>
-#include "calculator.hpp"
+#include <cpplocate\cpplocate.h>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "calculator.hpp"
 #include "resources.h"
-#include "cpplocate\cpplocate.h"
 
 using namespace std::string_literals;
 using namespace hellocmake_tests;
