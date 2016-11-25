@@ -5,17 +5,15 @@ sudo: false
 group: beta
 
 matrix:
-  include:
-    - os: linux
-        compiler: gcc
+  include:      
+    - compiler: gcc
         addons:
             apt:
                 sources: ['ubuntu-toolchain-r-test']
                 packages: ['g++-4.9']
         env: COMPILER=g++-4.9
       
-    - os: linux
-        compiler: clang
+    - compiler: clang
         addons:
             apt:
                 sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-precise-3.6']
