@@ -1,5 +1,5 @@
 #include <catch_with_main.hpp>
-#include <cpplocate\cpplocate.h>
+#include <cpplocate/cpplocate.h>
 #include <iostream>
 #include <fstream>
 #include <string>
