@@ -6,7 +6,6 @@
 #include "calculator.hpp"
 #include "resources.h"
 
-using namespace std::string_literals;
 using namespace hellocmake_tests;
 
 TEST_CASE("calculator.sum()", "calculator") {
@@ -24,7 +23,7 @@ TEST_CASE("Read file from test resource", "calculator") {
 
 	std::cout << "Current Path: " << resourcePath << std::endl;
 
-	auto string = ""s;
+	std::string string;
 	std::getline(file, string);
 
 	REQUIRE(file.is_open() == true);
