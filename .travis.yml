@@ -1,22 +1,29 @@
+dist: trusty
+sudo: false
+group: beta
+
 language: cpp
 
-compiler:
-    - gcc
-    - clang
-
-install:
-    - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
-
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - libyajl-dev
-    - libxml2-dev
-    - gcc-4.8
-    - g++-4.8
-    - clang
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env: COMPILER=g++-5
+      
+    - compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.6
+          packages:
+            - clang-3.6
+      env: COMPILER=clang++-3.6
 
 script:
   - mkdir build
