@@ -20,10 +20,10 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.5
+            - llvm-toolchain-precise-3.6
           packages:
-            - clang-3.5
-      env: COMPILER=clang++-3.5
+            - clang-3.6
+      env: COMPILER=clang++-3.6
 
 script:
   - mkdir build
