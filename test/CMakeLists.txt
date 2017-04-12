@@ -46,6 +46,7 @@ target_include_directories(${PROJECT_NAME}
 	${PROJECT_BINARY_DIR}/config
 	${MAIN_PROJECT_DIR}
 	${CATCH_INCLUDE_DIR}
+	${FAKEIT_INCLUDE_DIR}
 	${COMMON_INCLUDES}
 )
 
@@ -53,6 +54,7 @@ target_include_directories(${PROJECT_NAME}
 
 add_dependencies(${PROJECT_NAME} 
 	catch
+	fakeit
 )
 target_link_libraries(${PROJECT_NAME}
 	PRIVATE

@@ -1,4 +1,5 @@
 #include <catch_with_main.hpp>
+#include <catch/fakeit.hpp>
 #include <cpplocate/cpplocate.h>
 #include <iostream>
 #include <fstream>
@@ -7,6 +8,12 @@
 #include "resources.h"
 
 using namespace hellocmake_tests;
+using namespace fakeit;
+
+struct SomeInterface
+{
+	virtual int dummyMethod() = 0;
+};
 
 TEST_CASE("calculator.sum()", "calculator") {
 	calculator t;
@@ -16,7 +23,16 @@ TEST_CASE("calculator.sum()", "calculator") {
 	REQUIRE(sum == 3);
 }
 
-TEST_CASE("Read file from test resource", "calculator") {
+TEST_CASE("Create mock", "lib_fakeit")
+{
+	auto mock = Mock<SomeInterface>();
+	When(Method(mock, dummyMethod)).Return(1);
+	
+	auto& fake = mock.get();
+	REQUIRE(fake.dummyMethod() == 1);
+}
+
+TEST_CASE("Read file from test resource", "lib_cpplocate") {
 	const auto exePath = cpplocate::getModulePath();
 	auto resourcePath = exePath + "/" + resources::RESOURCE1;
 	std::ifstream file(resourcePath, std::fstream::in);
