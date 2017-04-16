@@ -1,0 +1,13 @@
+# Get what we need to build (GCC + CMake)
+FROM rikorose/gcc-cmake
+
+# Setup working directory
+WORKDIR /tmp/app
+# Copy source + cmake-files into workdir in container
+COPY . ./
+WORKDIR ./build
+
+# Generate & build source using cmake
+CMD cmake .. &&\
+    cmake --build . --config Release &&\
+    ctest -C Release

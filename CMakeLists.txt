@@ -17,6 +17,12 @@ add_subdirectory(${CMAKE_MODULE_PATH}/fakeit)
 add_subdirectory(${CMAKE_MODULE_PATH}/cpplocate)
 set(cpplocate_DIR ${CMAKE_MODULE_PATH}/cpplocate)
 
+# ---------------   OUTPUT DIRS
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output)
+
 # ---------------	BUILD LIB & TESTS
 add_subdirectory(src)
 add_subdirectory(test)
