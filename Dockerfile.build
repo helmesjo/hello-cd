@@ -1,13 +1,14 @@
 # Get what we need to build (GCC + CMake)
 FROM dockcross/base
 
+ENV BUILD_DIR /build
+
 # Setup working directory
 WORKDIR /tmp/app
 # Copy source + cmake-files into workdir in container
 COPY . ./
-WORKDIR ./build
+WORKDIR ./${BUILD_DIR}
 
 # Generate & build source using cmake
 RUN cmake .. &&\
-    cmake --build . --config Release &&\
-    ctest -C Release
+    cmake --build . --config Release
