@@ -1,3 +1,16 @@
-|Clang&GCC Build Status|VC++ Build Status|Static Analysis|
-|:--:|:--:|:--:|
-|[![Clang&GCC Build Status](https://travis-ci.org/helmesjo/hello-ci.svg?branch=master)](https://travis-ci.org/helmesjo/hello-ci)|[![VC++ Build Status](https://ci.appveyor.com/api/projects/status/n56w4oabspkbx002?svg=true)](https://ci.appveyor.com/project/helmesjo/hello-ci)|[![Coverity Scan](https://scan.coverity.com/projects/10837/badge.svg)](https://scan.coverity.com/projects/helmesjo-hello-ci)
+Starting with a first approach of the "Docker Builder Pattern", basically:
+
+   BUILD:
+    1. Create a Dockerfile.build that contains all tools necessary to build the source.
+        - Copy/Mount (latter preferable) repo and set as working directory.
+    2. Build the build-container and run.
+       - Mount source and workingdir to make it build directly back to the "artifact folder".
+   TEST:
+    3. Create a Dockerfile that contains the minimum necessities to run the app/lib/executable.
+    4. Build the runner-container and mount the artifact and set as working directory.
+    5. Test against the built artifact (UI Tests, Acceptance tests, Performance tests...), by running the 
+       runner-container and passing the test-runner as argument (to make it execute in the containers working-dir.
+
+Something like this to get a good base for the pipeline-structure.
+
+Next step will be to automate the GoCD server & agent startup sequence, and seperate out all pipeline configs into the repo (want to be able to create & remove the pipeline on a any server anywhere, anytime. So don't keep any configfiles stored on the actual server!
