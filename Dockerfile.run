@@ -1,0 +1,5 @@
+# Get what we need to build (GCC + CMake)
+FROM debian:jessie
+
+# Generate & build source using cmake
+ENTRYPOINT some-suitable-entry-point-for-kicking-of-different-automated-tests-in-latter-stages

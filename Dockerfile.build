@@ -2,5 +2,7 @@
 FROM dockcross/base
 
 # Generate & build source using cmake
-CMD cmake . &&\
+CMD mkdir -p build &&\
+    cd build &&\
+    cmake .. &&\
     cmake --build . --config Release
