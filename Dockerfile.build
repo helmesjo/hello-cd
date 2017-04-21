@@ -1,8 +1,5 @@
 # Get what we need to build (GCC + CMake)
 FROM dockcross/base
 
-# Generate & build source using cmake
-CMD mkdir -p build &&\
-    cd build &&\
-    cmake .. &&\
-    cmake --build . --config Release
+ADD build.sh /bin/build.sh
+ADD runtests.sh /bin/runtests.sh
