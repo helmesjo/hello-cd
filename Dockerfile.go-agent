@@ -1,0 +1,5 @@
+FROM gocd/gocd-agent-debian-8:v17.3.0
+
+RUN apt-get update && apt-get install -y \
+    docker.io \
+    && apt-get clean \
