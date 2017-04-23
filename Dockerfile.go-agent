@@ -1,5 +1,26 @@
 FROM gocd/gocd-agent-debian-8:v17.3.0
 
 RUN apt-get update && apt-get install -y \
-    docker.io \
-    && apt-get clean \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    software-properties-common
+
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
+    apt-key fingerprint 0EBFCD88
+
+RUN add-apt-repository \
+    "deb [arch=amd64] https://download.docker.com/linux/debian \
+    $(lsb_release -cs) \
+    stable"
+
+RUN apt-get update && \
+    apt-cache madison docker-ce
+
+RUN apt-get update && apt-get install -y \
+    docker-ce=17.03.1~ce-0~debian-jessie
+
+RUN service docker start &&\
+    service docker status &&\
+    gpasswd -a go docker
