@@ -21,6 +21,6 @@ RUN apt-get update && \
 RUN apt-get update && apt-get install -y \
     docker-ce=17.03.1~ce-0~debian-jessie
 
-RUN service docker start &&\
-    service docker status &&\
-    gpasswd -a go docker
+COPY entrypoint.sh .
+
+ENTRYPOINT ["/entrypoint.sh"]
