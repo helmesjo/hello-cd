@@ -1,5 +1,11 @@
 # Get what we need to build (GCC + CMake)
 FROM dockcross/base
 
+RUN apt-get update && apt-get install -y \
+    dos2unix
+
 ADD build.sh /bin/build.sh
 ADD runtests.sh /bin/runtests.sh
+
+RUN dos2unix /bin/build.sh &&\
+    dos2unix /bin/runtests.sh
