@@ -1,5 +1,8 @@
 # Get what we need to build (GCC + CMake)
 FROM dockcross/base
 
+ADD docker-buildsource.sh /bin/docker-buildsource.sh
+ADD docker-runtests.sh /bin/docker-runtests.sh
+
 ADD build.sh /bin/build.sh
 ADD runtests.sh /bin/runtests.sh
