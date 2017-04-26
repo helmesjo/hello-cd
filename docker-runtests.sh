@@ -2,6 +2,6 @@
 
 set -euxo pipefail
 
-docker run --rm --volume=$(PWD):/tmp --workdir=/tmp build-image ./runtests.sh
+docker run --volume=$(PWD):/tmp --workdir=/tmp build-image ./runtests.sh && echo "pass" || echo "fail"
 
 $SHELL
