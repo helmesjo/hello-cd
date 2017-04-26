@@ -2,8 +2,8 @@
 
 set -euxo pipefail
 
-echo "TESTING ECHO"
+# Get the current working directory and add slash to beginning (to handle windows-inconsistencies)
+CURRENT_WDIR=/$(pwd)
+CONTAINER_WDIR=//tmp
 
-exit 1
-
-docker run --interactive --rm --volume=$(PWD):/tmp --workdir=/tmp build-image ./build.sh && echo "pass" || echo "fail"
+docker run --interactive --rm --volume=$CURRENT_WDIR:$CONTAINER_WDIR --workdir=$CONTAINER_WDIR build-image ./build.sh
