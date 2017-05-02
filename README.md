@@ -4,7 +4,9 @@ Starting with a first approach of the "Docker Builder Pattern", basically:
     1. Create a Dockerfile.build that contains all tools necessary to build the source.
         - Copy/Mount (latter preferable) repo and set as working directory.
     2. Build the build-container and run.
-       - Mount source and workingdir to make it build directly back to the "artifact folder".
+        - Mount source and workingdir to make it build directly back to the "artifact folder".
+        NOTE: Consider having artifact be current image (containing build) as new image (docker create/commit),
+              since what we want is really a "100% identical" environment in case of rollback.
    TEST:
     3. Create a Dockerfile that contains the minimum necessities to run the app/lib/executable.
     4. Build the runner-container and mount the artifact and set as working directory.
