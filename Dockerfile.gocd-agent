@@ -21,6 +21,6 @@ RUN apt-get update && \
 RUN apt-get update && apt-get install -y \
     docker-ce=17.03.1~ce-0~debian-jessie
 
-COPY entrypoint.sh .
+COPY docker-gocd-agent-entrypoint.sh .
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/docker-gocd-agent-entrypoint.sh"]
