@@ -6,4 +6,8 @@ set -euxo pipefail
 CURRENT_WDIR=/$(pwd)
 CONTAINER_WDIR=//tmp
 
-docker run --rm --volume=$CURRENT_WDIR:$CONTAINER_WDIR --workdir=$CONTAINER_WDIR build-image ./runtests.sh
+docker run  --rm \
+            --volume $CURRENT_WDIR:$CONTAINER_WDIR \
+            --workdir $CONTAINER_WDIR \
+            build-image \
+            ./runtests.sh
