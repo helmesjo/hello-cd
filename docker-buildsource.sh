@@ -18,7 +18,6 @@ docker run  --volume $CURRENT_WDIR:$CONTAINER_WDIR \
             --workdir $CONTAINER_WDIR \
             --name $CONTAINER_NAME \
             $BUILD_IMAGE \
-            chmod +x ./build.sh; \
             ./build.sh
 
 # Create artifact
@@ -28,5 +27,3 @@ docker save --output artifact.tar $ARTIFACT_NAME
 # Clean up leftovers
 docker rm $CONTAINER_NAME
 docker rmi $ARTIFACT_NAME
-
-$SHELL
