@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Don't do below. If anything fails, we still need to clean up
 #set -euxo pipefail
 
 BUILD_IMAGE="build-image"
@@ -17,6 +18,7 @@ docker run  --volume $CURRENT_WDIR:$CONTAINER_WDIR \
             --workdir $CONTAINER_WDIR \
             --name $CONTAINER_NAME \
             $BUILD_IMAGE \
+            chmod u+x ./build.sh; \
             ./build.sh
 
 # Create artifact
@@ -24,4 +26,7 @@ docker commit $CONTAINER_NAME $ARTIFACT_NAME
 docker save --output artifact.tar $ARTIFACT_NAME
 
 # Clean up leftovers
-docker system prune --force
+docker rm $CONTAINER_NAME
+docker rmi $ARTIFACT_NAME
+
+$SHELL
