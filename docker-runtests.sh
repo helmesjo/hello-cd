@@ -10,5 +10,5 @@ docker run  --rm \
             --volume $CURRENT_WDIR:$CONTAINER_WDIR \
             --workdir $CONTAINER_WDIR \
             build-image \
-            chmod u+x ./runtests.sh; \
+            chmod +x ./runtests.sh; \
             ./runtests.sh

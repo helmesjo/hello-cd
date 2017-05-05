@@ -18,7 +18,7 @@ docker run  --volume $CURRENT_WDIR:$CONTAINER_WDIR \
             --workdir $CONTAINER_WDIR \
             --name $CONTAINER_NAME \
             $BUILD_IMAGE \
-            chmod u+x ./build.sh; \
+            chmod +x ./build.sh; \
             ./build.sh
 
 # Create artifact
