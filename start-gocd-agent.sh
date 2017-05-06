@@ -4,7 +4,8 @@ set -euxo pipefail
 
 DOCKERFILE="Dockerfile.gocd-agent"
 AGENT_IMAGE="gocd-agent"
-SERVER_URL="https://192.168.10.127:8154/go"
+read -p "Server ip: " ip
+SERVER_URL="https://$ip:8154/go"
 
 echo "Starting gocd-agent..."
 
@@ -19,3 +20,5 @@ docker run  --detach \
             $AGENT_IMAGE
 
 echo "Agent started!"
+
+$SHELL
