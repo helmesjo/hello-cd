@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#set -euxo pipefail
+set -euxo pipefail
 
 # Get the current working directory and add slash to beginning (to handle windows-inconsistencies)
 COMMIT_HASH=$(git rev-parse HEAD)

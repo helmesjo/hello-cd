@@ -1,7 +1,16 @@
 #!/bin/bash
 
 # Don't do below. If anything fails, we still need to clean up
-#set -euxo pipefail
+set -euxo pipefail
+
+# Clean up leftovers before exit
+function cleanup {
+    echo "Cleaning up leftovers..."
+    docker rm $CONTAINER_NAME
+    docker rmi $ARTIFACT_IMAGE
+    docker rmi $BUILD_IMAGE_NAME
+}
+trap cleanup EXIT
 
 COMMIT_HASH=$(git rev-parse HEAD)
 CONTAINER_WDIR=//source
@@ -27,8 +36,3 @@ docker start -i $CONTAINER_NAME
 ARTIFACT_IMAGE=artifact:$COMMIT_HASH
 docker commit $CONTAINER_NAME $ARTIFACT_IMAGE
 docker save --output artifact_$COMMIT_HASH.tar $ARTIFACT_IMAGE
-
-# Clean up leftovers
-docker rm $CONTAINER_NAME
-docker rmi $ARTIFACT_IMAGE
-docker rmi $BUILD_IMAGE_NAME
