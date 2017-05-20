@@ -15,11 +15,7 @@ docker build    --tag $BUILD_IMAGE_NAME \
 CONTAINER_NAME=container_build
 docker create   --workdir $CONTAINER_WDIR \
                 --name $CONTAINER_NAME \
-                $BUILD_IMAGE_NAME ./build.sh 
-
-# Remove any previous artifacts
-ARTIFACT_NAME=artifact_$COMMIT_HASH.tar
-rm -f $ARTIFACT_NAME
+                $BUILD_IMAGE_NAME ./scripts/build.sh
 
 # Copy over source to working dir
 docker cp   ./ $CONTAINER_NAME:$CONTAINER_WDIR
@@ -28,10 +24,11 @@ docker cp   ./ $CONTAINER_NAME:$CONTAINER_WDIR
 docker start -i $CONTAINER_NAME
 
 # Create artifact
-ARTIFACT_IMAGE=$BUILD_IMAGE_NAME
+ARTIFACT_IMAGE=artifact:$COMMIT_HASH
 docker commit $CONTAINER_NAME $ARTIFACT_IMAGE
-docker save --output $ARTIFACT_NAME $ARTIFACT_IMAGE
+docker save --output artifact_$COMMIT_HASH.tar $ARTIFACT_IMAGE
 
 # Clean up leftovers
 docker rm $CONTAINER_NAME
 docker rmi $ARTIFACT_IMAGE
+docker rmi $BUILD_IMAGE_NAME
