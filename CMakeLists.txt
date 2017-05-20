@@ -19,4 +19,4 @@ set(cpplocate_DIR ${CMAKE_MODULE_PATH}/cpplocate)
 
 # ---------------	BUILD LIB & TESTS
 add_subdirectory(src)
-add_subdirectory(test)
+add_subdirectory(tests)
