@@ -4,6 +4,6 @@ environment:
       VS_VERSION: Visual Studio 14
 
 build_script:
-  - ./build.sh
+  - /build.sh
 
 deploy: off
