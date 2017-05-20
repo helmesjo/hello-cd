@@ -6,6 +6,7 @@ set -euxo pipefail
 # Clean up leftovers before exit
 function cleanup {
     echo "Cleaning up leftovers..."
+    sleep 3
     docker rm $CONTAINER_NAME
     docker rmi $ARTIFACT_IMAGE
     docker rmi $BUILD_IMAGE_NAME
