@@ -6,10 +6,10 @@ set -euxo pipefail
 # Clean up leftovers before exit
 function cleanup {
     echo "Cleaning up leftovers..."
-    sleep 3
-    docker rm $CONTAINER_NAME
+    docker rm $CONTAINER_ID
     docker rmi $ARTIFACT_IMAGE
     docker rmi $BUILD_IMAGE_NAME
+    sleep 3
 }
 trap cleanup EXIT
 
@@ -22,18 +22,17 @@ docker build    --tag $BUILD_IMAGE_NAME \
                 --file ./Dockerfile.build .
 
 # Create build container
-CONTAINER_NAME=container_build
-docker create   --workdir $CONTAINER_WDIR \
-                --name $CONTAINER_NAME \
-                $BUILD_IMAGE_NAME ./scripts/build.sh
+CONTAINER_ID=$( docker create   --workdir $CONTAINER_WDIR \
+                $BUILD_IMAGE_NAME ./scripts/build.sh \
+                )
 
 # Copy over source to working dir
-docker cp   ./ $CONTAINER_NAME:$CONTAINER_WDIR
+docker cp   ./ $CONTAINER_ID:$CONTAINER_WDIR
 
 # Compile source
-docker start -i $CONTAINER_NAME
+docker start -i $CONTAINER_ID
 
 # Create artifact
 ARTIFACT_IMAGE=artifact:$COMMIT_HASH
-docker commit $CONTAINER_NAME $ARTIFACT_IMAGE
+docker commit $CONTAINER_ID $ARTIFACT_IMAGE
 docker save --output artifact_$COMMIT_HASH.tar $ARTIFACT_IMAGE

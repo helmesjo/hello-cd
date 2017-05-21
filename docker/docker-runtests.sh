@@ -5,8 +5,8 @@ set -euxo pipefail
 # Clean up leftovers before exit
 function cleanup {
     echo "Cleaning up leftovers..."
-    sleep 3
     docker rmi $ARTIFACT_NAME
+    sleep 3
 }
 trap cleanup EXIT
 
