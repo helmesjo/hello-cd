@@ -1,0 +1,32 @@
+pipelines:
+  build-on-docker-agent:
+    group: hello-cd
+    materials:
+      git-remote:  # material name
+        git: https://github.com/helmesjo/hello-cd.git
+        branch: master
+    stages:
+      - build: # stage name
+          clean_workspace: true
+          jobs:
+            build-artifact: # job name
+              artifacts:
+                - build:
+                    source: "artifact**"
+                    destination: 
+              tasks:
+                - exec: # type of task
+                    command: ./docker/build.sh
+      - test: # stage name
+          clean_workspace: true
+          jobs:
+            run-tests: # job name
+              tasks:
+                - fetch:
+                    pipeline: 
+                    stage: build
+                    job: build-artifact
+                    source: ./
+                    destination: ./
+                - exec: # type of task
+                    command: ./docker/runtests.sh
