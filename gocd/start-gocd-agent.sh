@@ -7,6 +7,8 @@ function onExit {
 }
 trap onExit EXIT
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 DOCKERFILE="Dockerfile.gocd-agent"
 AGENT_IMAGE="gocd-agent"
 read -p "Server ip: " ip
@@ -16,7 +18,7 @@ echo "Starting gocd-agent..."
 
 # Build docker image for the gocd-agent
 docker build    --tag $AGENT_IMAGE \
-                --file ./$DOCKERFILE .
+                --file $DIR/$DOCKERFILE .
 
 # Start gocd-agent and forward socket (so that the host-docker engine can be invoked from inside)
 docker run  --detach \
