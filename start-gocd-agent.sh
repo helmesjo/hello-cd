@@ -2,6 +2,11 @@
 
 set -euxo pipefail
 
+function onExit {
+    $SHELL
+}
+trap onExit EXIT
+
 DOCKERFILE="Dockerfile.gocd-agent"
 AGENT_IMAGE="gocd-agent"
 read -p "Server ip: " ip
@@ -20,5 +25,3 @@ docker run  --detach \
             $AGENT_IMAGE
 
 echo "Agent started!"
-
-$SHELL
