@@ -11,13 +11,14 @@ function cleanup {
 }
 trap cleanup EXIT
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 COMMIT_HASH=$(git rev-parse --short HEAD)
 CONTAINER_WDIR=//source
 
 # Build environment
 BUILD_IMAGE="build-image:"$COMMIT_HASH
 docker build    --tag $BUILD_IMAGE \
-                --file ./Dockerfile.build .
+                --file $DIR/Dockerfile.build .
 
 # Create build container
 CONTAINER_ID=$( docker create \
