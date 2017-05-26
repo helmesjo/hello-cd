@@ -27,6 +27,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
-COPY ./gocd/docker-gocd-agent-entrypoint.sh .
+COPY ./gocd/custom-gocd-agent-entrypoint.sh .
 
-ENTRYPOINT ["/docker-gocd-agent-entrypoint.sh"]
+ENTRYPOINT ["/custom-gocd-agent-entrypoint.sh"]
