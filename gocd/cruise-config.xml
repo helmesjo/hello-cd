@@ -7,4 +7,8 @@
     </config-repo>
   </config-repos>
   <pipelines group="hello-cd" />
+  <environments>
+    <environment name="docker">
+    </environment>
+  </environments>
 </cruise>

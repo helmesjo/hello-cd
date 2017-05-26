@@ -24,6 +24,7 @@ docker run  --detach \
             --volume /$DIR/$CONFIG_FILE:/godata/config/$CONFIG_FILE \
             --publish 8153:8153 \
             --publish 8154:8154 \
+            --name $SERVER_IMAGE \
             $SERVER_IMAGE
 
 echo "Server started!"
