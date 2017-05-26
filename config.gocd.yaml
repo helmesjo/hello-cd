@@ -1,3 +1,7 @@
+environments:
+  docker:
+    pipelines:
+      - build-on-docker-agent
 pipelines:
   build-on-docker-agent:
     group: hello-cd
