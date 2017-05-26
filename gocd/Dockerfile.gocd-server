@@ -1,0 +1,5 @@
+FROM gocd/gocd-server:v17.4.0
+
+COPY ./gocd/custom-gocd-server-entrypoint.sh .
+
+ENTRYPOINT ["/custom-gocd-server-entrypoint.sh"]
