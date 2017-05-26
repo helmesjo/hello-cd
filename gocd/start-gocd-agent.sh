@@ -32,6 +32,7 @@ AUTO_REGISTER_KEY="29a6415d-cfe8-40c7-9c46-37cf5612c995"
 AUTO_REGISTER_ENVIRONMENTS="docker"
 # Start gocd-agent and forward socket (so that the host-docker engine can be invoked from inside)
 docker run  --detach \
+            --rm \
             --volume //var/run/docker.sock://var/run/docker.sock \
             --env GO_SERVER_URL=$SERVER_URL \
             --env AGENT_AUTO_REGISTER_KEY=$AUTO_REGISTER_KEY \

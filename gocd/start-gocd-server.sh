@@ -19,9 +19,13 @@ echo "Starting gocd-server..."
 docker build    --tag $SERVER_IMAGE \
                 --file $DIR/$DOCKERFILE .
 
+mkdir -p $DIR/godata/config
+cp $DIR/$CONFIG_FILE $DIR/godata/config/
+
 # Start gocd-agent and forward socket (so that the host-docker engine can be invoked from inside)
 docker run  --detach \
-            --volume /$DIR/$CONFIG_FILE:/godata/config/$CONFIG_FILE \
+            --rm \
+            --volume /$DIR/godata:/godata \
             --publish 8153:8153 \
             --publish 8154:8154 \
             --name $SERVER_IMAGE \
