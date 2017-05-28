@@ -1,2 +1,6 @@
 # Get what we need to build (GCC + CMake)
 FROM dockcross/base
+
+WORKDIR /source
+
+COPY . ./

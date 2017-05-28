@@ -26,9 +26,6 @@ CONTAINER_ID=$( docker create \
                 $BUILD_IMAGE ./scripts/build.sh \
                 )
 
-# Copy over source to working dir
-docker cp   ./ $CONTAINER_ID:$CONTAINER_WDIR
-
 # Compile source
 docker start -i $CONTAINER_ID
 
