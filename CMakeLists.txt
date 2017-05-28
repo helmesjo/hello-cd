@@ -27,4 +27,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_PATH})
 # ---------------	BUILD SOURCE & TESTS
 
 add_subdirectory(src)
-add_subdirectory(test)
+add_subdirectory(tests)

@@ -7,9 +7,9 @@ ExternalProject_Add(
     fakeit
     PREFIX ${CMAKE_BINARY_DIR}/fakeit
     GIT_REPOSITORY https://github.com/eranpeer/FakeIt.git
-	GIT_TAG #need latest changes so keep on master for now
+	GIT_TAG 2.0.4
     TIMEOUT 10
-    UPDATE_COMMAND ${GIT_EXECUTABLE} fetch --tags
+    UPDATE_COMMAND ""
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     INSTALL_COMMAND ""
