@@ -16,22 +16,23 @@ COMMIT_HASH=$(git rev-parse --short HEAD)
 CONTAINER_WDIR=//source
 
 # Build environment
-BUILD_IMAGE="build-image:"$COMMIT_HASH
+BUILD_IMAGE="build:"$COMMIT_HASH
 docker build    --tag $BUILD_IMAGE \
                 --file $DIR/Dockerfile.build .
 
-# Create build container
+# Create build container & compile (create+start instead of run because of issues with logs)
 CONTAINER_ID=$( docker create \
                 --workdir $CONTAINER_WDIR \
                 $BUILD_IMAGE ./scripts/build.sh \
                 )
-
-# Compile source
 docker start -i $CONTAINER_ID
 
-# Create artifact
-ARTIFACT_ID=$(  docker commit \
-                $CONTAINER_ID \
-                artifact:$COMMIT_HASH \
-                )
-docker save --output artifact_$COMMIT_HASH.tar $ARTIFACT_ID
+# Create, tag & push image (the end result, AKA artifact)
+DOCKER_REPO="localhost:5000"
+IMAGE_TAG=$DOCKER_REPO/"hello-cd:"$COMMIT_HASH
+ARTIFACT_ID=$( docker commit    --message $COMMIT_HASH \
+                                $CONTAINER_ID \
+                                $IMAGE_TAG \
+                                )
+
+docker push $IMAGE_TAG

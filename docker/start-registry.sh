@@ -3,8 +3,6 @@
 set -euxo pipefail
 
 function cleanup {
-    echo "Cleaning up leftovers..."
-    $SHELL
     sleep 3
 }
 trap cleanup EXIT
