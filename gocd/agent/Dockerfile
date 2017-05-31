@@ -4,7 +4,7 @@ LABEL maintainer Fred Helmesjö <helmesjo@live.com>
 
 ENV DOCKER_VERSION 17.03.1
 
-RUN apt-get update && apt-get install --no-install-recommends -y \
+RUN     apt-get update && apt-get install --no-install-recommends -y \
         apt-transport-https \
         ca-certificates \
         curl \
@@ -27,6 +27,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
-COPY ./gocd/custom-gocd-agent-entrypoint.sh .
+COPY ./gocd/agent/custom-entrypoint.sh .
 
-ENTRYPOINT ["/custom-gocd-agent-entrypoint.sh"]
+ENTRYPOINT ["/custom-entrypoint.sh"]

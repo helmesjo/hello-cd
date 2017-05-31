@@ -9,14 +9,14 @@ trap onExit EXIT
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-DOCKERFILE="Dockerfile.gocd-agent"
+DOCKERFILE=$DIR/agent/"Dockerfile"
 AGENT_IMAGE="gocd-agent"
 
 echo "Starting gocd-agent..."
 
 # Build docker image for the gocd-agent
 docker build    --tag $AGENT_IMAGE \
-                --file $DIR/$DOCKERFILE .
+                --file $DOCKERFILE .
 
 # Try to find running server, else ask for ip
 SERVER_NAME="gocd-server"
