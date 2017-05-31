@@ -26,11 +26,5 @@ pipelines:
           jobs:
             run-tests: # job name
               tasks:
-                - fetch:
-                    pipeline: 
-                    stage: build
-                    job: build-artifact
-                    source: ./
-                    destination: ./
                 - exec: # type of task
                     command: ./docker/runtests.sh
