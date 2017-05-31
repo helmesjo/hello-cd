@@ -3,6 +3,7 @@
 set -euxo pipefail
 
 function cleanup {
+    docker rmi $IMAGE_TAG
     sleep 3
 }
 trap cleanup EXIT
