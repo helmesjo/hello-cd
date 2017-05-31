@@ -1,4 +1,3 @@
 build
-docker/registry
-gocd/godata
-artifact_*
+docker/_registry
+gocd/_godata

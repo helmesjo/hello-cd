@@ -8,7 +8,7 @@ function cleanup {
 trap cleanup EXIT
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-REGISTRY_OUTDIR=$DIR/registry
+REGISTRY_OUTDIR=$DIR/_registry
 
 mkdir -p $REGISTRY_OUTDIR
 
