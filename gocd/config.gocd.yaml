@@ -14,10 +14,6 @@ pipelines:
           clean_workspace: true
           jobs:
             build-artifact: # job name
-              artifacts:
-                - build:
-                    source: "artifact**"
-                    destination: 
               tasks:
                 - exec: # type of task
                     command: ./docker/build.sh
