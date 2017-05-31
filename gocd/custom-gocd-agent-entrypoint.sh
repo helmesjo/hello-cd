@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euxo pipefail
+
 echo "Setting up docker..."
 
 # Create group docker if not exists
