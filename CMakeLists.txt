@@ -20,7 +20,7 @@ set(cpplocate_DIR ${CMAKE_MODULE_PATH}/cpplocate)
 # ---------------   OUTPUT DIRECTORIES
 
 # First for the generic no-config case (e.g. with mingw)
-set(OUTPUT_PATH ${CMAKE_BINARY_DIR}/output)
+set(OUTPUT_PATH ${CMAKE_SOURCE_DIR}/output)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_PATH})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_PATH})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_PATH})
