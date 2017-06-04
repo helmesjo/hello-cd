@@ -7,6 +7,6 @@ mkdir -p build
 cd build
 cmake ..
 cmake --build . --config Release
-ctest -C Release --output-on-failure
+ctest --build-config Release --verbose --output-on-failure
 
 sleep 5
