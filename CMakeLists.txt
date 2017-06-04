@@ -17,6 +17,22 @@ add_subdirectory(${CMAKE_MODULE_PATH}/fakeit)
 add_subdirectory(${CMAKE_MODULE_PATH}/cpplocate)
 set(cpplocate_DIR ${CMAKE_MODULE_PATH}/cpplocate)
 
-# ---------------	BUILD LIB & TESTS
+# ---------------   OUTPUT DIRECTORIES
+
+# First for the generic no-config case (e.g. with mingw)
+set(OUTPUT_PATH ${CMAKE_BINARY_DIR}/output)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_PATH})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_PATH})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_PATH})
+# Second, for multi-config builds (e.g. msvc, Release/Debug)
+foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${OUTPUT_PATH} )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${OUTPUT_PATH} )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${OUTPUT_PATH} )
+endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
+
+# ---------------	BUILD SOURCE & TESTS
+
 add_subdirectory(src)
 add_subdirectory(tests)
