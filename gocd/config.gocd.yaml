@@ -17,3 +17,7 @@ pipelines:
               tasks:
                 - exec: # type of task
                     command: ./docker/build.sh
+              artifacts:
+                - test:
+                    source: output/*_report.xml
+                    destination: 
