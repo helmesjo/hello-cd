@@ -23,7 +23,7 @@
         
 ## **TODO:**
 - Fix docker-compose for GoCD setup, including registry.
-- Add test-result output (tests passed/failed, details of failes etc), perferably in HTML-friendly format.
+- ~~Add test-result output (tests passed/failed, details of failes etc), perferably in HTML-friendly format.~~
 - Add support for test coverage, result perferably in HTML-friendly format.
 - Add support for static analysis, result perferably in HTML-friendly format.
 - Do above as separate "pipeline steps", to that they can be move around in the pipeline config easily depending on their importance/time consumption etc.
