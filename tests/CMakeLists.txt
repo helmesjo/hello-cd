@@ -63,3 +63,5 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME} --reporter=junit --out=${OUTPUT_PATH}/${PROJECT_NAME}_report.xml)
+
+set(TEST_PROJECT_NAME ${PROJECT_NAME} PARENT_SCOPE)
