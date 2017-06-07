@@ -1,6 +1,30 @@
 # Get what we need to build (GCC + CMake)
 FROM dockcross/base
 
+# Get what we need to build (GCC + CMake)
+RUN     apt-get update && apt-get install --no-install-recommends -y \
+        lcov=1.11-3 && \
+        # Clean up
+        apt-get clean -y && \
+        apt-get autoclean -y && \
+        apt-get autoremove -y && \
+        rm -rf /var/lib/apt/lists/*
+
+#RUN     apt-get update && apt-get install --no-install-recommends -y \
+#        curl=7.38.0-4+deb8u5 \
+#        gcc=4:4.9.2-2 \
+#        lcov=1.11-3 \
+#        make=4.0-8.1 && \
+#        # Get newer cmake from backports
+#        echo "deb http://ftp.debian.org/debian jessie-backports main" | tee -a /etc/apt/sources.list && \
+#        apt-get update && apt-get -t jessie-backports install --no-install-recommends -y \
+#        cmake=3.6.2-2~bpo8+1 && \
+#        # Clean up
+#        apt-get clean -y && \
+#        apt-get autoclean -y && \
+#        apt-get autoremove -y && \
+#        rm -rf /var/lib/apt/lists/*
+
 WORKDIR /source
 
 COPY . ./
