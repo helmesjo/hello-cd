@@ -1,12 +1,22 @@
 #!/bin/bash
 
 # Read here: https://coderwall.com/p/fkfaqq/safer-bash-scripts-with-set-euxo-pipefail
-set -euxo pipefail
+set -euo pipefail
+
+function on_error {
+    echo "Something failed..."
+    sleep 5
+}
+trap on_error ERR
+
+# Read first argument, but default to Release if none supplied. 
+CONFIG="${1:-Release}"
+echo Building config: $CONFIG
 
 mkdir -p build
 cd build
-cmake ..
-cmake --build . --config Release
-ctest --build-config Release --verbose --output-on-failure
+cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DCMAKE_INSTALL_PREFIX=output
+cmake --build . --target install --config $CONFIG
+ctest --build-config $CONFIG --verbose --output-on-failure
 
-sleep 5
+sleep 3

@@ -1,45 +1,10 @@
-cmake_minimum_required( VERSION 3.2.2 )
+cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 
-enable_testing(true)
+# Following guide: https://rix0r.nl/blog/2015/08/13/cmake-guide/
 
-# ---------------	COMPILE FLAGS
+# Must use GNUInstallDirs to install libraries into correct
+# locations on all platforms.
+include(GNUInstallDirs)
 
-set(CMAKE_CXX_STANDARD 14) # C++14...
-set(CMAKE_CXX_STANDARD_REQUIRED ON) #...is required...
-set(CMAKE_CXX_EXTENSIONS OFF) #...without compiler extensions like gnu++11
-
-#                   ENABLE DEBUG SYMBOL GENERATION
-if(MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zi")
-else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
-endif()
-
-# ---------------	EXTERNAL MODULES
-
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules)
-
-add_subdirectory(${CMAKE_MODULE_PATH}/catch)
-add_subdirectory(${CMAKE_MODULE_PATH}/fakeit)
-add_subdirectory(${CMAKE_MODULE_PATH}/cpplocate)
-set(cpplocate_DIR ${CMAKE_MODULE_PATH}/cpplocate)
-
-# ---------------   OUTPUT DIRECTORIES
-
-# First for the generic no-config case (e.g. with mingw)
-set(OUTPUT_PATH ${CMAKE_SOURCE_DIR}/output)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_PATH})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_PATH})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_PATH})
-# Second, for multi-config builds (e.g. msvc, Release/Debug)
-foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
-    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
-    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${OUTPUT_PATH} )
-    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${OUTPUT_PATH} )
-    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${OUTPUT_PATH} )
-endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
-
-# ---------------	BUILD SOURCE & TESTS
-
+enable_testing()
 add_subdirectory(src)
-add_subdirectory(tests)
