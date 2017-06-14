@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.2.2 FATAL_ERROR)
 
 # Following guide: https://rix0r.nl/blog/2015/08/13/cmake-guide/
 
