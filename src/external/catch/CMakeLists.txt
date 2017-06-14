@@ -1,4 +1,3 @@
-cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 project(catch VERSION 1.9.4 LANGUAGES CXX)
 
 add_library(${PROJECT_NAME} INTERFACE)

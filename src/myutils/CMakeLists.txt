@@ -1,4 +1,3 @@
-cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 project(myutils VERSION 0.1 LANGUAGES CXX)
 
 add_library( ${PROJECT_NAME}
