@@ -13,9 +13,9 @@ trap on_error ERR
 CONFIG="${1:-Release}"
 echo Building config: $CONFIG
 
-mkdir -p build
+cmake -E make_directory build
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DCMAKE_INSTALL_PREFIX=output
+cmake ../src -DCMAKE_BUILD_TYPE=$CONFIG -DCMAKE_INSTALL_PREFIX=output
 cmake --build . --target install --config $CONFIG
 ctest --build-config $CONFIG --verbose --output-on-failure
 
