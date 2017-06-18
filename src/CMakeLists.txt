@@ -1,53 +1,24 @@
-project("hellocmake" CXX)
+cmake_minimum_required(VERSION 3.2.2)
+project(hello_ci VERSION 0.1 LANGUAGES CXX)
 
-# ---------------	METADATA
+# Following guide: https://rix0r.nl/blog/2015/08/13/cmake-guide/
 
-set(META_PROJECT_NAME ${PROJECT_NAME})
-set(META_PROJECT_NAMESPACE ${META_PROJECT_NAME})
-set(META_PROJECT_VERSION_MAJOR 0)
-set(META_PROJECT_VERSION_MINOR 1)
-set(META_BINARY_NAME ${META_PROJECT_NAME})
-set(META_BINARY_PATH ${CMAKE_BINARY_DIR})
+# Must use GNUInstallDirs to install libraries into correct
+# locations on all platforms.
+include(GNUInstallDirs)
 
-# ---------------	GROUP FILES
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-file(GLOB_RECURSE sources *.cpp *.hpp)
-file(GLOB_RECURSE resources resources/*)
-source_group(Resources FILES ${resources})
+LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 
-# ---------------	BUILD
+# Include external libs
+add_subdirectory(external/catch)
+add_subdirectory(external/fakeit)
 
-add_library(${PROJECT_NAME} 
-	STATIC 
-	${sources} 
-	${resources}
-)
-# On build, copy resource-files to output folder
-add_custom_command(TARGET ${PROJECT_NAME} 
-	POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-		"${PROJECT_SOURCE_DIR}/resources"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>/resources
-)
-
-# ---------------	CONFIGURE
-
-configure_file(
-    ${PROJECT_SOURCE_DIR}/config/config.h.in
-    ${PROJECT_BINARY_DIR}/config/config.h
-)
-configure_file(
-    ${PROJECT_SOURCE_DIR}/config/resources.h.in
-    ${PROJECT_BINARY_DIR}/config/resources.h
-)
-
-# ---------------	INCLUDE DIRECTORIES
-
-target_include_directories(${PROJECT_NAME}
-	PRIVATE
-	${PROJECT_BINARY_DIR}/config
-)
-
-	
-set(MAIN_PROJECT_NAME ${PROJECT_NAME} PARENT_SCOPE)
-set(MAIN_PROJECT_DIR ${PROJECT_SOURCE_DIR} PARENT_SCOPE)
+# Targets that we develop here
+enable_testing()
+add_subdirectory(myutils)
+add_subdirectory(mylib)
+add_subdirectory(myapp)
