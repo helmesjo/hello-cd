@@ -4,6 +4,7 @@ set -euxo pipefail
 
 # Clean up leftovers before exit (don't delete build image, it might be shared. I don't like this though!)
 function cleanup {
+    $SHELL
     echo "Cleaning up leftovers..."
     docker rm $CONTAINER_ID
     docker rmi $ARTIFACT_ID
@@ -28,7 +29,7 @@ CONTAINER_ID=$( docker create \
 docker start -i $CONTAINER_ID
 
 # Copy output back to host (should be optional)
-docker cp $CONTAINER_ID:$CONTAINER_WDIR/output $DIR/..
+docker cp $CONTAINER_ID:$CONTAINER_WDIR/build/output $DIR/..
 
 # Create, tag & push image (the end result, AKA artifact)
 DOCKER_REPO="localhost:5000"
