@@ -28,4 +28,6 @@ matrix:
       env: COMPILER=clang++-3.6
 
 script:
+  - bash git --version
+  - bash cmake --version
   - bash ./build.sh
