@@ -4,6 +4,12 @@ group: beta
 
 language: cpp
 
+addons:
+  apt:
+    packages:
+    - git
+    - cmake
+
 matrix:
   include:
     - compiler: gcc
