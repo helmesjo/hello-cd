@@ -1,4 +1,4 @@
-find_package(git REQUIRED)
+find_package(Git REQUIRED)
 
 function(execute_git)
     set(options "")
