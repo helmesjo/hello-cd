@@ -29,8 +29,14 @@ function(download_repo)
     set(multiValueArgs "")
     cmake_parse_arguments(args "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
+    # Determine if there are local changes, then we need to stash save & pop
+    execute_git(
+        COMMAND diff --shortstat
+        OUTPUT_VARIABLE GIT_HAVE_CHANGES
+    )
+
     if(GIT_HAVE_CHANGES)
-        message(AUTHOR_WARNING "Local changes detected! \n\tGit subtree requires a clean directory; please commit changes before running this.\n\tSkipping download.")
+        message(AUTHOR_WARNING "Local changes detected, skipping download.\n\tGit subtree requires a clean directory; please commit changes before running this.")
         return()
     endif()
 
@@ -48,12 +54,6 @@ function(download_repo)
 
     # Make clone-dir path relative to git-root
     string(REPLACE ${GIT_ROOT}/ "" RELATIVE_CLONE_DIR ${args_CLONE_DIR})
-
-    # Determine if there are local changes, then we need to stash save & pop
-    execute_git(
-        COMMAND diff --shortstat
-        OUTPUT_VARIABLE GIT_HAVE_CHANGES
-    )
 
     message("Cloning branch ${args_TAG} from ${args_URL} into relative directory ${RELATIVE_CLONE_DIR}:")
     set(MERGE_MESSAGE "Merged branch ${args_TAG} in repository ${args_URL}.")
