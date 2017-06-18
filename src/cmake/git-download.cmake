@@ -29,6 +29,11 @@ function(download_repo)
     set(multiValueArgs "")
     cmake_parse_arguments(args "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
+    if(GIT_HAVE_CHANGES)
+        message(AUTHOR_WARNING "Local changes detected! \n\tGit subtree requires a clean directory; please commit changes before running this.\n\tSkipping download.")
+        return()
+    endif()
+
     # If no tag is specified, default to master
     if(NOT args_TAG)
         set(args_TAG master)
@@ -49,10 +54,6 @@ function(download_repo)
         COMMAND diff --shortstat
         OUTPUT_VARIABLE GIT_HAVE_CHANGES
     )
-
-    if(GIT_HAVE_CHANGES)
-        message(FATAL_ERROR "Git subtree requires a clean directory; please commit changes before running this.")
-    endif()
 
     message("Cloning branch ${args_TAG} from ${args_URL} into relative directory ${RELATIVE_CLONE_DIR}:")
     set(MERGE_MESSAGE "Merged branch ${args_TAG} in repository ${args_URL}.")
