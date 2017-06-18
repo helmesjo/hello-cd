@@ -4,12 +4,6 @@ group: beta
 
 language: cpp
 
-addons:
-  apt:
-    packages:
-    - git
-    - cmake
-
 matrix:
   include:
     - compiler: gcc
@@ -18,6 +12,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - git
             - g++-5
       env: COMPILER=g++-5
       
@@ -28,6 +23,7 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.6
           packages:
+            - git
             - clang-3.6
       env: COMPILER=clang++-3.6
 
