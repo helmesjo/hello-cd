@@ -11,14 +11,14 @@ function cleanup {
 }
 trap cleanup EXIT
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 COMMIT_HASH=$(git rev-parse --short HEAD)
 CONTAINER_WDIR=//source
 
 # Build environment
 BUILD_IMAGE="build:"$COMMIT_HASH
 docker build    --tag $BUILD_IMAGE \
-                --file $DIR/Dockerfile.build .
+                --file $CURRENT_DIR/Dockerfile.build .
 
 # Create build container & compile (create+start instead of run because of issues with logs)
 CONTAINER_ID=$( docker create \
@@ -28,7 +28,7 @@ CONTAINER_ID=$( docker create \
 docker start -i $CONTAINER_ID
 
 # Copy output back to host (should be optional)
-docker cp $CONTAINER_ID:$CONTAINER_WDIR/build/output $DIR/../build/output
+docker cp $CONTAINER_ID:$CONTAINER_WDIR/build $CURRENT_DIR/../
 
 # Create, tag & push image (the end result, AKA artifact)
 DOCKER_REPO="localhost:5000"
