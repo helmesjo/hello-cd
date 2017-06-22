@@ -7,7 +7,7 @@ pipelines:
     group: hello-cd
     materials:
       git-remote:  # material name
-        git: https://github.com/helmesjo/hello-cd.git
+        git: /source
         branch: master
     stages:
       - build: # stage name

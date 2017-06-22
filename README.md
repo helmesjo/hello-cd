@@ -22,6 +22,7 @@
         
         
 ## **TODO:**
+- Host local gitrepo on docker http server (nginx) and reference this from server & agents using the overlay network driver.
 - Fix docker-compose for GoCD setup, including registry.
 - Add test-result output (tests passed/failed, details of failes etc), perferably in HTML-friendly format.
 - Add support for test coverage, result perferably in HTML-friendly format.
