@@ -5,7 +5,6 @@ include(git-download)
 
 set(REPO_DIR ${PROJECT_SOURCE_DIR}/${PROJECT_NAME}-repo)
 download_repo(
-    DO_PULL OFF
     URL "https://github.com/eranpeer/FakeIt.git"
     TAG ${PROJECT_VERSION}
     CLONE_DIR ${REPO_DIR}
