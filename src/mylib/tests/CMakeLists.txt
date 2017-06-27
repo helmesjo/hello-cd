@@ -2,23 +2,31 @@
 set(TEST_TARGET ${PROJECT_NAME})
 project(${TEST_TARGET}_tests VERSION ${PROJECT_VERSION} LANGUAGES CXX)
 
-add_executable(${PROJECT_NAME}
-	calculator_tests.cpp
+add_executable( ${PROJECT_NAME}
+	${CMAKE_CURRENT_LIST_DIR}/calculator_tests.cpp
 )
-set_target_properties(${PROJECT_NAME} 
-    PROPERTIES DEBUG_POSTFIX "-d"
+set_target_properties( ${PROJECT_NAME} 
+    PROPERTIES 
+		DEBUG_POSTFIX "-d"
 )
-target_include_directories(${PROJECT_NAME}
+target_include_directories( ${PROJECT_NAME}
 	PRIVATE
-		include
+		${CMAKE_CURRENT_LIST_DIR}/include
 )
 target_link_libraries( ${PROJECT_NAME}
-	${TEST_TARGET}
-	catch
-	fakeit
+	PRIVATE
+		${TEST_TARGET}
+		catch
+		fakeit
 )
 
 add_test(
 	NAME ${PROJECT_NAME} 
 	COMMAND ${PROJECT_NAME}
+)
+
+include(code-coverage)
+setup_target_for_coverage(
+	TARGET ${TEST_TARGET}
+	TEST_RUNNER ${PROJECT_NAME}
 )

@@ -10,7 +10,7 @@ function on_error {
 trap on_error ERR
 
 # Read first argument, but default to Release if none supplied. 
-CONFIG="${1:-Release}"
+CONFIG="${1:-RelWithDebInfo}"
 echo Building config: $CONFIG
 
 cmake -E make_directory build
