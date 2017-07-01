@@ -8,6 +8,8 @@ function on_error {
 }
 trap on_error ERR
 
-./scripts/build.sh Debug
-./build.sh Release
-./build.sh RelWithDebInfo
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+$CURRENT_DIR/build.sh Debug
+$CURRENT_DIR/build.sh Release
+$CURRENT_DIR/build.sh RelWithDebInfo
