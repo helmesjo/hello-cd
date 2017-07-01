@@ -10,22 +10,22 @@ RUN     apt-get update && apt-get install --no-install-recommends -y \
         curl \
         gnupg2 \
         software-properties-common && \
-    # Add Docker-repo
-    curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
-    apt-key fingerprint 0EBFCD88 && \
-    add-apt-repository \
-        "deb [arch=amd64] https://download.docker.com/linux/debian \
-        $(lsb_release -cs) \
-        stable" && \
-    apt-cache madison docker-ce && \
-    # Update package list again
-    apt-get update && apt-get install --no-install-recommends -y \
-        docker-ce=$DOCKER_VERSION~ce-0~debian-jessie && \
-    # Clean up
-    apt-get clean -y && \
-    apt-get autoclean -y && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
+        # Add Docker-repo
+        curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
+        apt-key fingerprint 0EBFCD88 && \
+        add-apt-repository \
+            "deb [arch=amd64] https://download.docker.com/linux/debian \
+            $(lsb_release -cs) \
+            stable" && \
+        apt-cache madison docker-ce && \
+        # Update package list again
+        apt-get update && apt-get install --no-install-recommends -y \
+            docker-ce=$DOCKER_VERSION~ce-0~debian-jessie && \
+        # Clean up
+        apt-get clean -y && \
+        apt-get autoclean -y && \
+        apt-get autoremove -y && \
+        rm -rf /var/lib/apt/lists/*
 
 COPY ./gocd/agent/custom-entrypoint.sh .
 
