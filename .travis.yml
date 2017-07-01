@@ -14,6 +14,8 @@ matrix:
           packages:
             - git
             - g++-5
+            - lcov
+            - genhtml
       env: COMPILER=g++-5
       
     - compiler: clang
@@ -25,6 +27,8 @@ matrix:
           packages:
             - git
             - clang-3.6
+            - lcov
+            - genhtml
       env: COMPILER=clang++-3.6
 
 script:
