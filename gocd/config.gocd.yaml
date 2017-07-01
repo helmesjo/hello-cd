@@ -17,3 +17,17 @@ pipelines:
               tasks:
                 - exec: # type of task
                     command: ./docker/build.sh
+      - analyze: # stage name
+          clean_workspace: true
+          jobs:
+            code-analysis:
+              artifacts:
+                - build:
+                   source: build/output/code-analysis
+                   destination: ""
+              tabs:
+                mylib: code-analysis/mylib_coverage/index.html
+                myutils: code-analysis/myutils_coverage/index.html
+              tasks:
+                - exec:
+                    command: ./docker/analyze-coverage.sh
