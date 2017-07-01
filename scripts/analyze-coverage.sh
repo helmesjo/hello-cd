@@ -9,6 +9,6 @@ function on_error {
 }
 trap on_error ERR
 
-./build.sh Debug
+./scripts/build.sh Debug
 cmake --build ./build --target coverage_all
 cmake --build ./build --target install

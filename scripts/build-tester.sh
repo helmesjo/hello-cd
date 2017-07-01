@@ -8,6 +8,6 @@ function on_error {
 }
 trap on_error ERR
 
-./build.sh Debug
+./scripts/build.sh Debug
 ./build.sh Release
 ./build.sh RelWithDebInfo
