@@ -1,21 +1,31 @@
-# Find and verify required programs
-if(CMAKE_COMPILER_IS_GNUCXX)
-    find_program(GCOV gcov)
-    find_program(LCOV lcov)
-    find_program(GENHTML genhtml)
+find_program(GCOV gcov)
+find_program(LCOV lcov)
+find_program(GENHTML genhtml)
 
-    if(NOT GCOV)
-        message(FATAL_ERROR "Gcov not found.")
-    endif()
+# Verify if code coverage is possible
 
-    if(NOT LCOV)
-        message(FATAL_ERROR "Lcov not found.")
-    endif()
+if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    message("Current compiler is ${CMAKE_CXX_COMPILER_ID}. Code-coverage only available for GCC.\n")
+    set(SKIP_COVERAGE true)
 
-    if(NOT GENHTML)
-        message(FATAL_ERROR "Genhtml not found.")
-    endif()
+elseif(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message("Code-coverage only available when building for Debug.\n")
+    set(SKIP_COVERAGE true)
+
+elseif(NOT GCOV)
+    message(WARNING "Gcov not found.")
+    set(SKIP_COVERAGE true)
+
+elseif(NOT LCOV)
+    message(WARNING "Lcov not found.")
+    set(SKIP_COVERAGE true)
+
+elseif(NOT GENHTML)
+    message(WARNING "Genhtml not found.")
+    set(SKIP_COVERAGE true)
 endif()
+
+# ----------------------------------------------------------------------
 
 # Setup an "ALL"-target linking all code coverage targets, allowing: cmake --build . --target coverage_all
 set(COVERAGE_ALL coverage_all)
@@ -29,8 +39,8 @@ endif()
 
 # Calling to this function will result in no-op if not on GCC or config not Debug
 function(setup_target_for_coverage)
-    if(NOT CMAKE_COMPILER_IS_GNUCXX OR NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-        message("Code-coverage only available for GCC & Debug configuration, ignoring...\n")
+    if(SKIP_COVERAGE)
+        message("Skipping setting up code coverage...\n")
         return()
     else()
         setup_target_for_coverage_internal( ${ARGV} )
@@ -89,6 +99,8 @@ function(setup_target_for_coverage_internal)
 
     message("Code coverage setup for target '${args_TARGET}' in: ${TARGET_BINARY_DIR}.\n \
     \tOutput found in: ${TARGET_BINARY_DIR}/${TARGET_COVERAGE}\n \
-    \tCreated target '${COVERAGE_ALL}' that will build all code-coverage targets.\n"
+    \tTarget '${COVERAGE_ALL}' will build all coverage-targets. Run the following to generate coverage reports:\n \
+    \t\tcmake --build . --target coverage_all\n \
+    \t\tcmake --build . --target install"
     )
 endfunction()

@@ -11,3 +11,4 @@ trap on_error ERR
 
 ./build.sh Debug
 cmake --build ./build --target coverage_all
+cmake --build ./build --target install
