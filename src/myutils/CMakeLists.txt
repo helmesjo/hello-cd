@@ -3,8 +3,7 @@ project(myutils VERSION 0.1 LANGUAGES CXX)
 add_library( ${PROJECT_NAME}
 	src/util.cpp
 )
-target_include_directories(
-	${PROJECT_NAME} 
+target_include_directories( ${PROJECT_NAME} 
 	INTERFACE
     	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     	$<INSTALL_INTERFACE:include>
@@ -12,12 +11,12 @@ target_include_directories(
 		include/${PROJECT_NAME}
 )
 
-set_target_properties(
-	${PROJECT_NAME} PROPERTIES
-    CXX_STANDARD 14
-    CXX_STANDARD_REQUIRED ON
-    CXX_EXTENSIONS OFF
-	DEBUG_POSTFIX "-d"
+set_target_properties(${PROJECT_NAME} 
+	PROPERTIES
+    	CXX_STANDARD 14
+    	CXX_STANDARD_REQUIRED ON
+    	CXX_EXTENSIONS OFF
+		DEBUG_POSTFIX "-d"
 )
 
 # 'make install' to the correct locations (provided by GNUInstallDirs).
@@ -47,4 +46,4 @@ export(
 	FILE ${PROJECT_NAME}-config.cmake
 )
 
-add_subdirectory(tests)
+include(tests/CMakeLists.txt)

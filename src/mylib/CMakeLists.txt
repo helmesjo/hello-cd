@@ -14,8 +14,7 @@ add_library( ${PROJECT_NAME}
 # Define headers for this library. PUBLIC headers are used for
 # compiling the library, and will be added to consumers' build
 # paths.
-target_include_directories(
-	${PROJECT_NAME} 
+target_include_directories( ${PROJECT_NAME} 
 	INTERFACE
     	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     	$<INSTALL_INTERFACE:include>
@@ -24,7 +23,8 @@ target_include_directories(
 		include/${PROJECT_NAME}
 )
 target_link_libraries( ${PROJECT_NAME}
-	myutils
+	PUBLIC
+		myutils
 )
 # We are forcing C++14 for this target
 set_target_properties( ${PROJECT_NAME}
@@ -64,4 +64,5 @@ export(
 	FILE ${PROJECT_NAME}-config.cmake
 )
 
-add_subdirectory(tests)
+# Must include instead of add_subdirectory, since target_link_libraries is not allowed in subdir
+include(tests/CMakeLists.txt)

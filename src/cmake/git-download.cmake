@@ -21,7 +21,6 @@ endfunction()
 function(download_repo)
     set(options "")
     set(oneValueArgs
-        DO_PULL
         URL
         TAG
         CLONE_DIR
