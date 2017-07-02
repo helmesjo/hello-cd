@@ -5,24 +5,24 @@ find_program(GENHTML genhtml)
 # Verify if code coverage is possible
 
 if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    message("Current compiler is ${CMAKE_CXX_COMPILER_ID}. Code-coverage only available for GCC.\n")
+    message("- Current compiler is ${CMAKE_CXX_COMPILER_ID}. Code-coverage only available for GCC.")
     set(SKIP_COVERAGE true)
 elseif(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-    message("Code-coverage only available when building for Debug.\n")
+    message("- Code-coverage only available when building for Debug.")
     set(SKIP_COVERAGE true)
 else()
     if(NOT GCOV)
-        message(WARNING "Gcov not found.")
+        message(WARNING "- Gcov not found.")
         set(SKIP_COVERAGE true)
     endif()
 
     if(NOT LCOV)
-        message(WARNING "Lcov not found.")
+        message(WARNING "- Lcov not found.")
         set(SKIP_COVERAGE true)
     endif()
 
     if(NOT GENHTML)
-        message(WARNING "Genhtml not found.")
+        message(WARNING "- Genhtml not found.")
         set(SKIP_COVERAGE true)
     endif()
 endif()
@@ -96,7 +96,7 @@ function(setup_target_for_coverage_internal)
 
     install(
         DIRECTORY "${TARGET_BINARY_DIR}/${TARGET_COVERAGE}" 
-        DESTINATION "code-analysis" 
+        DESTINATION ./code-analysis
         OPTIONAL
     )
 
