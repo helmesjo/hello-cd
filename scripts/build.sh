@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Read here: https://coderwall.com/p/fkfaqq/safer-bash-scripts-with-set-euxo-pipefail
-set -euo pipefail
+set -euxo pipefail
 
 function on_error {
     echo "Something failed..."
@@ -16,7 +16,8 @@ echo Building config: $CONFIG
 cmake -E make_directory build
 cd build
 cmake ../src -DCMAKE_BUILD_TYPE=$CONFIG -DCMAKE_INSTALL_PREFIX=output
-cmake --build . --target install --config $CONFIG
+cmake --build . --config $CONFIG
 ctest --build-config $CONFIG --verbose --output-on-failure
+cmake --build . --target install --config $CONFIG
 
 sleep 3
