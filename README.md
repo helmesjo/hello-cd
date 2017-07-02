@@ -22,7 +22,7 @@ When all is done, you can run _``docker ps``_ to verify that three containers ar
 
 Within a minute when the server has spun up, go to [localhost](http://localhost:8153/go) and you should see the pipeline:
 
-<img src="./examples/pipeline.png" alt="Drawing" style="width: 200px;"/>
+<img src="./examples/pipeline.png" alt="Drawing" style="width: 130px;"/>
 
 Each run can be inspected, and stuff like [code coverage](http://localhost:8153/go/tab/build/detail/build-on-docker-agent/1/analyze/1/code-analysis#) can be viewed in ([custom](./gocd/config.gocd.yaml#L32)) tabs:
 
