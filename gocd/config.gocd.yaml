@@ -14,6 +14,10 @@ pipelines:
           clean_workspace: true
           jobs:
             build-artifact: # job name
+              artifacts:
+                - test:
+                   source: build/output/code-analysis/*tests.xml
+                   destination: "tests"
               tasks:
                 - exec: # type of task
                     command: ./docker/build.sh
