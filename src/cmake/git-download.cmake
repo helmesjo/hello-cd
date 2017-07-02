@@ -64,7 +64,7 @@ function(download_repo)
             WORKING_DIRECTORY ${GIT_ROOT}
         )
     else()
-        message("\tUpdating...")
+        message("\tChecking for updates...")
         execute_git(
             COMMAND subtree pull --prefix ${RELATIVE_CLONE_DIR} ${args_URL} ${args_TAG} --squash --message ${MERGE_MESSAGE}
             WORKING_DIRECTORY ${GIT_ROOT}
