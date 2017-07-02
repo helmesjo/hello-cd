@@ -7,22 +7,24 @@ find_program(GENHTML genhtml)
 if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     message("Current compiler is ${CMAKE_CXX_COMPILER_ID}. Code-coverage only available for GCC.\n")
     set(SKIP_COVERAGE true)
-
 elseif(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Code-coverage only available when building for Debug.\n")
     set(SKIP_COVERAGE true)
+else()
+    if(NOT GCOV)
+        message(WARNING "Gcov not found.")
+        set(SKIP_COVERAGE true)
+    endif()
 
-elseif(NOT GCOV)
-    message(WARNING "Gcov not found.")
-    set(SKIP_COVERAGE true)
+    if(NOT LCOV)
+        message(WARNING "Lcov not found.")
+        set(SKIP_COVERAGE true)
+    endif()
 
-elseif(NOT LCOV)
-    message(WARNING "Lcov not found.")
-    set(SKIP_COVERAGE true)
-
-elseif(NOT GENHTML)
-    message(WARNING "Genhtml not found.")
-    set(SKIP_COVERAGE true)
+    if(NOT GENHTML)
+        message(WARNING "Genhtml not found.")
+        set(SKIP_COVERAGE true)
+    endif()
 endif()
 
 # ----------------------------------------------------------------------
@@ -32,6 +34,11 @@ set(COVERAGE_ALL coverage_all)
 if(NOT TARGET ${COVERAGE_ALL})
     add_custom_target( ${COVERAGE_ALL} 
         COMMENT "Main target for all code coverage targets."
+    )
+
+    message("Target '${COVERAGE_ALL}' will build all code coverage targets. Run the following to generate coverage reports:\n \
+    \tcmake --build . --target coverage_all\n \
+    \tcmake --build . --target install"
     )
 endif()
 
@@ -98,9 +105,6 @@ function(setup_target_for_coverage_internal)
     )
 
     message("Code coverage setup for target '${args_TARGET}' in: ${TARGET_BINARY_DIR}.\n \
-    \tOutput found in: ${TARGET_BINARY_DIR}/${TARGET_COVERAGE}\n \
-    \tTarget '${COVERAGE_ALL}' will build all coverage-targets. Run the following to generate coverage reports:\n \
-    \t\tcmake --build . --target coverage_all\n \
-    \t\tcmake --build . --target install"
+    \tOutput found in: ${TARGET_BINARY_DIR}/${TARGET_COVERAGE}\n"
     )
 endfunction()
