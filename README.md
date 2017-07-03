@@ -3,8 +3,8 @@
 
 This will:
  * Start a registry, where artifacts are stored as docker images.
- * Start a GoCD server, which polls the local repo for changes (commits) which kicks off the [pipeline](./gocd/config.gocd.yaml#5).
- * Start a GoCD agent with [socket binded "docker-in-docker"](https://medium.com/lucjuggery/about-var-run-docker-sock-3bfd276e12fd). It connects to the server and gets delegated the individual tasks defined by the [pipeline](./gocd/config.gocd.yaml#21).
+ * Start a GoCD server, which polls the local repo for changes (commits) which kicks off the [pipeline](./gocd/config.gocd.yaml#L5).
+ * Start a GoCD agent with [socket binded "docker-in-docker"](https://medium.com/lucjuggery/about-var-run-docker-sock-3bfd276e12fd). It connects to the server and gets delegated the individual tasks defined by the [pipeline](./gocd/config.gocd.yaml#L21).
 
 Do this:
 
