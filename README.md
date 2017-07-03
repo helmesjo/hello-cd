@@ -1,11 +1,6 @@
 ## **Try it out:**
 ### **Set up a local _Continuous Integration_ pipeline, running in docker**
 
-**This will**:
- * Start a registry, where artifacts are stored as docker images.
- * Start a GoCD server, which polls the local repo for changes (commits) which kicks off the [pipeline](./gocd/config.gocd.yaml#L5).
- * Start a GoCD agent with [socket binded "docker-in-docker"](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci#the-solution) ([also this](https://medium.com/lucjuggery/about-var-run-docker-sock-3bfd276e12fd)). It connects to the server and gets delegated the individual tasks defined by the [pipeline](./gocd/config.gocd.yaml#L21).
-
 **Steps**:
 
 1. Install [Docker](https://www.docker.com/).
@@ -19,6 +14,11 @@ cd hello-cd
 ./gocd/start-agent.sh
 ```
 _Note: It might take a while the first time, since no image-layers are present locally and must be downloaded._
+
+**This will**:
+ * Start a registry, where artifacts are stored as docker images.
+ * Start a GoCD server, which polls the local repo for changes (commits) which kicks off the [pipeline](./gocd/config.gocd.yaml#L5).
+ * Start a GoCD agent with [socket binded "docker-in-docker"](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci#the-solution) ([also this](https://medium.com/lucjuggery/about-var-run-docker-sock-3bfd276e12fd)). It connects to the server and gets delegated the individual tasks defined by the [pipeline](./gocd/config.gocd.yaml#L21).
 
 When all is done, you can run _``docker ps``_ to verify that three containers are up and running (gocd server+agent & docker registry):
 
