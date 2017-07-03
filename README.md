@@ -24,7 +24,7 @@ Within a minute when the server has spun up, go to [localhost](http://localhost:
 
 <img src="./examples/pipeline.png" width="200px"/>
 
-Each run can be inspected, and stuff like [code coverage](http://localhost:8153/go/tab/build/detail/build-on-docker-agent/1/analyze/1/code-analysis#) can be viewed in ([custom](./gocd/config.gocd.yaml#L32)) tabs:
+Each run can be inspected, and stuff like [code coverage](http://localhost:8153/go/tab/build/detail/build-on-docker-agent/1/analyze/1/code-analysis#tab-mylib) can be viewed in ([custom](./gocd/config.gocd.yaml#L32)) tabs:
 
 ![][code-coverage]
 
