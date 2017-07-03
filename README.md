@@ -6,7 +6,11 @@ This will:
  * Start a GoCD server, which polls the local repo for changes (commits) which kicks off the [pipeline](./gocd/config.gocd.yaml#5).
  * Start a GoCD agent with [socket binded "docker-in-docker"](https://medium.com/lucjuggery/about-var-run-docker-sock-3bfd276e12fd). It connects to the server and gets delegated the individual tasks defined by the [pipeline](./gocd/config.gocd.yaml#21).
 
-Run the following commands in order (on windows, let each script finish before running the next):
+Do this:
+
+1. Install [Docker](https://www.docker.com/).
+
+2. Run the following commands in order (let each script finish before running the next):
 ```
 git clone https://github.com/helmesjo/hello-cd.git
 cd hello-cd
