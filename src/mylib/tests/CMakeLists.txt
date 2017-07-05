@@ -22,7 +22,13 @@ target_link_libraries( ${PROJECT_NAME}
 
 add_test(
 	NAME ${PROJECT_NAME} 
-	COMMAND ${PROJECT_NAME}
+	COMMAND ${PROJECT_NAME} --reporter junit --out ${PROJECT_NAME}.xml
+)
+
+install(
+	FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.xml
+	DESTINATION ./code-analysis
+	OPTIONAL
 )
 
 include(code-coverage)

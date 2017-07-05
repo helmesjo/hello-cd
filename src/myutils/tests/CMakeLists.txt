@@ -2,13 +2,14 @@
 set(TEST_TARGET ${PROJECT_NAME})
 project(${TEST_TARGET}_tests VERSION ${PROJECT_VERSION} LANGUAGES CXX)
 
-add_executable(${PROJECT_NAME}
+add_executable( ${PROJECT_NAME}
 	${CMAKE_CURRENT_LIST_DIR}/util_tests.cpp
 )
-set_target_properties(${PROJECT_NAME} 
-    PROPERTIES DEBUG_POSTFIX "-d"
+set_target_properties( ${PROJECT_NAME} 
+    PROPERTIES 
+		DEBUG_POSTFIX "-d"
 )
-target_include_directories(${PROJECT_NAME}
+target_include_directories( ${PROJECT_NAME}
 	PRIVATE
 		${CMAKE_CURRENT_LIST_DIR}/include
 )
@@ -21,7 +22,13 @@ target_link_libraries( ${PROJECT_NAME}
 
 add_test(
 	NAME ${PROJECT_NAME} 
-	COMMAND ${PROJECT_NAME}
+	COMMAND ${PROJECT_NAME} --reporter junit --out ${PROJECT_NAME}.xml
+)
+
+install(
+	FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.xml
+	DESTINATION ./code-analysis
+	OPTIONAL
 )
 
 include(code-coverage)
