@@ -27,14 +27,14 @@ pipelines:
             code-analysis:
               artifacts:
                 - build:
-                   source: build/output/reports
-                   destination: ""
-                - test:
-                   source: build/output/reports/*_analysis.xml
-                   destination: "tests"
+                   source: build/output/reports/*_coverage_analysis/
+                   destination: "reports"
+                - build:
+                   source: build/output/reports/*static_analysis.xml
+                   destination: "reports"
               tabs:
-                mylib: reports/mylib_coverage/index.html
-                myutils: reports/myutils_coverage/index.html
+                mylib: reports/mylib_coverage_analysis/index.html
+                myutils: reports/mylib_coverage_analysis/index.html
               tasks:
                 - exec:
                     command: ./docker/run-analysis.sh
