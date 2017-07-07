@@ -64,5 +64,11 @@ export(
 	FILE ${PROJECT_NAME}-config.cmake
 )
 
+# Setup static analysis
+include(code-analysis)
+setup_target_for_analysis(
+	${PROJECT_NAME}
+)
+
 # Must include instead of add_subdirectory, since target_link_libraries is not allowed in subdir
 include(tests/CMakeLists.txt)

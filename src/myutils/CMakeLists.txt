@@ -46,4 +46,10 @@ export(
 	FILE ${PROJECT_NAME}-config.cmake
 )
 
+# Setup static analysis
+include(code-analysis)
+setup_target_for_analysis(
+	${PROJECT_NAME}
+)
+
 include(tests/CMakeLists.txt)
