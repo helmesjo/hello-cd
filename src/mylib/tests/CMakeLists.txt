@@ -27,7 +27,7 @@ add_test(
 
 install(
 	FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.xml
-	DESTINATION ./code-analysis
+	DESTINATION ./reports
 	OPTIONAL
 )
 

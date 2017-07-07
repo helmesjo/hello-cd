@@ -14,18 +14,17 @@ if(NOT TARGET ${ANALYSIS_ALL})
         COMMENT "Main target for all static analysis targets."
     )
 
-    message("Target '${ANALYSIS_ALL}' will build all static analysis targets. Run the following to generate reports:\n \
+    message("STATIC ANALYSIS")
+    message("- Target '${ANALYSIS_ALL}' will build all static analysis targets. Run the following to generate reports:\n \
     \tcmake --build . --target static_analysis_all\n \
     \tcmake --build . --target install"
     )
 endif()
 
-# ----------------------------------------------------------------------
-
 function(setup_target_for_analysis TARGET)
+    message("STATIC ANALYSIS")
     if(SKIP_ANALYSIS OR NOT TARGET)
-        message("Skipping setting up static analysis for target '${TARGET}'...\n")
-        return()
+        message("- Skipping setting up static analysis for target '${TARGET}'...\n")
     else()
         setup_target_for_analysis_internal( ${TARGET} )
     endif()
@@ -59,12 +58,12 @@ function(setup_target_for_analysis_internal TARGET)
     )
     string(REPLACE ";" ";-I" TARGET_INCLUDES "${TARGET_INCLUDES}")
 
-    set(TARGET_ANALYSIS ${TARGET}_analysis)
+    set(TARGET_ANALYSIS ${TARGET}_static_analysis)
     set(OUTPUT_FILE ${TARGET_BINARY_DIR}/${TARGET_ANALYSIS}.xml)
 
     add_custom_target( ${TARGET_ANALYSIS}
         # Run cppcheck
-        COMMAND ${CPPCHECK} --xml-version=2 --enable=all --force -I ${TARGET_INCLUDES} ${TARGET_SOURCES} 2> ${OUTPUT_FILE}
+        COMMAND ${CPPCHECK} --xml-version=2 --enable=all --force -I ${TARGET_INCLUDES} ${TARGET_SOURCES} 2> "${OUTPUT_FILE}"
 
         DEPENDS ${TARGET}
         WORKING_DIRECTORY ${TARGET_SOURCE_DIR}
@@ -77,12 +76,12 @@ function(setup_target_for_analysis_internal TARGET)
     )
 
     install(
-        FILES ${OUTPUT_FILE}
-        DESTINATION ./code-analysis
+        FILES "${OUTPUT_FILE}"
+        DESTINATION ./reports
         OPTIONAL
     )
 
-    message("Static analysis setup for target '${TARGET}' in:\n
+    message("- Static analysis setup for target '${TARGET}' in:\n
     \t\"${TARGET_BINARY_DIR}\".\n \
     \tReport found at: \"${OUTPUT_FILE}\"\n"
     )
