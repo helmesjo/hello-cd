@@ -6,7 +6,7 @@ pipelines:
   build-on-docker-agent:
     group: hello-cd
     materials:
-      git-remote:  # material name
+      git-repo:  # material name
         git: /source
         branch: master
     stages:
@@ -16,7 +16,7 @@ pipelines:
             build-artifact: # job name
               artifacts:
                 - test:
-                   source: build/output/code-analysis/*tests.xml
+                   source: build/output/reports/*tests.xml
                    destination: "tests"
               tasks:
                 - exec: # type of task
@@ -27,11 +27,14 @@ pipelines:
             code-analysis:
               artifacts:
                 - build:
-                   source: build/output/code-analysis
+                   source: build/output/reports
                    destination: ""
+                - test:
+                   source: build/output/reports/*_analysis.xml
+                   destination: "tests"
               tabs:
-                mylib: code-analysis/mylib_coverage/index.html
-                myutils: code-analysis/myutils_coverage/index.html
+                mylib: reports/mylib_coverage/index.html
+                myutils: reports/myutils_coverage/index.html
               tasks:
                 - exec:
-                    command: ./docker/analyze-coverage.sh
+                    command: ./docker/run-analysis.sh

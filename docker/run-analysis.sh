@@ -22,7 +22,7 @@ docker build    --tag $BUILD_IMAGE \
 # Create build container & compile (create+start instead of run because of issues with logs)
 CONTAINER_ID=$( docker create \
                 --workdir $CONTAINER_WDIR \
-                $BUILD_IMAGE ./scripts/analyze-coverage.sh \
+                $BUILD_IMAGE sh -c "./scripts/run-coverage-analysis.sh && ./scripts/run-static-analysis.sh" \
                 )
 docker start -i $CONTAINER_ID
 
