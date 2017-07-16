@@ -17,8 +17,8 @@ _Note: It might take a while the first time, since no image-layers are present l
 
 **This will**:
  * Start a registry, where artifacts are stored as docker images.
- * Start a GoCD server, which polls the local repo for changes (commits) which kicks off the [pipeline](./gocd/config.gocd.yaml#L5).
- * Start a GoCD agent with [socket binded "docker-in-docker"](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci#the-solution) ([also this](https://medium.com/lucjuggery/about-var-run-docker-sock-3bfd276e12fd)). It connects to the server and gets delegated the individual tasks defined by the [pipeline](./gocd/config.gocd.yaml#L21).
+ * Start a GoCD server, which polls the local repo for changes (commits) which kicks off the [pipeline](https://github.com/helmesjo/hello-cd/blob/e3aa87d082af69aa870189ffb7e83f9f4e0291c9/gocd/config.gocd.yaml#L5).
+ * Start a GoCD agent with [socket binded "docker-in-docker"](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci#the-solution) ([also this](https://medium.com/lucjuggery/about-var-run-docker-sock-3bfd276e12fd)). It connects to the server and gets delegated the individual [tasks](https://github.com/helmesjo/hello-cd/blob/e3aa87d082af69aa870189ffb7e83f9f4e0291c9/gocd/config.gocd.yaml#L21) defined by the pipeline.
 
 When all is done, you can run _``docker ps``_ to verify that three containers are up and running (gocd server+agent & docker registry):
 
@@ -28,7 +28,7 @@ Within a minute when the server has spun up, go to [localhost](http://localhost:
 
 <img src="./examples/pipeline.png" width="200px"/>
 
-Each run can be inspected, and stuff like [code coverage](http://localhost:8153/go/tab/build/detail/build-on-docker-agent/1/analyze/1/code-analysis#tab-mylib) can be viewed in ([custom](./gocd/config.gocd.yaml#L32)) tabs:
+Each run can be inspected, and stuff like [code coverage](http://localhost:8153/go/tab/build/detail/build-on-docker-agent/1/analyze/1/code-analysis#tab-mylib) can be viewed in custom [tabs](https://github.com/helmesjo/hello-cd/blob/e3aa87d082af69aa870189ffb7e83f9f4e0291c9/gocd/config.gocd.yaml#L35):
 
 ![][code-coverage]
 
