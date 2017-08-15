@@ -4,7 +4,10 @@ FROM dockcross/base
 # Get what we need to build (GCC + CMake)
 RUN     apt-get update && apt-get install --no-install-recommends -y \
         cppcheck=1.67-1 \
-        lcov=1.11-3 && \
+        lcov=1.11-3 \
+        python-pip && \
+        # pip
+        pip install cppcheck-junit==1.4.0 && \
         # Clean up
         apt-get clean -y && \
         apt-get autoclean -y && \

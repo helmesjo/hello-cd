@@ -1,9 +1,15 @@
 find_program(CPPCHECK cppcheck)
+find_program(CPPCHECK_JUNIT cppcheck_junit)
 
 # Verify if static analysis is possible
 
 if(NOT CPPCHECK)
     message(WARNING "- Cppcheck not found.")
+    set(SKIP_ANALYSIS true)
+endif()
+
+if(NOT CPPCHECK_JUNIT)
+    message(WARNING "- Cppcheck-junit not found.")
     set(SKIP_ANALYSIS true)
 endif()
 
@@ -60,10 +66,13 @@ function(setup_target_for_analysis_internal TARGET)
 
     set(TARGET_ANALYSIS ${TARGET}_static_analysis)
     set(OUTPUT_FILE ${TARGET_BINARY_DIR}/${TARGET_ANALYSIS}.xml)
+    set(OUTPUT_FILE_JUNIT ${TARGET_BINARY_DIR}/${TARGET_ANALYSIS}-junit.xml)
 
     add_custom_target( ${TARGET_ANALYSIS}
         # Run cppcheck
         COMMAND ${CPPCHECK} --xml-version=2 --enable=all --force -I ${TARGET_INCLUDES} ${TARGET_SOURCES} 2> "${OUTPUT_FILE}"
+        # Below should (optionally? or always do both?) convert cppcheck format -> junit format. 
+        COMMAND ${CPPCHECK_JUNIT} "${OUTPUT_FILE}" "${OUTPUT_FILE_JUNIT}"
 
         DEPENDS ${TARGET}
         WORKING_DIRECTORY ${TARGET_SOURCE_DIR}
@@ -76,7 +85,7 @@ function(setup_target_for_analysis_internal TARGET)
     )
 
     install(
-        FILES "${OUTPUT_FILE}"
+        FILES "${OUTPUT_FILE}" "${OUTPUT_FILE_JUNIT}"
         DESTINATION ./reports
         OPTIONAL
     )
