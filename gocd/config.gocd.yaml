@@ -34,7 +34,7 @@ pipelines:
                    destination: "reports"
               tabs:
                 mylib: reports/mylib_coverage_analysis/index.html
-                myutils: reports/mylib_coverage_analysis/index.html
+                myutils: reports/myutils_coverage_analysis/index.html
               tasks:
                 - exec:
                     command: ./docker/run-analysis.sh
