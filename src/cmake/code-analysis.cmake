@@ -64,7 +64,7 @@ function(setup_target_for_analysis_internal TARGET)
     )
     string(REPLACE ";" ";-I" TARGET_INCLUDES "${TARGET_INCLUDES}")
 
-    set(TARGET_ANALYSIS ${TARGET}_static_analysis)
+    set(TARGET_ANALYSIS ${TARGET}_static_analysis_tests)
     set(OUTPUT_FILE ${TARGET_BINARY_DIR}/${TARGET_ANALYSIS}.xml)
     set(OUTPUT_FILE_JUNIT ${TARGET_BINARY_DIR}/${TARGET_ANALYSIS}-junit.xml)
 

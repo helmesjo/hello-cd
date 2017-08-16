@@ -29,9 +29,9 @@ pipelines:
                 - build:
                    source: build/output/reports/*_coverage_analysis/
                    destination: "reports"
-                - build:
-                   source: build/output/reports/*static_analysis.xml
-                   destination: "reports"
+                - test:
+                   source: build/output/reports/*tests*.xml
+                   destination: "tests"
               tabs:
                 mylib: reports/mylib_coverage_analysis/index.html
                 myutils: reports/myutils_coverage_analysis/index.html
