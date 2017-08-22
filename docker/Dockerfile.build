@@ -1,12 +1,23 @@
 # Get what we need to build (GCC + CMake)
-FROM dockcross/base
+FROM debian:9.1
 
 # Get what we need to build (GCC + CMake)
 RUN     apt-get update && apt-get install --no-install-recommends -y \
-        cppcheck=1.67-1 \
-        lcov=1.11-3 \
-        python-pip && \
+        automake=1:1.15-6 \
+        autotools-dev=20161112.1 \
+        #build-essential=12.3 \
+        cmake=3.7.2-1 \
+        cppcheck=1.76.1-1 \
+        gcc=4:6.3.0-4 \
+        g++=4:6.3.0-4 \
+        git=1:2.11.0-3+deb9u1 \
+        lcov=1.13-1 \
+        make=4.1-9.1 \
+        python-pip=9.0.1-2 \
+        python-pygments=2.2.0+dfsg-1 \
+        python-setuptools && \
         # pip
+        pip install wheel && \
         pip install cppcheck-junit==1.4.0 && \
         # Clean up
         apt-get clean -y && \
