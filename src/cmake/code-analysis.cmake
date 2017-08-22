@@ -79,7 +79,7 @@ function(setup_target_for_analysis_internal TARGET)
 
     add_custom_target( ${TARGET_ANALYSIS}
         # Run cppcheck
-        COMMAND ${CPPCHECK} --xml-version=2 --enable=all --force -I ${TARGET_INCLUDES} ${TARGET_SOURCES} 2> "${OUTPUT_FILE}"
+        COMMAND ${CPPCHECK} --xml-version=2 --enable=all --suppress=missingIncludeSystem --force -I ${TARGET_INCLUDES} ${TARGET_SOURCES} 2> "${OUTPUT_FILE}"
         # Below should (optionally? or always do both?) convert cppcheck format -> junit format. 
         COMMAND ${CPPCHECK_JUNIT} "${OUTPUT_FILE}" "${OUTPUT_FILE_JUNIT}"
         COMMAND ${CPPCHECK_HTML} --report-dir=${OUTPUT_DIR_HTML};--title=${TARGET};--source-dir=${SOURCE_DIR};--file=${OUTPUT_FILE}
