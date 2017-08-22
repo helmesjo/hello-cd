@@ -64,6 +64,6 @@ Each run can be inspected, and stuff like [code coverage](http://localhost:8153/
 - Fix docker-compose for GoCD setup, including registry.
 - ~~Add test-result output (tests passed/failed, details of failes etc), perferably in HTML-friendly format.~~
 - ~~Add support for test coverage, result perferably in HTML-friendly format.~~
-- Add support for static analysis, result perferably in HTML-friendly format.
+- ~~Add support for static analysis, result perferably in HTML-friendly format.~~
 - Host local gitrepo on docker http server (nginx) and reference this from server & agents using the overlay network driver.
 - Do above as separate "pipeline steps", so that they can be easily moved around in the pipeline config depending on their importance/time consumption etc.
