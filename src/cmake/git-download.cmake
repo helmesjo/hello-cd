@@ -118,6 +118,16 @@ function(download_repo)
 
     message("Cloning branch ${args_TAG} from ${args_URL} into relative directory ${RELATIVE_CLONE_DIR}...")
     
+    # Compare HEAD on remote URL:TAG with local (if any), skip download if up-to-date
+    check_if_up_to_date(
+        ${ARGV}
+        OUTPUT_VARIABLE IS_UP_TO_DATE
+    )
+    if(IS_UP_TO_DATE)
+        message("Already up-to-date with branch '${args_TAG}' on ${args_URL}\n\tSkipping download.")
+        return()
+    endif()
+
     # Determine if there are local changes, in which case download will be skipped
     execute_git(
         COMMAND diff --shortstat
@@ -125,16 +135,6 @@ function(download_repo)
     )
     if(GIT_HAVE_CHANGES)
         message(WARNING "Local changes detected, skipping download.\n\tGit subtree requires a clean directory; please commit changes before running this.\n\t${GIT_HAVE_CHANGES}")
-        #return()
-    endif()
-
-    # Compare HEAD on remote URL:TAG with local (if any), skip download if up-to-date
-    check_if_up_to_date(
-        ${ARGV}
-        OUTPUT_VARIABLE IS_UP_TO_DATE
-    )
-    if(IS_UP_TO_DATE)
-        message("Already up-to-date with tag '${args_TAG}' on ${args_URL}\n\tSkipping download...")
         return()
     endif()
 
