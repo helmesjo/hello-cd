@@ -80,6 +80,7 @@ function(store_repo_head)
     )
     cmake_parse_arguments(args "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
     
+    # Store remote HEAD (commit hash) in local meta-file, and commit back in to repo (so that git subtree works correctly)
     get_repo_head(
         ${ARGV}
         OUTPUT_VARIABLE REMOTE_HEAD
@@ -88,6 +89,14 @@ function(store_repo_head)
     file(
         WRITE "${META_PATH}" "${REMOTE_HEAD}"
     )
+
+    execute_git(
+        COMMAND add "${META_PATH}"
+    )
+    execute_git(
+        COMMAND commit -m "git-download: Added meta-file."
+    )
+
 endfunction()
 
 function(download_repo)
@@ -101,6 +110,9 @@ function(download_repo)
     set(multiValueArgs "")
     cmake_parse_arguments(args "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
+    # Merge message used by git subtree add/pull
+    set(MERGE_MESSAGE "Merged branch ${args_TAG} in repository ${args_URL}.")
+    
     # If no tag is specified, default to master
     if(NOT args_TAG)
         set(args_TAG master)
@@ -128,21 +140,11 @@ function(download_repo)
         return()
     endif()
 
-    # Determine if there are local changes, in which case download will be skipped
-    execute_git(
-        COMMAND diff --shortstat
-        OUTPUT_VARIABLE GIT_HAVE_CHANGES
-    )
-    if(GIT_HAVE_CHANGES)
-        message(WARNING "Local changes detected, skipping download.\n\tGit subtree requires a clean directory; please commit changes before running this.\n\t${GIT_HAVE_CHANGES}")
-        return()
-    endif()
-
     # Submodules can't be pulled with git subtree, so in this case clone 
     # normally to temp-dir, download specified submodules and set git-url to this instead of remote.
     # Note: Must
     if(args_SUBMODULES)
-        set(TMP_DIR "${CMAKE_BINARY_DIR}/tmp")
+        set(TMP_DIR "${CMAKE_BINARY_DIR}/tmp/git-download")
         execute_process(
             COMMAND ${CMAKE_COMMAND} -E remove_directory ${TMP_DIR}
             WORKING_DIRECTORY "${TMP_DIR}/.."
@@ -190,7 +192,16 @@ function(download_repo)
         
     endif()
 
-    set(MERGE_MESSAGE "Merged branch ${args_TAG} in repository ${args_URL}.")
+    # Determine if there are local changes, in which case download will be skipped
+    execute_git(
+        COMMAND diff --shortstat
+        OUTPUT_VARIABLE GIT_HAVE_CHANGES
+    )
+    if(GIT_HAVE_CHANGES)
+        message(WARNING "Local changes detected, skipping download.\n\tGit subtree requires a clean directory; please commit changes before running this.\n\t${GIT_HAVE_CHANGES}")
+        return()
+    endif()
+
     if(NOT EXISTS ${args_CLONE_DIR})
         message("\tAdding...")
         execute_git(
