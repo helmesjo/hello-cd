@@ -15,11 +15,18 @@ function(execute_git)
         set(args_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
     endif()
 
+    #message("Running git-command: git ${args_COMMAND}")
+
     execute_process(
         COMMAND ${GIT_EXECUTABLE} ${args_COMMAND}
         OUTPUT_VARIABLE GIT_RESULT
+        RESULT_VARIABLE RETURN_CODE
         WORKING_DIRECTORY ${args_WORKING_DIRECTORY}
     )
+
+    if(NOT "${RETURN_CODE}" STREQUAL "0")
+        message(FATAL_ERROR "Failed to run git command.")
+    endif()
 
     set(${args_OUTPUT_VARIABLE} ${GIT_RESULT} PARENT_SCOPE)
 endfunction()
@@ -105,9 +112,10 @@ function(download_repo)
         URL
         TAG
         CLONE_DIR
+    )
+    set(multiValueArgs
         SUBMODULES
     )
-    set(multiValueArgs "")
     cmake_parse_arguments(args "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     # Merge message used by git subtree add/pull
@@ -140,35 +148,35 @@ function(download_repo)
         return()
     endif()
 
-    # Submodules can't be pulled with git subtree, so in this case clone 
-    # normally to temp-dir, download specified submodules and set git-url to this instead of remote.
-    # Note: Must
+    # Submodules can't be pulled with git subtree, so in this case clone normally to temp-dir, 
+    # download specified submodules and set git-url to this instead of remote.
+    # Note: Must merge submodules into main repo
     if(args_SUBMODULES)
         set(TMP_DIR "${CMAKE_BINARY_DIR}/tmp/git-download")
+        message("Submodules detected.\n \
+        \tCloning to temporary directory and merging submodules into repo before running subtree...\n \
+        \tTemp directory: '${TMP_DIR}'")
+
         execute_process(
             COMMAND ${CMAKE_COMMAND} -E remove_directory ${TMP_DIR}
             WORKING_DIRECTORY "${TMP_DIR}/.."
         )
 
         execute_git(
-            COMMAND clone ${args_URL} "${TMP_DIR}"
+            COMMAND clone -b ${args_TAG} --single-branch ${args_URL} "${TMP_DIR}"
         )
-        execute_process(
-            COMMAND ${GIT_EXECUTABLE} checkout ${args_TAG}
-            WORKING_DIRECTORY "${TMP_DIR}"
-        )
-        execute_process(
-            COMMAND ${GIT_EXECUTABLE} submodule update --init ${args_SUBMODULES}
-            WORKING_DIRECTORY "${TMP_DIR}"
-        )
-
         execute_git(
-            COMMAND rm .gitmodules
+            COMMAND submodule update --init ${args_SUBMODULES}
             WORKING_DIRECTORY "${TMP_DIR}"
         )
 
         # Merge submodules into main repo so that subtree merges it all
+        execute_git(
+            COMMAND rm .gitmodules
+            WORKING_DIRECTORY "${TMP_DIR}"
+        )
         foreach(SUBMODULE ${args_SUBMODULES})
+            message("Merging submodule '${SUBMODULE}'")
             execute_git(
                 COMMAND rm --cached ${SUBMODULE}
                 WORKING_DIRECTORY "${TMP_DIR}"
@@ -183,11 +191,17 @@ function(download_repo)
             COMMAND add -A
             WORKING_DIRECTORY "${TMP_DIR}"
         )
+        string(REPLACE ";" " " COMMIT_MESSAGE ${args_SUBMODULES})
         execute_git(
-            COMMAND commit -am "git-download: Merged submodules into main repo for use with subtree."
+            COMMAND commit -m "git-download: Merged submodules ${COMMIT_MESSAGE} into main repo for use with subtree."
             WORKING_DIRECTORY "${TMP_DIR}"
         )
-
+        # Replace current tag (we want the submodules-merge to be part of the tag)
+        execute_git(
+            COMMAND tag -f ${args_TAG}
+            WORKING_DIRECTORY "${TMP_DIR}"
+        )
+        
         set(args_URL "${TMP_DIR}/.git")
         
     endif()
