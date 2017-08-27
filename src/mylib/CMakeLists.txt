@@ -1,5 +1,7 @@
 project(mylib VERSION 0.1 LANGUAGES CXX)
 
+find_package(myutils)
+
 # --------------- META-DATA ---------------
 set(META_PROJECT_NAME ${PROJECT_NAME})
 set(META_PROJECT_NAMESPACE ${META_PROJECT_NAME})
@@ -10,6 +12,9 @@ configure_file(
 
 add_library( ${PROJECT_NAME}
 	src/calculator.cpp
+)
+add_library(
+	${CMAKE_PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME}
 )
 # Define headers for this library. PUBLIC headers are used for
 # compiling the library, and will be added to consumers' build
@@ -24,7 +29,7 @@ target_include_directories( ${PROJECT_NAME}
 )
 target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
-		myutils
+		${CMAKE_PROJECT_NAME}::myutils
 )
 # We are forcing C++14 for this target
 set_target_properties( ${PROJECT_NAME}
