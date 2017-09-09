@@ -7,7 +7,7 @@ else()
 endif()
 
 set(BUILD_SCRIPT "b2")
-set(BOOSTDEP_EXEC_PATH "dist/bin/boostdep")
+set(BCP_EXEC_PATH "dist/bin/bcp")
 
 function(execute_git)
     set(oneValueArgs
@@ -28,12 +28,13 @@ function(execute_git)
     execute_process(
         COMMAND ${GIT_EXECUTABLE} ${args_COMMAND}
         OUTPUT_VARIABLE GIT_RESULT
+        ERROR_VARIABLE GIT_ERROR
         RESULT_VARIABLE RETURN_CODE
         WORKING_DIRECTORY ${args_WORKING_DIRECTORY}
     )
 
     if(NOT "${RETURN_CODE}" STREQUAL "0")
-        message(FATAL_ERROR "Failed to run 'git ${args_COMMAND}'")
+        message(FATAL_ERROR "Failed to run 'git ${args_COMMAND}' :\n\t${GIT_ERROR}")
     endif()
 
     set(${args_OUTPUT_VARIABLE} ${GIT_RESULT} PARENT_SCOPE)
@@ -53,7 +54,7 @@ function(clone_repo)
         )
         # Fix for issues with long paths
         execute_git(
-            COMMAND config core.longpaths true
+            COMMAND config --system core.longpaths true
             WORKING_DIRECTORY ${args_CLONE_DIR}
         )
     else()
@@ -68,75 +69,61 @@ endfunction()
 
 function(pull_modules)
     set(oneValueArgs
-        REPO_DIR
+        BOOST_DIR
     )
     cmake_parse_arguments(args "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     execute_git(
         COMMAND submodule update --depth=1 --init
-        WORKING_DIRECTORY "${args_REPO_DIR}"
+        WORKING_DIRECTORY "${args_BOOST_DIR}"
     )
 
 endfunction()
 
-function(get_required_modules)
+function(copy_required_modules)
     set(oneValueArgs
-        REPO_DIR
-        OPTIONAL 
-            ALL_MODULES
-            REQUIRED_MODULES
-            UNUSED_MODULES
+        BOOST_DIR
+        OUTPUT_DIR
     )
     set(multiValueArgs
         SUBMODULES
     )
     cmake_parse_arguments(args "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-    set(ALL_REQUIRED_MODULES "")
-    # Run through each module and find required dependencies
-    foreach(MODULE ${args_SUBMODULES})
-        #message("Finding required dependencies for ${MODULE}...")
-        execute_process(
-            COMMAND ${BOOSTDEP_EXEC_PATH} --subset ${MODULE}
-            OUTPUT_VARIABLE REQUIRED_MODULES
-            WORKING_DIRECTORY ${args_REPO_DIR}
-        )
-
-        # Pattern-match to find module-name (eg. "assert:"), then remove ":"
-        string(REGEX MATCHALL "[a-z_]*:" REQUIRED_MODULES "${REQUIRED_MODULES}")
-        string(REPLACE ":" "" REQUIRED_MODULES "${REQUIRED_MODULES}")
-
-        # Only add unique and missing modules
-        foreach(DEPENDENCY ${REQUIRED_MODULES})
-            if(NOT DEPENDENCY IN_LIST ALL_REQUIRED_MODULES)
-                list(APPEND ALL_REQUIRED_MODULES ${DEPENDENCY})
-            endif()
-        endforeach()
-
-        message("Required modules for ${MODULE}: ${REQUIRED_MODULES}\n")
-    endforeach()
-    
-    # List all modules
+    file(MAKE_DIRECTORY "${args_OUTPUT_DIR}")
+    message("Copying subset of boost required for modules: ${args_SUBMODULES}\n\tTo folder: ${args_OUTPUT_DIR}")
     execute_process(
-        COMMAND ${BOOSTDEP_EXEC_PATH} --list-modules
-        OUTPUT_VARIABLE ALL_MODULES
-        WORKING_DIRECTORY ${args_REPO_DIR}
+        COMMAND "${BCP_EXEC_PATH}" ${args_SUBMODULES} "${args_OUTPUT_DIR}"
+        WORKING_DIRECTORY "${args_BOOST_DIR}"
     )
-    # Convert to list
-    string(REPLACE "\n" ";" ALL_MODULES "${ALL_MODULES}")
-    # Determine which modules are unused
-    set(ALL_UNUSED_MODULES "")
-    foreach(MODULE ${ALL_MODULES})
-        if(NOT MODULE IN_LIST ALL_REQUIRED_MODULES)
-            list(APPEND ALL_UNUSED_MODULES ${MODULE})
-        endif()
-    endforeach()
 
-    set(${args_ALL_MODULES} ${ALL_MODULES} PARENT_SCOPE)
-    set(${args_REQUIRED_MODULES} ${ALL_REQUIRED_MODULES} PARENT_SCOPE)
-    set(${args_UNUSED_MODULES} ${ALL_UNUSED_MODULES} PARENT_SCOPE)
 endfunction()
 
+function(remove_non_source)
+    set(oneValueArgs
+        BOOST_DIR
+    )
+    cmake_parse_arguments(args "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    message("Removing non-source files from all libraries, including docs, examples & tests.")
+    
+    file(GLOB NON_SOURCE_DIRS
+        ABSOLUTE "${args_BOOST_DIR}/" 
+            "${args_BOOST_DIR}/libs/*/doc/"
+            "${args_BOOST_DIR}/libs/*/example/"
+            "${args_BOOST_DIR}/libs/*/test/"
+            "${args_BOOST_DIR}/tools/*/doc/"
+            "${args_BOOST_DIR}/tools/*/example/"
+            "${args_BOOST_DIR}/tools/*/test/"
+    )
+
+    foreach(DIR ${NON_SOURCE_DIRS})
+        file(REMOVE_RECURSE "${DIR}")
+        file(RELATIVE_PATH REL_DIR "${args_BOOST_DIR}" "${DIR}")
+        message("Removed: ${REL_DIR}.")
+    endforeach()
+
+endfunction()
 
 function(download_boost)
     set(oneValueArgs
@@ -149,72 +136,80 @@ function(download_boost)
     )
     cmake_parse_arguments(args "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-    if(NOT EXISTS "${args_CLONE_DIR}")
-        # 1: Clone repo
-        clone_repo(
-            ${ARGV}
-        )
-        # 2: Pull all modules
-        pull_modules(
-            REPO_DIR ${args_CLONE_DIR}
-        )
-    endif()
-
-    file( GLOB IS_B2_BUILT "${args_CLONE_DIR}/b2*" )
-    if(NOT IS_B2_BUILT)
-        # 3: Run boostrap
-        execute_process(
-            COMMAND ${BOOTSTRAP_SCRIPT}
-            WORKING_DIRECTORY ${args_CLONE_DIR}
-        )
-    endif()
-
-    if(NOT EXISTS "${args_CLONE_DIR}/${BOOSTDEP_EXEC_PATH}")
-        # 4: Build (and install) boostdep. Will be put in dist/bin/
-        execute_process(
-            COMMAND ${BUILD_SCRIPT} "tools/boostdep/build//install"
-            WORKING_DIRECTORY ${args_CLONE_DIR}
-        )
-    endif()
-
-    # 6: Get missing dependencies for all modules
-    get_required_modules(
-        REPO_DIR ${args_CLONE_DIR}
-        SUBMODULES ${args_SUBMODULES}
-        REQUIRED_MODULES MODULES_NEEDED
-        UNUSED_MODULES MODULES_TO_REMOVE
+    file(REMOVE_RECURSE "${args_CLONE_DIR}")
+    set(TMP_DIR "${args_CLONE_DIR}/boost-download_tmp")
+    
+    # Clone repo
+    clone_repo(
+        URL ${args_URL}
+        TAG ${args_TAG}
+        CLONE_DIR "${TMP_DIR}"
+    )
+    # Pull all modules
+    pull_modules(
+        BOOST_DIR "${TMP_DIR}"
     )
 
-    foreach(MODULE ${MODULES_TO_REMOVE})
-        if(NOT MODULE IN_LIST MODULES_NEEDED)
-            file(REMOVE_RECURSE "${args_CLONE_DIR}/libs/${MODULE}")
-        endif()
-    endforeach()
-    
-    message("All required modules: ${MODULES_NEEDED}\n")
-    message("All unused modules (removed): ${MODULES_TO_REMOVE}\n")
+    # Remove crap
+    remove_non_source(
+        BOOST_DIR "${TMP_DIR}"
+    )
+
+    # Run bootstrap
+    file( GLOB IS_B2_BUILT "${TMP_DIR}/b2*" )
+    if(NOT IS_B2_BUILT)
+        execute_process(
+            COMMAND ${BOOTSTRAP_SCRIPT}
+            WORKING_DIRECTORY "${TMP_DIR}"
+        )
+    endif()
+
+    # Generate header sym-links
+    execute_process(
+        COMMAND ${BUILD_SCRIPT} "headers"
+        WORKING_DIRECTORY "${TMP_DIR}"
+    )
+
+    # Build bcp. Will be put in dist/bin/
+    if(NOT EXISTS "${TMP_DIR}/${BCP_EXEC_PATH}*")
+        execute_process(
+            COMMAND ${BUILD_SCRIPT} "tools/bcp"
+            WORKING_DIRECTORY "${TMP_DIR}"
+        )
+    endif()
+
+    # Copy minimum required subset of boost to new dir
+    copy_required_modules(
+        BOOST_DIR ${TMP_DIR}
+        SUBMODULES ${args_SUBMODULES}
+        OUTPUT_DIR "${args_CLONE_DIR}"
+    )
+
+    # Clean up tmp-repo and remove (can't remove with all symlinks in ./boost/...)
+    execute_git(
+        COMMAND clean --force -d -x
+        WORKING_DIRECTORY "${TMP_DIR}"
+    )
+    file(REMOVE_RECURSE "${TMP_DIR}")
+
+    # Init new git repo which contains the minimal subset
+    execute_git(
+        COMMAND init
+        WORKING_DIRECTORY "${args_CLONE_DIR}"
+    )
+    execute_git(
+        COMMAND add -A
+        WORKING_DIRECTORY "${args_CLONE_DIR}"
+    )
+    execute_git(
+        COMMAND commit -am "Minimal boost"
+        WORKING_DIRECTORY "${args_CLONE_DIR}"
+    )
+    execute_git(
+        COMMAND tag ${args_TAG}
+        WORKING_DIRECTORY "${args_CLONE_DIR}"
+    )
+
+    message("A minimal version containing required modules for: \n\t'${args_SUBMODULES}' \nhas been created at: \n\t${args_CLONE_DIR}")
 
 endfunction()
-
-
-# Needed submodules to build boostdep:
-# * tools/build
-# * tools/boostdep
-# * libs/config
-# * libs/filesystem
-# * libs/system
-# * libs/core
-# * libs/type_traits
-# * libs/predef
-# * libs/assert
-# * libs/iterator
-# * libs/mpl
-# * libs/preprocessor
-# * libs/static_assert
-# * libs/detail
-# * libs/smart_ptr
-# * libs/throw_exception
-# * libs/io
-# * libs/functional
-# * libs/range
-# * libs/winapi (if on windows)
