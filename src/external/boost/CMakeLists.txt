@@ -59,4 +59,5 @@ download_repo(
     CLONE_DIR ${boost_cmake_REPO_DIR}
 )
 
-add_subdirectory(${boost_cmake_REPO_DIR})
+set(BOOST_SOURCE "${REPO_DIR}")
+add_subdirectory( "${boost_cmake_REPO_DIR}" )
