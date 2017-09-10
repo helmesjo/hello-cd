@@ -27,28 +27,36 @@ check_if_up_to_date(
 )
 if(IS_UP_TO_DATE)
     message("Already up-to-date with branch '${boost_TAG}' on ${boost_URL}\n\tSkipping download.")
-    return()
+else()
+    # Download a stripped down version of boost, containing only specified modules & dependencies
+    download_boost(
+        URL ${boost_URL}
+        TAG ${boost_TAG}
+        CLONE_DIR "${CLONE_DIR}"
+        SUBMODULES ${boost_MODULES}
+    )
+
+    # "Download" tmp repo & merge with subtree
+    download_repo(
+        URL "${CLONE_DIR}"
+        TAG "boost-${PROJECT_VERSION}"
+        CLONE_DIR "${REPO_DIR}"
+    )
+
+    # meta-data stored by download_repo assumes we pass the real url, 
+    # but since we pass a modified repo, the hash will be wrong so we store it manually
+    store_repo_head(
+        URL ${boost_URL}
+        TAG ${boost_TAG}
+        CLONE_DIR "${REPO_DIR}"
+    )
 endif()
 
-# Download a stripped down version of boost, containing only specified modules & dependencies
-download_boost(
-    URL ${boost_URL}
-    TAG ${boost_TAG}
-    CLONE_DIR "${CLONE_DIR}"
-    SUBMODULES ${boost_MODULES}
-)
-
-# "Download" tmp repo & merge with subtree
+set(boost_cmake_REPO_DIR "${PROJECT_SOURCE_DIR}/boost-cmake-repo")
 download_repo(
-    URL "${CLONE_DIR}"
-    TAG "boost-${PROJECT_VERSION}"
-    CLONE_DIR "${REPO_DIR}"
+    URL "https://github.com/Orphis/boost-cmake.git"
+    TAG v${PROJECT_VERSION}
+    CLONE_DIR ${boost_cmake_REPO_DIR}
 )
 
-# meta-data stored by download_repo assumes we pass the real url, 
-# but since we pass a modified repo, the hash will be wrong so we store it manually
-store_repo_head(
-    URL ${boost_URL}
-    TAG ${boost_TAG}
-    CLONE_DIR "${REPO_DIR}"
-)
+add_subdirectory(${boost_cmake_REPO_DIR})
