@@ -109,12 +109,8 @@ function(remove_non_source)
     
     file(GLOB NON_SOURCE_DIRS
         ABSOLUTE "${args_BOOST_DIR}/" 
-            "${args_BOOST_DIR}/libs/*/doc/"
-            "${args_BOOST_DIR}/libs/*/example/"
-            "${args_BOOST_DIR}/libs/*/test/"
-            "${args_BOOST_DIR}/tools/*/doc/"
-            "${args_BOOST_DIR}/tools/*/example/"
-            "${args_BOOST_DIR}/tools/*/test/"
+            "${args_BOOST_DIR}/libs/*/{doc,test,example}/"
+            "${args_BOOST_DIR}/tools/*/{doc,test,example}/"
     )
 
     foreach(DIR ${NON_SOURCE_DIRS})
