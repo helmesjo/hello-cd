@@ -60,7 +60,9 @@ set(BOOST_LIBS
 )
 
 foreach(lib ${BOOST_LIBS})
-  include("libs/${lib}.cmake")
+  if(lib STREQUAL "header" OR EXISTS "${BOOST_SOURCE}/libs/${lib}")
+    include("libs/${lib}.cmake")
+  endif()
 endforeach()
 
 # TODO: Move those to option() calls in the right file
