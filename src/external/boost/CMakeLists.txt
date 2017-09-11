@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.7.1)
-project(boost VERSION 1.64.0 LANGUAGES CXX)
+set(boost_VERSION 1.64.0)
 
 include(boost-download)
 include(git-download)
 
 set(CLONE_DIR "${CMAKE_CURRENT_BINARY_DIR}/boost-download")
-set(REPO_DIR "${PROJECT_SOURCE_DIR}/${PROJECT_NAME}-repo")
+set(REPO_DIR "${CMAKE_CURRENT_LIST_DIR}/boost-repo")
 set(boost_URL "https://github.com/boostorg/boost.git")
-set(boost_TAG "boost-${PROJECT_VERSION}")
+set(boost_TAG "boost-${boost_VERSION}")
 
 set( boost_MODULES
     build
@@ -39,7 +39,7 @@ else()
     # "Download" tmp repo & merge with subtree
     download_repo(
         URL "${CLONE_DIR}"
-        TAG "boost-${PROJECT_VERSION}"
+        TAG ${boost_TAG}
         CLONE_DIR "${REPO_DIR}"
     )
 
@@ -52,10 +52,10 @@ else()
     )
 endif()
 
-set(boost_cmake_REPO_DIR "${PROJECT_SOURCE_DIR}/boost-cmake-repo")
+set(boost_cmake_REPO_DIR "${CMAKE_CURRENT_LIST_DIR}/boost-cmake-repo")
 download_repo(
     URL "https://github.com/Orphis/boost-cmake.git"
-    TAG v${PROJECT_VERSION}
+    TAG v${boost_VERSION}
     CLONE_DIR ${boost_cmake_REPO_DIR}
 )
 
