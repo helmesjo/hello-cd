@@ -1,5 +1,7 @@
 project(mylib VERSION 0.1 LANGUAGES CXX)
 
+find_package(myutils QUIET)
+
 # --------------- META-DATA ---------------
 set(META_PROJECT_NAME ${PROJECT_NAME})
 set(META_PROJECT_NAMESPACE ${META_PROJECT_NAME})
