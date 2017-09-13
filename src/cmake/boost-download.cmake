@@ -107,14 +107,13 @@ function(remove_non_source)
 
     message("Removing non-source files from all libraries, including docs, examples & tests.")
     
-    file(GLOB NON_SOURCE_DIRS
-        ABSOLUTE "${args_BOOST_DIR}/" 
-            "${args_BOOST_DIR}/libs/*/doc/"
-            "${args_BOOST_DIR}/libs/*/example/"
-            "${args_BOOST_DIR}/libs/*/test/"
-            "${args_BOOST_DIR}/tools/*/doc/"
-            "${args_BOOST_DIR}/tools/*/example/"
-            "${args_BOOST_DIR}/tools/*/test/"
+    file(GLOB_RECURSE NON_SOURCE_DIRS
+        LIST_DIRECTORIES true
+        "*"
+    )
+    list(FILTER NON_SOURCE_DIRS 
+        INCLUDE
+        REGEX "^.*\/(doc|example|test)$"
     )
 
     foreach(DIR ${NON_SOURCE_DIRS})
