@@ -5,6 +5,7 @@ set -euxo pipefail
 
 function on_error {
     echo "Something failed..."
+    $SHELL
     sleep 5
 }
 trap on_error ERR

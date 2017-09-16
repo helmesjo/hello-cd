@@ -16,6 +16,7 @@ LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 # Include external libs
 add_subdirectory(external/boost)
 add_subdirectory(external/catch)
+add_subdirectory(external/cucumber-cpp)
 add_subdirectory(external/fakeit)
 
 # Targets that we develop here
