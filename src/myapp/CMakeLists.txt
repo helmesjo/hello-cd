@@ -13,3 +13,9 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC
         ${CMAKE_PROJECT_NAME}::mylib
 )
+
+# 'make install' to the correct locations (provided by GNUInstallDirs).
+install(
+	TARGETS ${PROJECT_NAME}
+    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
