@@ -10,7 +10,6 @@ if(GMOCK_FOUND)
 endif()
 
 if(Boost_UNIT_TEST_FRAMEWORK_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
     add_executable(BoostCalculatorSteps features/step_definitions/BoostCalculatorSteps)
-    target_link_libraries(BoostCalculatorSteps Calc ${CUKE_LIBRARIES} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+    target_link_libraries(BoostCalculatorSteps Calc ${CUKE_LIBRARIES} Boost::boost Boost::unit_test_framework)
 endif()

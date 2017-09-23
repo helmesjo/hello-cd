@@ -11,7 +11,12 @@ download_repo(
     SUBMODULES features/cucumber-tck
 )
 
-set(CUKE_DISABLE_GTEST ON)
-set(CUKE_DISABLE_BOOST_TEST ON)
+set(CUKE_DISABLE_BOOST_TEST     OFF)
+set(CUKE_DISABLE_GTEST          OFF)
+set(CUKE_DISABLE_UNIT_TESTS     ON)
+set(CUKE_DISABLE_E2E_TESTS      ON)
+set(CUKE_ENABLE_EXAMPLES        ON)
+set(CUKE_DISABLE_QT             ON)
+set(VALGRIND_TESTS              OFF)
 
 add_subdirectory(cucumber-cpp-repo)

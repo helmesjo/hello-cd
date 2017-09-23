@@ -40,5 +40,5 @@ if(MINGW)
     list(APPEND CUKE_DEP_LIBRARIES ws2_32)
 endif(MINGW)
 
-target_link_libraries(cucumber-cpp-nomain PRIVATE ${CUKE_DEP_LIBRARIES})
-target_link_libraries(cucumber-cpp PRIVATE ${CUKE_DEP_LIBRARIES})
+target_link_libraries(cucumber-cpp-nomain PRIVATE ${CUKE_DEP_LIBRARIES} Boost::boost)
+target_link_libraries(cucumber-cpp PRIVATE ${CUKE_DEP_LIBRARIES} Boost::boost)

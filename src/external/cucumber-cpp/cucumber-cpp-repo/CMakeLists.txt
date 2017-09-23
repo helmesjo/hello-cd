@@ -49,12 +49,12 @@ if(NOT CUKE_DISABLE_BOOST_TEST)
     # "An external test runner utility is required to link with dynamic library" (Boost User's Guide)
     set(Boost_USE_STATIC_LIBS OFF)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_TEST_DYN_LINK")
-    find_package(Boost ${BOOST_MIN_VERSION} COMPONENTS unit_test_framework)
+    find_package(Boost ${BOOST_MIN_VERSION} COMPONENTS unit_test_framework QUIET)
 endif()
 
 if(CUKE_USE_STATIC_BOOST)
     set(Boost_USE_STATIC_LIBS ON)
-    find_package(Boost ${BOOST_MIN_VERSION} COMPONENTS ${CUKE_CORE_BOOST_LIBS} REQUIRED)
+    find_package(Boost ${BOOST_MIN_VERSION} COMPONENTS ${CUKE_CORE_BOOST_LIBS} QUIET)
 
     if(NOT MSVC)
         find_package(Threads)
@@ -63,11 +63,19 @@ if(CUKE_USE_STATIC_BOOST)
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_ALL_DYN_LINK")
     set(Boost_USE_STATIC_LIBS OFF)
-    find_package(Boost ${BOOST_MIN_VERSION} COMPONENTS ${CUKE_CORE_BOOST_LIBS} REQUIRED)
+    find_package(Boost ${BOOST_MIN_VERSION} COMPONENTS ${CUKE_CORE_BOOST_LIBS} QUIET)
 endif()
 
-include_directories(${Boost_INCLUDE_DIRS})
-set(CUKE_EXTRA_LIBRARIES ${CUKE_EXTRA_LIBRARIES} ${Boost_THREAD_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY})
+set(CUKE_EXTRA_LIBRARIES 
+    ${CUKE_EXTRA_LIBRARIES} 
+    Boost::boost 
+    Boost::thread 
+    Boost::system 
+    Boost::regex 
+    Boost::date_time 
+    Boost::program_options 
+    Boost::filesystem
+)
 
 #
 # GTest
