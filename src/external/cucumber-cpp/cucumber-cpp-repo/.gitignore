@@ -1,0 +1,20 @@
+# Bundler
+/Gemfile.lock
+
+# rvm
+/.ruby-version
+/.ruby-gemset
+
+# Build artifacts
+/build/
+
+# vim swap files
+*.swp
+
+# CLion
+/.idea
+/cmake-build-*/
+
+# Qt Creator
+/CMakeLists.txt.user
+
