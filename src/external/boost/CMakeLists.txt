@@ -10,6 +10,7 @@ set(boost_URL "https://github.com/boostorg/boost.git")
 set(boost_TAG "boost-${boost_VERSION}")
 
 set( boost_MODULES
+    asio
     build
     date_time
     program_options
