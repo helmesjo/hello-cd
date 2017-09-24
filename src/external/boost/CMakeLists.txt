@@ -13,6 +13,7 @@ set( boost_MODULES
     asio
     build
     date_time
+    multi_array
     program_options
     regex
     system
