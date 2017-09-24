@@ -109,7 +109,7 @@ function(remove_non_source)
     
     file(GLOB_RECURSE NON_SOURCE_DIRS
         LIST_DIRECTORIES true
-        "*"
+        "${args_BOOST_DIR}/*"
     )
     # Filter away all folder-paths not ending in either "doc", "example" or "test"
     list(FILTER NON_SOURCE_DIRS 
