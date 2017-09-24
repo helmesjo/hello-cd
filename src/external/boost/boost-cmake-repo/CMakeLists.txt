@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.0.0)
 project(Boost-CMake)
 
 option(BOOST_DOWNLOAD_TO_BINARY_DIR "Prefer downloading Boost to the binary directory instead of source directory" OFF)
-set(BOOST_URL "https://github.com/Orphis/boost-cmake/releases/download/v1.63.0%2B1/boost_1_63_0-1.tar.xz" CACHE STRING "Boost download URL")
-set(BOOST_URL_SHA256 "bb03ac7d13d6bfae52ac13ceaf54d88aa0c4776611bf60a942947f46aedcdb1a" CACHE STRING "Boost download URL SHA256 checksum")
+set(BOOST_URL "https://github.com/Orphis/boost-cmake/releases/download/v1.64.0/boost_1_64_0.tar.xz" CACHE STRING "Boost download URL")
+set(BOOST_URL_SHA256 "d964dfdab2f73d04a8f52303f1b141344447b78ab85dc79da78fa167fdd807f5" CACHE STRING "Boost download URL SHA256 checksum")
+set(BOOST_ARCHIVE_DIRECTORY "" CACHE DIRECTORY "Use the specified local directory to search for boost archives instead of downloading them" )
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 
@@ -24,10 +25,11 @@ if(USE_ANDROID)
   set(CMAKE_ASM_COMPILER_TARGET "${CMAKE_CXX_COMPILER_TARGET}")
 endif()
 
-set(BOOST_LIBS
+set(BOOST_LIBS_REQUIRED
   # Header only libs
   header
-
+)
+set(BOOST_LIBS_OPTIONAL
   # Compiled libs
   atomic
   chrono
@@ -52,15 +54,20 @@ set(BOOST_LIBS
   serialization
   signals
   system
-  unit_test_framework
+  test
   thread
   timer
   type_erasure
   wave
 )
 
-foreach(lib ${BOOST_LIBS})
-  if(lib STREQUAL "header" OR EXISTS "${BOOST_SOURCE}/libs/${lib}")
+foreach(lib ${BOOST_LIBS_REQUIRED})
+  include("libs/${lib}.cmake")
+endforeach()
+
+foreach(lib ${BOOST_LIBS_OPTIONAL})
+  # In case only a subset of modules is available (eg. after using bcp)
+  if(EXISTS "${BOOST_SOURCE}/libs/${lib}")
     include("libs/${lib}.cmake")
   endif()
 endforeach()
