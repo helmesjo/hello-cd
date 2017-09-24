@@ -74,7 +74,7 @@ function(pull_modules)
     cmake_parse_arguments(args "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     execute_git(
-        COMMAND submodule update --depth=1 --init
+        COMMAND submodule update --depth=1 --jobs=8 --init
         WORKING_DIRECTORY "${args_BOOST_DIR}"
     )
 
