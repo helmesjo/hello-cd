@@ -10,10 +10,8 @@ set(boost_URL "https://github.com/boostorg/boost.git")
 set(boost_TAG "boost-${boost_VERSION}")
 
 set( boost_MODULES
-    asio
-    build
+    boost # For header-only libs
     date_time
-    multi_array
     program_options
     regex
     system
