@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.7.1)
-set(boost_VERSION 1.64.0)
+set(boost_VERSION 1.51.0)
 
 include(boost-download)
 include(git-download)
