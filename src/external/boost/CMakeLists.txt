@@ -10,8 +10,9 @@ set(boost_URL "https://github.com/boostorg/boost.git")
 set(boost_TAG "boost-${boost_VERSION}")
 
 set( boost_MODULES
-    boost # For header-only libs
+    boost   # For header-only libs
     date_time
+    log     # Adding this explicitly else bcp fails to copy log/config which is required in boost-cmake/libs/log
     program_options
     regex
     system
