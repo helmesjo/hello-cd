@@ -5,6 +5,7 @@ set -uxo pipefail
 # Clean up leftovers before exit (don't delete build image, it might be shared. I don't like this though!)
 function cleanup {
     echo "Cleaning up leftovers..."
+    $SHELL
     docker rm $CONTAINER_ID
     docker rmi $ARTIFACT_ID
     sleep 3
@@ -26,6 +27,8 @@ CONTAINER_ID=$( docker create \
                 $BUILD_IMAGE ./scripts/build.sh \
                 )
 docker start -i $CONTAINER_ID
+
+$SHELL
 
 # Copy output back to host (should be optional)
 docker cp $CONTAINER_ID:$CONTAINER_WDIR/build $CURRENT_DIR/../
