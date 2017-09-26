@@ -115,7 +115,7 @@ function(remove_non_source)
     # Filter away all folder-paths not ending in either "doc", "example" or "test"
     list(FILTER NON_SOURCE_DIRS 
         INCLUDE
-        REGEX "^.*(\\/|\\\\)(doc|example|test)$"
+        REGEX "^.*(libs|tools)(\\\/|\\\\)[^\\\/\\\\]*(\\\/|\\\\)(doc|example|test)$"
     )
 
     foreach(DIR ${NON_SOURCE_DIRS})
