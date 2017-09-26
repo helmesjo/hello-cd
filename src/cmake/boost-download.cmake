@@ -159,6 +159,7 @@ function(download_boost)
     # Run bootstrap
     file( GLOB IS_B2_BUILT "${TMP_DIR}/b2*" )
     if(NOT IS_B2_BUILT)
+        message("Running boost bootstrap...")
         execute_process(
             COMMAND ${BOOTSTRAP_SCRIPT}
             WORKING_DIRECTORY "${TMP_DIR}"
@@ -166,12 +167,14 @@ function(download_boost)
     endif()
 
     # Generate header sym-links
+    message("Generating header sym-links...")
     execute_process(
         COMMAND ${BUILD_SCRIPT} "headers"
         WORKING_DIRECTORY "${TMP_DIR}"
     )
 
     # Build bcp. Will be put in dist/bin/
+    message("Building bcp...")
     if(NOT EXISTS "${TMP_DIR}/${BCP_EXEC_PATH}*")
         execute_process(
             COMMAND ${BUILD_SCRIPT} "tools/bcp"
@@ -187,6 +190,7 @@ function(download_boost)
     )
 
     # Clean up tmp-repo and remove (can't remove with all symlinks in ./boost/...)
+    message("Creating repo with minimal subset of boost...")
     execute_git(
         COMMAND clean --force -d -x
         WORKING_DIRECTORY "${TMP_DIR}"
@@ -211,6 +215,6 @@ function(download_boost)
         WORKING_DIRECTORY "${args_CLONE_DIR}"
     )
 
-    message("A minimal version containing required modules for: \n\t'${args_SUBMODULES}' \nhas been created at: \n\t${args_CLONE_DIR}")
+    message("A minimal subset containing required modules for: \n\t'${args_SUBMODULES}' \nhas been created at: \n\t${args_CLONE_DIR}")
 
 endfunction()
