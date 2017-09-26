@@ -1,7 +1,6 @@
 find_package(Git REQUIRED)
 
 function(execute_git)
-    set(options "")
     set(oneValueArgs
         WORKING_DIRECTORY
         OUTPUT_VARIABLE
@@ -15,17 +14,18 @@ function(execute_git)
         set(args_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
     endif()
 
-    #message("Running git-command: git ${args_COMMAND}")
+    message("Running git-command: git ${args_COMMAND}")
 
     execute_process(
         COMMAND ${GIT_EXECUTABLE} ${args_COMMAND}
         OUTPUT_VARIABLE GIT_RESULT
+        ERROR_VARIABLE GIT_ERROR
         RESULT_VARIABLE RETURN_CODE
         WORKING_DIRECTORY ${args_WORKING_DIRECTORY}
     )
 
     if(NOT "${RETURN_CODE}" STREQUAL "0")
-        message(FATAL_ERROR "Failed to run git command.")
+        message(FATAL_ERROR "Failed to run 'git ${args_COMMAND}' \n\tError code ${RETURN_CODE}: ${GIT_ERROR}")
     endif()
 
     set(${args_OUTPUT_VARIABLE} ${GIT_RESULT} PARENT_SCOPE)
