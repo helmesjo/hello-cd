@@ -61,5 +61,4 @@ download_repo(
 )
 
 set(BOOST_SOURCE "${REPO_DIR}")
-add_definitions(-DBOOST_THREAD_USES_DATETIME=1)
 add_subdirectory( "${boost_cmake_REPO_DIR}" )
