@@ -17,6 +17,7 @@ add_subdirectory(external/boost)
 add_subdirectory(external/catch)
 add_subdirectory(external/cucumber-cpp)
 add_subdirectory(external/fakeit)
+add_subdirectory(external/googletest)
 
 # Targets that we develop here
 enable_testing()
