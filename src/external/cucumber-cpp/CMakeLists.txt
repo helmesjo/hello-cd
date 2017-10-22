@@ -28,7 +28,7 @@ set(CUKE_DEPENDENCIES
 set(CUKE_SOURCE_DIR "${REPO_DIR}/src")
 
 include_directories(${CUKE_INCLUDE_DIR})
-add_subdirectory("${CUKE_SOURCE_DIR}")
+add_subdirectory("${CUKE_SOURCE_DIR}" EXCLUDE_FROM_ALL)
 
 # Manually add gtest driver
 set_property(

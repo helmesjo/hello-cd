@@ -13,4 +13,4 @@ download_repo(
 # Enabling this option will make gtest link the runtimes dynamically too, and match the project in which it is included.
 # See: https://github.com/google/googletest/blob/master/googletest/README.md#visual-studio-dynamic-vs-static-runtimes
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-add_subdirectory("${REPO_DIR}")
+add_subdirectory("${REPO_DIR}" EXCLUDE_FROM_ALL)

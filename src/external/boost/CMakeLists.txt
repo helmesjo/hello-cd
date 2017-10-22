@@ -61,4 +61,4 @@ download_repo(
 )
 
 set(BOOST_SOURCE "${REPO_DIR}")
-add_subdirectory( "${boost_cmake_REPO_DIR}" )
+add_subdirectory( "${boost_cmake_REPO_DIR}" EXCLUDE_FROM_ALL)
