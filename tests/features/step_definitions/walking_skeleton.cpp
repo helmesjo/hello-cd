@@ -7,13 +7,13 @@ using cucumber::ScenarioScope;
 
 struct CalcCtx {
     calculator calc;
-    double first;
-    double second;
-    double result;
+    int first;
+    int second;
+    int result;
 };
 
 GIVEN("^I have entered (\\d+) into the calculator$") {
-    REGEX_PARAM(double, n);
+    REGEX_PARAM(int, n);
     ScenarioScope<CalcCtx> context;
 
     context->first = n;
@@ -33,7 +33,7 @@ WHEN("^I press divide") {
 }
 
 THEN("^the result should be (.*) on the screen$") {
-    REGEX_PARAM(double, expected);
+    REGEX_PARAM(int, expected);
     ScenarioScope<CalcCtx> context;
 
     EXPECT_EQ(expected, context->result);
