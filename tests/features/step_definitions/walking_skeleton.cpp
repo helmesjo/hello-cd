@@ -1,5 +1,4 @@
-#include <boost/test/unit_test.hpp>
-#define EXPECT_EQ BOOST_CHECK_EQUAL
+#include <gtest/gtest.h>
 #include <cucumber-cpp/autodetect.hpp>
 
 #include <mylib/calculator.hpp>
