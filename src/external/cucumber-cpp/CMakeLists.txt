@@ -15,7 +15,16 @@ add_definitions(-DBOOST_THREAD_USES_DATETIME=1)
 
 # Setup expected variables & includes, since we bypass the root cmake-script (it is absolute poison)
 set(CUKE_INCLUDE_DIR "${REPO_DIR}/include")
-set(CUKE_DEP_LIBRARIES Boost::boost gtest)
+set(CUKE_DEPENDENCIES 
+    Boost::boost 
+    Boost::thread 
+    Boost::system 
+    Boost::regex 
+    Boost::date_time 
+    Boost::program_options 
+    Boost::filesystem
+    gtest
+)
 set(CUKE_SOURCE_DIR "${REPO_DIR}/src")
 
 include_directories(${CUKE_INCLUDE_DIR})
@@ -30,6 +39,32 @@ set_property(
 
 # Since cucumber-cpp isn't aware of "modern" cmake, do it for them so downstream targets just link it &
 # all includes are automagically setup (as per cmake-convention since 5 years back)
+
+# Set required link targets to build cucumber-cpp
+set_property(
+    TARGET cucumber-cpp 
+    APPEND PROPERTY LINK_LIBRARIES
+        ${CUKE_DEPENDENCIES}
+)
+set_property(
+    TARGET cucumber-cpp-nomain
+    APPEND PROPERTY LINK_LIBRARIES
+        ${CUKE_DEPENDENCIES}
+)
+
+# Expose required link targets for consumers
+set_property(
+    TARGET cucumber-cpp 
+    APPEND PROPERTY INTERFACE_LINK_LIBRARIES
+        ${CUKE_DEPENDENCIES}
+)
+set_property(
+    TARGET cucumber-cpp-nomain
+    APPEND PROPERTY INTERFACE_LINK_LIBRARIES
+        ${CUKE_DEPENDENCIES}
+)
+
+# Expose required include directories for consumers
 set_property(
     TARGET cucumber-cpp 
     APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES

@@ -6,13 +6,5 @@ add_executable( ${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
 	PRIVATE
 		hello_cd::mylib
-		Boost::boost 
-		Boost::thread 
-		Boost::system 
-		Boost::regex 
-		Boost::date_time 
-		Boost::program_options 
-		Boost::filesystem
-		gtest
 		cucumber-cpp
 )
