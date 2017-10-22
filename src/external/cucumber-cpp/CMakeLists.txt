@@ -15,10 +15,18 @@ add_definitions(-DBOOST_THREAD_USES_DATETIME=1)
 
 # Setup expected variables & includes, since we bypass the root cmake-script (it is absolute poison)
 set(CUKE_INCLUDE_DIR "${REPO_DIR}/include")
-set(CUKE_DEP_LIBRARIES Boost::boost)
+set(CUKE_DEP_LIBRARIES Boost::boost gtest)
+set(CUKE_SOURCE_DIR "${REPO_DIR}/src")
 
 include_directories(${CUKE_INCLUDE_DIR})
-add_subdirectory("${REPO_DIR}/src")
+add_subdirectory("${CUKE_SOURCE_DIR}")
+
+# Manually add gtest driver
+set_property(
+    TARGET cucumber-cpp 
+    APPEND PROPERTY SOURCES
+        $<BUILD_INTERFACE:${CUKE_SOURCE_DIR}/drivers/GTestDriver.cpp>
+)
 
 # Since cucumber-cpp isn't aware of "modern" cmake, do it for them so downstream targets just link it &
 # all includes are automagically setup (as per cmake-convention since 5 years back)
