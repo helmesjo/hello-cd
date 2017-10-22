@@ -11,7 +11,7 @@ download_repo(
     SUBMODULES features/cucumber-tck
 )
 
-set(CUKE_USE_STATIC_BOOST OFF CACHE BOOL "")
+set(CUKE_USE_STATIC_BOOST ON CACHE BOOL "")
 set(CUKE_USE_STATIC_GTEST OFF CACHE BOOL "")
 
 set(CUKE_DISABLE_BOOST_TEST ON CACHE BOOL "")
@@ -22,4 +22,5 @@ set(CUKE_ENABLE_EXAMPLES OFF CACHE BOOL "")
 set(VALGRIND_TESTS OFF CACHE BOOL "")
 
 add_definitions(-DBOOST_THREAD_USES_DATETIME=1)
-add_subdirectory(cucumber-cpp-repo)
+set(CUKE_INCLUDE_DIR "${REPO_DIR}/include")
+add_subdirectory("${REPO_DIR}/src")
