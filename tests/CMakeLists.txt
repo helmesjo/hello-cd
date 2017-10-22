@@ -13,13 +13,6 @@ target_link_libraries(${PROJECT_NAME}
 		Boost::date_time 
 		Boost::program_options 
 		Boost::filesystem
+		gtest
 		cucumber-cpp
-)
-
-set_target_properties(${PROJECT_NAME} 
-	PROPERTIES
-    	CXX_STANDARD 14
-    	CXX_STANDARD_REQUIRED ON
-    	CXX_EXTENSIONS OFF
-		DEBUG_POSTFIX "-d"
 )
