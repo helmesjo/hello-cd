@@ -20,7 +20,6 @@ add_subdirectory(external/fakeit)
 add_subdirectory(external/googletest)
 
 # Targets that we develop here
-enable_testing()
 add_subdirectory(myutils)
 add_subdirectory(mylib)
 add_subdirectory(myapp)
