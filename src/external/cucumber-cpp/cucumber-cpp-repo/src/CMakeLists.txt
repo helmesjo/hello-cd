@@ -24,7 +24,6 @@ if(Boost_UNIT_TEST_FRAMEWORK_FOUND)
     list(APPEND CUKE_SOURCES drivers/BoostDriver.cpp)
 endif()
 
-
 if(CMAKE_EXTRA_GENERATOR OR MSVC_IDE)
     message(STATUS "Adding header files to project")
     file(GLOB_RECURSE CUKE_HEADERS "${CUKE_INCLUDE_DIR}/cucumber-cpp/*.hpp")
@@ -41,14 +40,5 @@ if(MINGW)
     list(APPEND CUKE_DEP_LIBRARIES ws2_32)
 endif(MINGW)
 
-target_link_libraries(cucumber-cpp-nomain PRIVATE ${CUKE_DEP_LIBRARIES} Boost::boost)
-target_include_directories( cucumber-cpp-nomain
-	PUBLIC
-    	$<BUILD_INTERFACE:${CUKE_INCLUDE_DIR}>
-)
-
-target_link_libraries(cucumber-cpp PRIVATE ${CUKE_DEP_LIBRARIES} Boost::boost)
-target_include_directories( cucumber-cpp
-	PUBLIC
-    	$<BUILD_INTERFACE:${CUKE_INCLUDE_DIR}>
-)
+target_link_libraries(cucumber-cpp-nomain PRIVATE ${CUKE_DEP_LIBRARIES})
+target_link_libraries(cucumber-cpp PRIVATE ${CUKE_DEP_LIBRARIES})
