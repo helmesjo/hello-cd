@@ -15,7 +15,7 @@ echo "Running code coverage analysis..."
 
 cmake -E make_directory build
 cd build
-cmake ../src -DCMAKE_BUILD_TYPE=$CONFIG -DCMAKE_INSTALL_PREFIX=output
+cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DCMAKE_INSTALL_PREFIX=output
 cmake --build . --target coverage_all --config $CONFIG
 cmake --build . --target install --config $CONFIG
 
