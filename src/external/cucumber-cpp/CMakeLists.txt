@@ -11,16 +11,23 @@ download_repo(
     SUBMODULES features/cucumber-tck
 )
 
-set(CUKE_USE_STATIC_BOOST ON CACHE BOOL "")
-set(CUKE_USE_STATIC_GTEST OFF CACHE BOOL "")
-
-set(CUKE_DISABLE_BOOST_TEST ON CACHE BOOL "")
-set(CUKE_DISABLE_GTEST ON CACHE BOOL "")
-set(CUKE_DISABLE_UNIT_TESTS ON CACHE BOOL "")
-set(CUKE_DISABLE_E2E_TESTS ON CACHE BOOL "")
-set(CUKE_ENABLE_EXAMPLES OFF CACHE BOOL "")
-set(VALGRIND_TESTS OFF CACHE BOOL "")
-
 add_definitions(-DBOOST_THREAD_USES_DATETIME=1)
+
+# Setup expected variables & includes, since we bypass the root cmake-script (it is absolute poison)
 set(CUKE_INCLUDE_DIR "${REPO_DIR}/include")
+set(CUKE_DEP_LIBRARIES Boost::boost)
+
+include_directories(${CUKE_INCLUDE_DIR})
 add_subdirectory("${REPO_DIR}/src")
+
+# Since cucumber-cpp isn't aware of "modern" cmake, do it for them so downstream targets just link it &
+# all includes are automagically setup (as per cmake-convention since 5 years back)
+set_property(
+    TARGET cucumber-cpp 
+    APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+        $<BUILD_INTERFACE:${CUKE_INCLUDE_DIR}>
+)
+set_property(TARGET cucumber-cpp-nomain
+    APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+        $<BUILD_INTERFACE:${CUKE_INCLUDE_DIR}>
+)
