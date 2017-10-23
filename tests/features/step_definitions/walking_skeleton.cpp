@@ -12,24 +12,24 @@ struct CalcCtx {
     int result;
 };
 
-GIVEN("^I have entered (\\d+) into the calculator$") {
+GIVEN("^I first entered (\\d+) into the calculator$") {
     REGEX_PARAM(int, n);
     ScenarioScope<CalcCtx> context;
 
     context->first = n;
+}
+
+WHEN("^I then entered (\\d+) into the calculator$") {
+    REGEX_PARAM(int, n);
+    ScenarioScope<CalcCtx> context;
+
     context->second = n;
 }
 
-WHEN("^I press add") {
+WHEN("^I press sum") {
     ScenarioScope<CalcCtx> context;
 
     context->result = context->calc.sum(context->first, context->second);
-}
-
-WHEN("^I press divide") {
-    ScenarioScope<CalcCtx> context;
-
-    //context->result = context->calc.divide();
 }
 
 THEN("^the result should be (.*) on the screen$") {
