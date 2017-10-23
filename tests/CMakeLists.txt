@@ -8,3 +8,9 @@ target_link_libraries(${PROJECT_NAME}
 		hello_cd::mylib
 		cucumber-cpp
 )
+
+# 'make install' to the correct locations (provided by GNUInstallDirs).
+install(
+	TARGETS ${PROJECT_NAME}
+    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
