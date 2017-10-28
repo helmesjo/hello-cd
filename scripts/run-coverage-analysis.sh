@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Read here: https://coderwall.com/p/fkfaqq/safer-bash-scripts-with-set-euxo-pipefail
-set -euxo pipefail
+set -euo pipefail
 
 function on_error {
     echo "Something failed..."
@@ -9,7 +9,6 @@ function on_error {
 }
 trap on_error ERR
 
-# Read first argument, but default to Release if none supplied. 
 CONFIG="Debug"
 echo "Running code coverage analysis..."
 

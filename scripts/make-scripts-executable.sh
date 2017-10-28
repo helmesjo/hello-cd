@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -uxo pipefail
+set -uo pipefail
 
 function onExit {
     sleep 3

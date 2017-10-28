@@ -1,16 +1,11 @@
 project(end_to_end_tests VERSION 0.1 LANGUAGES CXX)
 
-add_executable( ${PROJECT_NAME}
-	features/step_definitions/walking_skeleton.cpp
-)
-target_link_libraries(${PROJECT_NAME}
-	PRIVATE
+include(cucumber-testing)
+
+add_cucumber_test(
+	FEATURE "features/walking_skeleton.feature"
+	STEP_DEFINITIONS "features/step_definitions/walking_skeleton.cpp"
+	TARGETS 
 		hello_cd::mylib
 		cucumber-cpp
-)
-
-# 'make install' to the correct locations (provided by GNUInstallDirs).
-install(
-	TARGETS ${PROJECT_NAME}
-    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

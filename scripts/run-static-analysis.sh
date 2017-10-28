@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Read here: https://coderwall.com/p/fkfaqq/safer-bash-scripts-with-set-euxo-pipefail
-set -euxo pipefail
+set -euo pipefail
 
 function on_error {
     echo "Something failed..."
