@@ -13,7 +13,7 @@ function cleanup {
 trap cleanup EXIT
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-REPO_ROOT_DIR=$CURRENT_DIR/..
+REPO_ROOT_DIR="$(dirname "$CURRENT_DIR")"
 REPO_NAME=$(basename `git rev-parse --show-toplevel`)
 COMMIT_HASH=$(git rev-parse --short HEAD)
 CONTAINER_WDIR=//source

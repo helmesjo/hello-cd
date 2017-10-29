@@ -1,11 +1,10 @@
 #!/bin/bash
 
-set -euo pipefail
+set -euxo pipefail
 
 # Clean up leftovers before exit
 function cleanup {
     docker rm $CONTAINER_ID
-    docker rmi $ARTIFACT_ID
     sleep 3
 }
 trap cleanup EXIT
@@ -16,7 +15,7 @@ if [[ $# -eq 0 ]] ; then
 fi
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-REPO_ROOT_DIR=$CURRENT_DIR/..
+REPO_ROOT_DIR="$(dirname "$CURRENT_DIR")"
 REPO_NAME=$(basename `git rev-parse --show-toplevel`)
 COMMIT_HASH=$(git rev-parse --short HEAD)
 CONTAINER_WDIR=//source
