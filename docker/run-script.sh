@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -uxo pipefail
+set -euo pipefail
 
-# Clean up leftovers before exit (don't delete build image, it might be shared. I don't like this though!)
+# Clean up leftovers before exit
 function cleanup {
     echo "Cleaning up leftovers..."
     docker rm $CONTAINER_ID
@@ -11,7 +11,13 @@ function cleanup {
 }
 trap cleanup EXIT
 
-SCRIPT="${1:-NoScriptSpecified.sh}"
+if [[ $# -eq 0 ]] ; then
+    echo "No argument supplied"
+    exit 1
+fi
+
+SCRIPT=${1}
+echo "Running script '$SCRIPT' inside container..."
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 COMMIT_HASH=$(git rev-parse --short HEAD)

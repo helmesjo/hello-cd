@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euxo pipefail
+set -euo pipefail
 
 # Clean up leftovers before exit (don't delete build image, it might be shared. I don't like this though!)
 function cleanup {
