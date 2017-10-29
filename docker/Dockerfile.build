@@ -38,5 +38,3 @@ RUN     git config --global user.name "docker_bot" && \
         git config --global user.email "<>"
 
 WORKDIR /source
-
-COPY . ./
