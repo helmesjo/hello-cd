@@ -4,7 +4,6 @@ set -euo pipefail
 
 # Clean up leftovers before exit
 function cleanup {
-    echo "Cleaning up leftovers..."
     docker rm $CONTAINER_ID
     docker rmi $ARTIFACT_ID
     sleep 3
@@ -16,21 +15,28 @@ if [[ $# -eq 0 ]] ; then
     exit 1
 fi
 
-SCRIPT=${1}
-echo "Running script '$SCRIPT' inside container..."
-
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+REPO_ROOT_DIR=$CURRENT_DIR/..
+REPO_NAME=$(basename `git rev-parse --show-toplevel`)
 COMMIT_HASH=$(git rev-parse --short HEAD)
 CONTAINER_WDIR=//source
 
-# Build environment
-BUILD_IMAGE="build:"$COMMIT_HASH
-docker build    --tag $BUILD_IMAGE \
-                --file $CURRENT_DIR/Dockerfile.build .
+# Expected args: 
+# 1. Script
+# 2. Dockerfile (optional)
+# 3. Image-tag  (optional)
+SCRIPT=${1}
+DOCKERFILE="${2:-$CURRENT_DIR/Dockerfile.build}"
+IMAGE_TAG="${3:-$REPO_NAME:$COMMIT_HASH}"
+
+IMAGE_ID=$($CURRENT_DIR/build-image.sh $DOCKERFILE $IMAGE_TAG 2>&1 >/dev/null)
+
+echo "Running script '$SCRIPT' inside container..."
 
 # Create build container & compile (create+start instead of run because of issues with logs)
 CONTAINER_ID=$( docker create \
+                --volume /$REPO_ROOT_DIR:$CONTAINER_WDIR \
                 --workdir $CONTAINER_WDIR \
-                $BUILD_IMAGE sh -c "$SCRIPT" \
+                $IMAGE_ID sh -c "$SCRIPT" \
                 )
 docker start -i $CONTAINER_ID
