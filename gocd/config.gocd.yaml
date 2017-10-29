@@ -20,7 +20,9 @@ pipelines:
                    destination: "tests"
               tasks:
                 - exec: # type of task
-                    command: ./docker/build.sh
+                    command: ./docker/run-script.sh
+                    arguments:
+                     - "./scripts/build.sh"
       - analyze: # stage name
           clean_workspace: true
           jobs:
@@ -39,4 +41,6 @@ pipelines:
                 myutils-analys: reports/myutils_static_analysis_html/index.html
               tasks:
                 - exec:
-                    command: ./docker/run-analysis.sh
+                    command: ./docker/run-script.sh
+                    arguments:
+                     - "./scripts/run-coverage-analysis.sh && ./scripts/run-static-analysis.sh"
