@@ -5,17 +5,17 @@ find_program(CPPCHECK_HTML cppcheck-htmlreport)
 # Verify if static analysis is possible
 
 if(NOT CPPCHECK)
-    message(WARNING "- Cppcheck not found.")
+    message("STATIC ANALYSIS - Cppcheck not found.")
     set(SKIP_ANALYSIS true)
 endif()
 
 if(NOT CPPCHECK_JUNIT)
-    message(WARNING "- Cppcheck-junit not found.")
+    message("STATIC ANALYSIS - Cppcheck-junit not found.")
     set(SKIP_ANALYSIS true)
 endif()
 
 if(NOT CPPCHECK_HTML)
-    message(WARNING "- Cppcheck-html not found.")
+    message("STATIC ANALYSIS - Cppcheck-html not found.")
     set(SKIP_ANALYSIS true)
 endif()
 
@@ -25,18 +25,12 @@ if(NOT TARGET ${ANALYSIS_ALL})
     add_custom_target( ${ANALYSIS_ALL} 
         COMMENT "Main target for all static analysis targets."
     )
-
-    message("STATIC ANALYSIS")
-    message("- Target '${ANALYSIS_ALL}' will build all static analysis targets. Run the following to generate reports:\n \
-    \tcmake --build . --target static_analysis_all\n \
-    \tcmake --build . --target install"
-    )
+    message("STATIC ANALYSIS - To generate reports: `cmake --build . --target static_analysis_all`" )
 endif()
 
 function(setup_target_for_analysis TARGET)
-    message("STATIC ANALYSIS")
     if(SKIP_ANALYSIS OR NOT TARGET)
-        message("- Skipping setting up static analysis for target '${TARGET}'...\n")
+        return()
     else()
         setup_target_for_analysis_internal( ${TARGET} )
     endif()
@@ -106,8 +100,5 @@ function(setup_target_for_analysis_internal TARGET)
         OPTIONAL
     )
 
-    message("- Static analysis setup for target '${TARGET}' in:\n
-    \t\"${TARGET_BINARY_DIR}\".\n \
-    \tReport found at: \"${OUTPUT_FILE}\"\n"
-    )
+    message("STATIC ANALYSIS - Static analysis setup for target '${TARGET}'")
 endfunction()
