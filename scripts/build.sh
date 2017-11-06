@@ -18,7 +18,7 @@ echo "Building config '$CONFIG'..."
 cmake -E make_directory build
 # Generate
 cmake -E chdir build \
-    cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DCMAKE_INSTALL_PREFIX=output
+    cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DCMAKE_INSTALL_PREFIX=output -DDOWNLOAD_ENABLED=FALSE
 
 # Build
 cmake -E chdir build \
