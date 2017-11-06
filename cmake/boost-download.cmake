@@ -23,7 +23,7 @@ function(execute_git)
         set(args_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
     endif()
 
-    message("Running git-command: git ${args_COMMAND}")
+    #message("Running git-command: git ${args_COMMAND}")
 
     execute_process(
         COMMAND ${GIT_EXECUTABLE} ${args_COMMAND}
