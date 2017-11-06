@@ -1,9 +1,13 @@
 find_package(Git REQUIRED)
 
+option(DOWNLOAD_ENABLED "If disabled, all repos will appear as up-to-date." ON)
+
 function(execute_git)
     set(oneValueArgs
         WORKING_DIRECTORY
         OUTPUT_VARIABLE
+        CONTINUE_ON_FAIL
+        RETURN_CODE
     )
     set(multiValueArgs
         COMMAND
@@ -14,7 +18,7 @@ function(execute_git)
         set(args_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
     endif()
 
-    message("Running git-command: git ${args_COMMAND}")
+    #message("Running git-command: git ${args_COMMAND}")
 
     execute_process(
         COMMAND ${GIT_EXECUTABLE} ${args_COMMAND}
@@ -24,11 +28,12 @@ function(execute_git)
         WORKING_DIRECTORY ${args_WORKING_DIRECTORY}
     )
 
-    if(NOT "${RETURN_CODE}" STREQUAL "0")
+    if(NOT args_CONTINUE_ON_FAIL AND NOT "${RETURN_CODE}" STREQUAL "0")
         message(FATAL_ERROR "Failed to run 'git ${args_COMMAND}' \n\tError code ${RETURN_CODE}: ${GIT_ERROR}")
     endif()
 
     set(${args_OUTPUT_VARIABLE} ${GIT_RESULT} PARENT_SCOPE)
+    set(${args_RETURN_CODE} ${RETURN_CODE} PARENT_SCOPE)
 endfunction()
 
 function(get_repo_head)
@@ -50,6 +55,26 @@ function(get_repo_head)
     set(${args_OUTPUT_VARIABLE} ${REMOTE_HEAD} PARENT_SCOPE)
 endfunction()
 
+function(check_if_git_repo)
+    set(oneValueArgs
+        DIR
+        OUTPUT_VARIABLE
+    )
+    cmake_parse_arguments(args "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    execute_git(
+        COMMAND rev-parse --is-inside-git-dir
+        CONTINUE_ON_FAIL TRUE
+        RETURN_CODE RESULT
+    )
+
+    if("${RESULT}" STREQUAL "0")
+        set(${args_OUTPUT_VARIABLE} TRUE PARENT_SCOPE)
+    else()
+        set(${args_OUTPUT_VARIABLE} FALSE PARENT_SCOPE)
+    endif()
+endfunction()
+
 function(check_if_up_to_date)
     set(oneValueArgs
         URL
@@ -60,7 +85,21 @@ function(check_if_up_to_date)
     cmake_parse_arguments(args "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     set(${args_OUTPUT_VARIABLE} "FALSE" PARENT_SCOPE)
-    
+
+    # Check if this is even inside a git-repo, skip if not
+    check_if_git_repo(
+        DIR ${CMAKE_CURRENT_SOURCE_DIR}
+        OUTPUT_VARIABLE IS_REPO
+    )
+    if(NOT DOWNLOAD_ENABLED)
+        set(${args_OUTPUT_VARIABLE} "TRUE" PARENT_SCOPE)
+        return()
+    elseif(NOT IS_REPO)
+        set(${args_OUTPUT_VARIABLE} "TRUE" PARENT_SCOPE)
+        message(WARNING "This is not a git-repo. Skipping download...")
+        return()
+    endif()
+
     get_repo_head(
         ${ARGV}
         OUTPUT_VARIABLE REMOTE_HEAD
@@ -70,12 +109,9 @@ function(check_if_up_to_date)
     set(META_PATH "${args_CLONE_DIR}_meta")
     if(EXISTS "${META_PATH}")
         file(READ "${META_PATH}" CURRENT_HEAD)
-    else()
-        return()
-    endif()
-
-    if(${CURRENT_HEAD} STREQUAL ${REMOTE_HEAD})
-        set(${args_OUTPUT_VARIABLE} "TRUE" PARENT_SCOPE)
+        if(${CURRENT_HEAD} STREQUAL ${REMOTE_HEAD})
+            set(${args_OUTPUT_VARIABLE} "TRUE" PARENT_SCOPE)
+        endif()
     endif()
 endfunction()
 
@@ -106,6 +142,7 @@ function(store_repo_head)
 
 endfunction()
 
+
 function(download_repo)
     set(options "")
     set(oneValueArgs
@@ -118,13 +155,23 @@ function(download_repo)
     )
     cmake_parse_arguments(args "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-    # Merge message used by git subtree add/pull
-    set(MERGE_MESSAGE "Merged branch ${args_TAG} in repository ${args_URL}.")
-    
     # If no tag is specified, default to master
     if(NOT args_TAG)
         set(args_TAG master)
     endif()
+
+    # Compare HEAD on remote URL:TAG with local (if any), skip download if up-to-date
+    check_if_up_to_date(
+        ${ARGV}
+        OUTPUT_VARIABLE IS_UP_TO_DATE
+    )
+    if(IS_UP_TO_DATE)
+        message("Already up-to-date with branch '${args_TAG}' on ${args_URL}")
+        return()
+    endif()
+
+    # Merge message used by git subtree add/pull
+    set(MERGE_MESSAGE "Merged branch ${args_TAG} in repository ${args_URL}.")
 
     execute_git(
         COMMAND rev-parse --show-toplevel
@@ -137,16 +184,6 @@ function(download_repo)
     string(REPLACE ${GIT_ROOT}/ "" RELATIVE_CLONE_DIR ${args_CLONE_DIR})
 
     message("Cloning branch ${args_TAG} from ${args_URL} into relative directory ${RELATIVE_CLONE_DIR}...")
-    
-    # Compare HEAD on remote URL:TAG with local (if any), skip download if up-to-date
-    check_if_up_to_date(
-        ${ARGV}
-        OUTPUT_VARIABLE IS_UP_TO_DATE
-    )
-    if(IS_UP_TO_DATE)
-        message("Already up-to-date with branch '${args_TAG}' on ${args_URL}\n\tSkipping download.")
-        return()
-    endif()
 
     # Submodules can't be pulled with git subtree, so in this case clone normally to temp-dir, 
     # download specified submodules and set git-url to this instead of remote.
