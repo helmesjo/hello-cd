@@ -27,7 +27,7 @@ check_if_up_to_date(
     OUTPUT_VARIABLE IS_UP_TO_DATE
 )
 if(IS_UP_TO_DATE)
-    message("Already up-to-date with branch '${boost_TAG}' on ${boost_URL}\n\tSkipping download.")
+    message("Already up-to-date with branch '${boost_TAG}' on ${boost_URL}")
 else()
     # Download a stripped down version of boost, containing only specified modules & dependencies
     download_boost(
