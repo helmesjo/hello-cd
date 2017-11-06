@@ -166,7 +166,7 @@ function(download_repo)
         OUTPUT_VARIABLE IS_UP_TO_DATE
     )
     if(IS_UP_TO_DATE)
-        message("Already up-to-date with branch '${args_TAG}' on ${args_URL}")
+        #message("Already up-to-date with branch '${args_TAG}' on ${args_URL}")
         return()
     endif()
 
