@@ -1,7 +1,7 @@
 find_program(CUCUMBER cucumber)
 
 if(NOT CUCUMBER)
-    message(WARNING "- Cucumber not found, skipping acceptance tests.")
+    message("TESTING - Cucumber not found, skipping acceptance tests.")
     set(SKIP true)
 endif()
 
