@@ -5,23 +5,23 @@ find_program(GENHTML genhtml)
 # Verify if code coverage is possible
 
 if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    message("- Current compiler is ${CMAKE_CXX_COMPILER_ID}. Code-coverage only available for GCC.\n")
+    message("CODE COVERAGE - Current compiler is ${CMAKE_CXX_COMPILER_ID}. Code-coverage only available for GCC.")
     set(SKIP_COVERAGE true)
 
 elseif(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-    message("- Code-coverage only available when building for Debug.\n")
+    message("CODE COVERAGE - Code-coverage only available when building for Debug.\n")
     set(SKIP_COVERAGE true)
 
 elseif(NOT GCOV)
-    message(WARNING "- Gcov not found.")
+    message("CODE COVERAGE - Gcov not found.")
     set(SKIP_COVERAGE true)
 
 elseif(NOT LCOV)
-    message(WARNING "- Lcov not found.")
+    message("CODE COVERAGE - Lcov not found.")
     set(SKIP_COVERAGE true)
 
 elseif(NOT GENHTML)
-    message(WARNING "- Genhtml not found.")
+    message("CODE COVERAGE - Genhtml not found.")
     set(SKIP_COVERAGE true)
 endif()
 
@@ -31,20 +31,12 @@ if(NOT TARGET ${COVERAGE_ALL})
     add_custom_target( ${COVERAGE_ALL} 
         COMMENT "Main target for all code coverage targets."
     )
-    
-    message("CODE COVERAGE")
-    message("- Target '${COVERAGE_ALL}' will build all coverage-targets. Run the following to generate reports:\n \
-    \tcmake --build . --target coverage_all\n \
-    \tcmake --build . --target install"
-    )
-
+    message("CODE COVERAGE - To generate reports: `cmake --build . --target coverage_all`")
 endif()
 
 # Calling to this function will result in no-op if not on GCC or config not Debug
 function(setup_target_for_coverage)
-    message("CODE COVERAGE")
     if(SKIP_COVERAGE)
-        message("- Skipping setting up code coverage...\n")
         return()
     else()
         setup_target_for_coverage_internal( ${ARGV} )
@@ -105,8 +97,5 @@ function(setup_target_for_coverage_internal)
         OPTIONAL
     )
 
-    message("- Code coverage analysis setup for target '${args_TARGET}' in:\n
-    \t\"${TARGET_BINARY_DIR}\".\n \
-    \tReport found at: \"${OUTPUT_DIR}\"\n"
-    )
+    message("CODE COVERAGE - Analysis setup for target '${args_TARGET}'")
 endfunction()
