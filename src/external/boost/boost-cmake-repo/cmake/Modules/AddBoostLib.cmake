@@ -34,6 +34,4 @@ function(_add_boost_lib)
   if(BOOSTLIB_INCLUDE_PRIVATE)
     target_include_directories(Boost_${BOOSTLIB_NAME} PRIVATE ${BOOSTLIB_INCLUDE_PRIVATE})
   endif()
-
-  message("Added Boost::${BOOSTLIB_NAME}")
 endfunction()
