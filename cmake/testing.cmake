@@ -47,11 +47,7 @@ function(add_test_internal)
         OPTIONAL
     )
 
-    message("- Test '${arg_TEST_NAME}' setup for target '${arg_TEST_TARGET}'.\n
-    \tTarget found at: \"${OUT_DIR}\"\n \
-    \tReport found at: \"${OUT_DIR}/${arg_REPORT_FILE}\n \
-    \tTags: \"${arg_TAGS}\"\n"
-    )
+    message("TESTING - Test '${arg_TEST_NAME}' setup for target '${arg_TEST_TARGET}'. Tags: ${arg_TAGS}")
 
 endfunction()
 
