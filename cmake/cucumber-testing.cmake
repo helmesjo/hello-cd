@@ -1,5 +1,12 @@
 find_program(CUCUMBER cucumber)
 
+# Tests are run in descending order (higher cost first)
+# We use this to make sure steprunner is started before cucumber-feature when run in parallel
+# (steprunner blocks & waits for cucumber-feature to send steps to execute)
+if(NOT TEST_COST)
+    set(TEST_COST "100000000")
+endif()
+
 if(NOT CUCUMBER)
     message("TESTING - Cucumber not found, skipping acceptance tests.")
     set(SKIP true)
@@ -44,18 +51,37 @@ function(add_cucumber_test)
         NAME ${FEATURE_NAME}_steprunner
         COMMAND ${FEATURE_NAME}
     )
-    set_tests_properties( ${FEATURE_NAME}_steprunner PROPERTIES LABELS "acceptance")
-    set_tests_properties( ${FEATURE_NAME}_steprunner 
-        PROPERTIES 
-            TIMEOUT 10
-            PARALLEL_LEVEL 2
-            PROCESSORS 2
-    )
+    decrement_cost_and_set_for_test( TEST ${FEATURE_NAME}_steprunner )
+    
     add_test(
         NAME ${FEATURE_NAME}
         COMMAND ${CUCUMBER} "${CMAKE_CURRENT_SOURCE_DIR}/${arg_FEATURE}"
         WORKING_DIRECTORY ${arg_FEATURES_ROOT}
     )
-    set_tests_properties( ${FEATURE_NAME} PROPERTIES LABELS "acceptance")
+    decrement_cost_and_set_for_test( TEST ${FEATURE_NAME} )
+
+    # Shared settings
+    set_tests_properties( ${FEATURE_NAME} ${FEATURE_NAME}_steprunner 
+        PROPERTIES 
+            TIMEOUT 10
+            PARALLEL_LEVEL 2
+            PROCESSORS 1
+            LABELS "acceptance"
+    )
     
+endfunction()
+
+function(decrement_cost_and_set_for_test)
+    set(oneValueArgs
+        TEST
+    )
+    cmake_parse_arguments(arg "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    math(EXPR TEST_COST "${TEST_COST}-1")
+    set(TEST_COST ${TEST_COST} PARENT_SCOPE)
+
+    set_tests_properties( ${arg_TEST}
+        PROPERTIES 
+            COST ${TEST_COST}
+    )
+
 endfunction()
