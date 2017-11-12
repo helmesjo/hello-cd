@@ -36,7 +36,7 @@ AUTO_REGISTER_ENVIRONMENTS="docker"
 docker run  --detach \
             --rm \
             --volume /$GIT_ROOT:/source \
-            --volume //var/run/docker.sock://var/run/docker.sock \
+            --privileged \
             --env GO_SERVER_URL=$SERVER_URL \
             --env AGENT_AUTO_REGISTER_KEY=$AUTO_REGISTER_KEY \
             --env AGENT_AUTO_REGISTER_ENVIRONMENTS=$AUTO_REGISTER_ENVIRONMENTS \
