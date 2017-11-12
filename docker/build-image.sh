@@ -14,7 +14,7 @@ COMMIT_HASH=$(git rev-parse --short HEAD)
 REPO_NAME=$(basename `git rev-parse --show-toplevel`)
 
 DOCKERFILE="${1:-$CURRENT_DIR/Dockerfile.build}"
-IMAGE_TAG="${2:-$REPO_NAME:$COMMIT_HASH}"
+IMAGE_TAG="${2:-$REPO_NAME:build}"
 
 echo "Building image '$DOCKERFILE'..."
 
