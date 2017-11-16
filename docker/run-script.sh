@@ -26,7 +26,7 @@ CONTAINER_WDIR=//source
 # 3. Image-tag  (optional)
 SCRIPT=${1}
 DOCKERFILE="${2:-$CURRENT_DIR/Dockerfile.build}"
-IMAGE_TAG="${3:-$REPO_NAME:$COMMIT_HASH}"
+IMAGE_TAG="${3:-$REPO_NAME:build}"
 
 IMAGE_ID=$($CURRENT_DIR/build-image.sh $DOCKERFILE $IMAGE_TAG 2>&1 >/dev/null)
 
