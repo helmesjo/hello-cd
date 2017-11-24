@@ -7,6 +7,11 @@ function onExit {
 }
 trap onExit EXIT
 
+# Try to find running server, else ask for ip
+SERVER_NAME="gocd-server"
+SERVER_LOCAL_URL=https://$(docker inspect --format='{{(index (index .NetworkSettings.IPAddress))}}' $SERVER_NAME):$(docker inspect --format='{{(index (index .NetworkSettings.Ports "8154/tcp") 0).HostPort}}' $SERVER_NAME)/go 
+SERVER_URL="${1:-$SERVER_LOCAL_URL}"
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 DOCKERFILE=$DIR/agent/"Dockerfile"
@@ -17,10 +22,6 @@ echo "Starting gocd-agent..."
 # Build docker image for the gocd-agent
 docker build    --tag $AGENT_IMAGE \
                 --file $DOCKERFILE .
-
-# Try to find running server, else ask for ip
-SERVER_NAME="gocd-server"
-SERVER_URL=https://$(docker inspect --format='{{(index (index .NetworkSettings.IPAddress))}}' $SERVER_NAME):$(docker inspect --format='{{(index (index .NetworkSettings.Ports "8154/tcp") 0).HostPort}}' $SERVER_NAME)/go 
 
 if [ -z ${SERVER_URL+x} ]
 then
