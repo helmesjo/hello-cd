@@ -55,7 +55,7 @@ function(add_cucumber_test)
     
     add_test(
         NAME ${FEATURE_NAME}
-        COMMAND ${CUCUMBER} "${CMAKE_CURRENT_SOURCE_DIR}/${arg_FEATURE}"
+        COMMAND ${CUCUMBER} --strict "${CMAKE_CURRENT_SOURCE_DIR}/${arg_FEATURE}"
         WORKING_DIRECTORY ${arg_FEATURES_ROOT}
     )
     decrement_cost_and_set_for_test( TEST ${FEATURE_NAME} )
