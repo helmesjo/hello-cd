@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2.2)
+cmake_minimum_required(VERSION 3.5)
 project(hello_cd VERSION 0.1 LANGUAGES CXX)
 
 # Following guide: https://rix0r.nl/blog/2015/08/13/cmake-guide/
@@ -12,6 +12,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
+
+# Make find_package work with upstream targets
+include(EnableUpstreamTargets)
 
 enable_testing()
 

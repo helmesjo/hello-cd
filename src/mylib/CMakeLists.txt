@@ -1,6 +1,6 @@
 project(mylib VERSION 0.1 LANGUAGES CXX)
 
-find_package(myutils QUIET)
+find_package(myutils REQUIRED)
 
 # --------------- META-DATA ---------------
 set(META_PROJECT_NAME ${PROJECT_NAME})
