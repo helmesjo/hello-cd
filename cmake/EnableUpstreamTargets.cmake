@@ -6,10 +6,7 @@ define_property(GLOBAL PROPERTY UPSTREAM_TARGETS
 # Overload add_library to remember all targets manually (checking if target exists is not reliable enough)
 macro(add_library)
     _add_library(${ARGV})
-    # No need to store aliases
-    if(NOT "${ARGV1}" STREQUAL "ALIAS")
-        set_property(GLOBAL APPEND PROPERTY UPSTREAM_TARGETS "${ARGV0}")
-    endif()
+    set_property(GLOBAL APPEND PROPERTY UPSTREAM_TARGETS "${ARGV0}")
 endmacro()
 
 # Overload find_package to null-op if package is an upstream target (in same build)
