@@ -14,6 +14,9 @@ CONFIG="${1:-RelWithDebInfo}"
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Install dependencies
+$CURRENT_DIR/install-dependencies.sh
+
 echo "Building config '$CONFIG'..."
 cmake -E make_directory build
 # Generate

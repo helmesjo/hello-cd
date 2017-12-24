@@ -11,11 +11,21 @@ download_repo(
     SUBMODULES features/cucumber-tck
 )
 
+find_package(Boost REQUIRED
+    COMPONENTS
+        thread 
+        system 
+        regex 
+        date_time 
+        program_options 
+        filesystem    
+)
+
 add_definitions(-DBOOST_THREAD_USES_DATETIME=1)
 
 # Setup expected variables & includes, since we bypass the root cmake-script (it is absolute poison)
 set(CUKE_INCLUDE_DIR "${REPO_DIR}/include")
-set(CUKE_DEPENDENCIES 
+set(CUKE_DEPENDENCIES
     Boost::boost 
     Boost::thread 
     Boost::system 
