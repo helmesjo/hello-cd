@@ -20,12 +20,14 @@ find_package(Boost REQUIRED
         program_options 
         filesystem    
 )
+find_package(Threads REQUIRED)
 
 add_definitions(-DBOOST_THREAD_USES_DATETIME=1)
 
 # Setup expected variables & includes, since we bypass the root cmake-script (it is absolute poison)
 set(CUKE_INCLUDE_DIR "${REPO_DIR}/include")
 set(CUKE_DEPENDENCIES
+    ${CMAKE_THREAD_LIBS_INIT}
     Boost::boost 
     Boost::thread 
     Boost::system 
