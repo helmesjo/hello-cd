@@ -28,6 +28,7 @@ RUN     apt-get update && \
         # pip
         pip install wheel && \
         pip install cppcheck-junit==1.4.0 && \
+        pip install conan==0.30.3 && \
         # Clean up
         apt-get clean -y && \
         apt-get autoclean -y && \
