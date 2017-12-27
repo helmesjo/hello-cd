@@ -12,6 +12,7 @@ RUN     apt-get update && \
         cppcheck=1.76.1-1 \
         gcc=4:6.3.0-4 \
         g++=4:6.3.0-4 \
+        g++-multilib=4:6.3.0-4 \
         lcov=1.13-1 \
         make=4.1-9.1 \
         python-pip=9.0.1-2 \
