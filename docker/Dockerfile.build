@@ -4,16 +4,11 @@ FROM debian:9.1
 RUN     apt-get update && \
         apt-get install --no-install-recommends -y \ 
         software-properties-common && \
-        add-apt-repository "deb http://ftp.debian.org/debian stretch-backports main" && \
-        # Install from backports
-        apt-get update && \
-        apt-get -t stretch-backports install --no-install-recommends -y \
-        git=1:2.14.2-1~bpo9+1 && \
+
         # Install from default
         apt-get install --no-install-recommends -y \
         automake=1:1.15-6 \
         autotools-dev=20161112.1 \
-        cmake=3.7.2-1 \
         cppcheck=1.76.1-1 \
         gcc=4:6.3.0-4 \
         g++=4:6.3.0-4 \
@@ -23,12 +18,21 @@ RUN     apt-get update && \
         python-pygments=2.2.0+dfsg-1 \
         python-setuptools=33.1.1-1 \
         ruby=1:2.3.3 && \
-        #gem
+
+        # Install from buster main
+        add-apt-repository "deb http://httpredir.debian.org/debian buster main" && \
+        apt-get update && \
+        apt-get -t buster install --no-install-recommends -y \
+        cmake=3.9.5-1 \
+        git=1:2.15.1-1 && \
+
+        # Gem
         gem install cucumber --version 2.4.0 && \
         # pip
         pip install wheel && \
         pip install cppcheck-junit==1.4.0 && \
         pip install conan==0.30.3 && \
+
         # Clean up
         apt-get clean -y && \
         apt-get autoclean -y && \
