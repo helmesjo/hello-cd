@@ -22,6 +22,7 @@ function(add_cucumber_test)
         FEATURE
         FEATURES_ROOT
     )
+    set(options "")
     set(multiValueArgs
         STEP_DEFINITIONS
         TARGETS
