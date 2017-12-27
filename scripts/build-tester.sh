@@ -8,8 +8,10 @@ function on_error {
 }
 trap on_error ERR
 
+# Read argument
+ARCH="${1:-x86}"
+
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-$CURRENT_DIR/build.sh Debug
-$CURRENT_DIR/build.sh Release
-$CURRENT_DIR/build.sh RelWithDebInfo
+$CURRENT_DIR/build.sh Debug $ARCH
+$CURRENT_DIR/build.sh Release $ARCH

@@ -9,13 +9,14 @@ function on_error {
 }
 trap on_error ERR
 
-# Read first argument, but default to Release if none supplied. 
-CONFIG="${1:-RelWithDebInfo}"
+# Read arguments
+CONFIG="${1:-Release}"
+ARCH="${2:-x86}"
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Install dependencies
-$CURRENT_DIR/install-dependencies.sh
+$CURRENT_DIR/install-dependencies.sh $CONFIG $ARCH
 
 echo "Building config '$CONFIG'..."
 cmake -E make_directory build
