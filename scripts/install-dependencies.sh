@@ -2,7 +2,7 @@
 set -euo pipefail
 
 function on_error {
-    echo "Something failed..."
+    echo -e "\n-- Dependencies NOT installed.\n"
     sleep 5
     exit 1
 }
@@ -14,15 +14,21 @@ command -v conan >/dev/null 2>&1 ||
     on_error
 }
 
+CONFIG="${1:-Release}"
+ARCH="${2:-x86}"
+
 echo -e "\n-- Installing dependencies...\n"
+
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BUILD_DIR=$CURRENT_DIR/../build
 
 # Add conan-community as remote. Needed until more packages are available in the official repository.
 # Fails if already added. If so, just swollow error.
 conan remote add conan_community https://api.bintray.com/conan/conan-community/conan >/dev/null || true
 
-cmake -E make_directory build
-cmake -E chdir build \
-    conan install .. --build=missing
+cmake -E make_directory "$BUILD_DIR"
+cmake -E chdir "$BUILD_DIR" \
+    conan install .. --build=missing -s arch=$ARCH -s build_type=$CONFIG
 
 echo -e "\n-- Dependencies installed.\n"
 sleep 2

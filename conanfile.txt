@@ -1,5 +1,8 @@
 [requires]
 Boost/1.64.0@conan/stable
 
+[options]
+Boost:shared=True # false
+
 [generators]
 cmake
