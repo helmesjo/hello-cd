@@ -20,7 +20,9 @@ find_package(Boost REQUIRED
         program_options 
         filesystem    
 )
-find_package(Threads REQUIRED)
+if(NOT MSVC)
+    find_package(Threads QUIET)
+endif()
 
 add_definitions(-DBOOST_THREAD_USES_DATETIME=1)
 
