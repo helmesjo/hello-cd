@@ -2,7 +2,7 @@
 set -euo pipefail
 
 function on_error {
-    (>&2 echo "Could not determine cmake toolchain '$TOOLCHAIN'")
+    (>&2 echo "Could not determine cmake toolchain")
     sleep 3
     exit 1
 }
@@ -25,6 +25,7 @@ TOOLCHAIN="$OS-$COMPILER-$ARCH"
 
 # If toolchain doesn't exist
 if [ ! -f "$TOOLCHAIN_DIR/$TOOLCHAIN.cmake" ]; then
+    (>&2 echo "No toolchain found matching '$TOOLCHAIN.cmake'")
     on_error
 fi
 
