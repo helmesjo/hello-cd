@@ -14,14 +14,14 @@ CONFIG="${1:-Release}"
 ARCH="${2:-x86_64}"
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-TOOLCHAIN=$($CURRENT_DIR/determine-toolchain.sh 2>&1 >/dev/null)
+TOOLCHAIN=$($CURRENT_DIR/determine-toolchain.sh $ARCH 2>&1 >/dev/null)
 TOOLCHAIN_DIR="$CURRENT_DIR/../cmake/toolchain"
 BUILD_DIR="$CURRENT_DIR/../build"
 
 # Install dependencies
 $CURRENT_DIR/install-dependencies.sh $CONFIG $ARCH
 
-echo "Building for '$CONFIG $ARCH'..."
+echo "Building for '$CONFIG $ARCH' with toolchain '$TOOLCHAIN'..."
 cmake -E make_directory $BUILD_DIR
 # Generate
 cmake -E chdir $BUILD_DIR \
