@@ -11,8 +11,11 @@ trap on_error ERR
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TOOLCHAIN_DIR="$CURRENT_DIR/../cmake/toolchain"
 
-OS="$($CURRENT_DIR/get-os.sh 2>&1 >/dev/null)"
+# Get arch from argument, or determine from environment
 ARCH="$($CURRENT_DIR/get-arch.sh 2>&1 >/dev/null)"
+ARCH="${1:-$ARCH}"
+
+OS="$($CURRENT_DIR/get-os.sh 2>&1 >/dev/null)"
 COMPILER="unknown"
 
 if [ "$OS" == "linux" ]; then
