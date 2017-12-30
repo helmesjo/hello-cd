@@ -26,12 +26,12 @@ echo -e "\n-- Installing dependencies for '$CONFIG $ARCH' with profile '$PROFILE
 
 # Add conan-community as remote. Needed until more packages are available in the official repository.
 # Fails if already added. If so, just swollow error.
-conan remote add conan_community https://api.bintray.com/conan/conan-community/conan 2>&1 >/dev/null || true
+conan remote add conan_community https://api.bintray.com/conan/conan-community/conan 2>&1 > /dev/null || true
 
 cmake -E make_directory $BUILD_DIR
 
 # Generate default profile. It is inherited inside profiles to autofill settings
-conan profile new default --detect || true
+conan profile new default --detect 2>&1 > /dev/null || true
 
 # Install dependencies. Build if pre-built is missing.
 cmake -E chdir $BUILD_DIR \
