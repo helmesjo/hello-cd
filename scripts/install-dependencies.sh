@@ -17,12 +17,12 @@ command -v conan >/dev/null 2>&1 ||
 CONFIG="${1:-Release}"
 ARCH="${2:-x86_64}"
 
-echo -e "\n-- Installing dependencies for '$CONFIG $ARCH'...\n"
-
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 OS="$($CURRENT_DIR/get-os.sh 2>&1 >/dev/null)"
 PROFILE="$CURRENT_DIR/../conan/profile-$OS.txt"
 BUILD_DIR="$CURRENT_DIR/../build"
+
+echo -e "\n-- Installing dependencies for '$CONFIG $ARCH' with profile '$PROFILE'...n"
 
 # Add conan-community as remote. Needed until more packages are available in the official repository.
 # Fails if already added. If so, just swollow error.
