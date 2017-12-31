@@ -9,14 +9,21 @@ function on_error {
 }
 trap on_error ERR
 
-# Read first argument, but default to Release if none supplied. 
 CONFIG="Debug"
-echo "Running static analysis..."
+ARCH="x86"
 
-cmake -E make_directory build
-cd build
-cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DCMAKE_INSTALL_PREFIX=output
-cmake --build . --target static_analysis_all --config $CONFIG
-cmake --build . --target install --config $CONFIG
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BUILD_DIR="$CURRENT_DIR/../build"
+
+$CURRENT_DIR/build.sh $CONFIG $ARCH
+
+echo "Running code coverage analysis for '$CONFIG $ARCH'..."
+
+# Generate
+cmake -E chdir $BUILD_DIR \
+    cmake --build . --target static_analysis_all --config $CONFIG
+# Install result
+cmake -E chdir $BUILD_DIR \
+    cmake --build . --target install --config $CONFIG
 
 sleep 3
