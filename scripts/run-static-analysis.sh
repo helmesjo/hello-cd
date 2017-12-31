@@ -10,7 +10,7 @@ function on_error {
 trap on_error ERR
 
 CONFIG="Debug"
-ARCH="x86"
+ARCH="x86_64"
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUILD_DIR="$CURRENT_DIR/../build"
