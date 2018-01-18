@@ -29,15 +29,19 @@ then
     SERVER_URL="https://$ip:8154/go"
 fi
 
+# Make sure network is started (used to enable communication by container-name)
+NETWORK=$($DIR/../docker/start-network.sh 2>&1)
+
 GIT_ROOT=$(git rev-parse --show-toplevel)
 AUTO_REGISTER_KEY="29a6415d-cfe8-40c7-9c46-37cf5612c995"
 AUTO_REGISTER_ENVIRONMENTS="docker"
 # Start gocd-agent and forward socket (so that the host-docker engine can be invoked from inside)
 # Git-repo is added to agent and used as clone-url (will change this to point to a docker http server)
 docker run  --detach \
-            --rm \
+            --restart always \
             --volume /$GIT_ROOT:/source \
             --privileged \
+            --net $NETWORK
             --env GO_SERVER_URL=$SERVER_URL \
             --env AGENT_AUTO_REGISTER_KEY=$AUTO_REGISTER_KEY \
             --env AGENT_AUTO_REGISTER_ENVIRONMENTS=$AUTO_REGISTER_ENVIRONMENTS \
