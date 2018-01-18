@@ -28,12 +28,16 @@ SCRIPT=${1}
 DOCKERFILE="${2:-$CURRENT_DIR/Dockerfile.build}"
 IMAGE_TAG="${3:-$REPO_NAME:build}"
 
+# Make sure network is started (used to enable communication by container-name)
+NETWORK=$($DIR/../docker/start-network.sh 2>&1)
+
 IMAGE_ID=$($CURRENT_DIR/build-image.sh $DOCKERFILE $IMAGE_TAG 2>&1 >/dev/null)
 
 echo "Running script '$SCRIPT' inside container..."
 
 # Create build container & compile (create+start instead of run because of issues with logs)
 CONTAINER_ID=$( docker create \
+                --net $NETWORK \
                 --volume /$REPO_ROOT_DIR:$CONTAINER_WDIR \
                 --workdir $CONTAINER_WDIR \
                 $IMAGE_ID sh -c "$SCRIPT" \
