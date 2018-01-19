@@ -2,25 +2,27 @@
 
 set -euo pipefail
 
-# Clean up leftovers before exit (don't delete build image, it might be shared. I don't like this though!)
-function cleanup {
-    (>&2 echo "$IMAGE_ID")
-    sleep 1
+function on_error {
+    echo "Could not build dockerfile $DOCKERFILE" >&2
+    sleep 5
+    exit 1
 }
-trap cleanup EXIT
+trap on_error ERR
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 COMMIT_HASH=$(git rev-parse --short HEAD)
 REPO_NAME=$(basename `git rev-parse --show-toplevel`)
 
 DOCKERFILE="${1:-$CURRENT_DIR/Dockerfile.build}"
-IMAGE_TAG="${2:-$REPO_NAME:build}"
+IMAGE_NAME="${2:-$REPO_NAME:build}"
 
-echo "Building image '$DOCKERFILE'..."
+echo -e "\n-- Building image '$DOCKERFILE'...\n"
 
 # Build environment
-IMAGE_ID=$( docker build \
-                --quiet \
-                --tag $IMAGE_TAG \
-                --file $DOCKERFILE .//docker
-                )
+docker build    --tag $IMAGE_NAME \
+                --file $DOCKERFILE .
+
+echo -e "\n-- Built image '$IMAGE_NAME'\n"
+echo $IMAGE_NAME >&2
+
+sleep 2
