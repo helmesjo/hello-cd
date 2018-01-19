@@ -19,7 +19,7 @@ IMAGE_NAME="conan-server"
 # Make sure network is started (used to enable communication by container-name)
 NETWORK=$($DIR/../docker/start-network.sh 2>&1 >/dev/null)
 
-echo "Starting conan server, connecting it to network '$NETWORK'..."
+echo -e "\n-- Starting conan server, connecting it to network '$NETWORK'...\n"
 
 # Build docker image for the conan-server
 docker build    --tag $IMAGE_NAME \
@@ -44,6 +44,6 @@ ID=$(docker run  --detach \
     )
 
 echo $ID >&2
-echo "Server started!"
+echo -e "\n-- Conan server '$SERVER_NAME' started & connected to network '$NETWORK'\n"
 
 sleep 5
