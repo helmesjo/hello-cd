@@ -29,7 +29,7 @@ DOCKERFILE="${2:-$CURRENT_DIR/Dockerfile.build}"
 IMAGE_TAG="${3:-$REPO_NAME:build}"
 
 # Make sure network is started (used to enable communication by container-name)
-NETWORK=$($DIR/../docker/start-network.sh 2>&1)
+NETWORK=$($DIR/../docker/start-network.sh 2>&1 >/dev/null)
 
 IMAGE_ID=$($CURRENT_DIR/build-image.sh $DOCKERFILE $IMAGE_TAG 2>&1 >/dev/null)
 

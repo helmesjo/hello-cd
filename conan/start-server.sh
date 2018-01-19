@@ -17,7 +17,7 @@ DOCKERFILE="$DIR/server/Dockerfile"
 IMAGE_NAME="conan-server"
 
 # Make sure network is started (used to enable communication by container-name)
-NETWORK=$($DIR/../docker/start-network.sh 2>&1)
+NETWORK=$($DIR/../docker/start-network.sh 2>&1 >/dev/null)
 
 echo "Starting conan server, connecting it to network '$NETWORK'..."
 

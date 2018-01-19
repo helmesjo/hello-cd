@@ -30,7 +30,7 @@ then
 fi
 
 # Make sure network is started (used to enable communication by container-name)
-NETWORK=$($DIR/../docker/start-network.sh 2>&1)
+NETWORK=$($DIR/../docker/start-network.sh 2>&1 >/dev/null)
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
 AUTO_REGISTER_KEY="29a6415d-cfe8-40c7-9c46-37cf5612c995"
