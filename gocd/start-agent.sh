@@ -9,7 +9,7 @@ trap onExit EXIT
 
 # Try to find running server, else ask for ip
 SERVER_NAME="gocd-server"
-SERVER_LOCAL_URL=https://$(docker inspect --format='{{(index (index .NetworkSettings.IPAddress))}}' $SERVER_NAME):$(docker inspect --format='{{(index (index .NetworkSettings.Ports "8154/tcp") 0).HostPort}}' $SERVER_NAME)/go 
+SERVER_LOCAL_URL="https://$SERVER_NAME:8154/go"
 SERVER_URL="${1:-$SERVER_LOCAL_URL}"
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -30,7 +30,7 @@ then
 fi
 
 # Make sure network is started (used to enable communication by container-name)
-NETWORK=$($DIR/../docker/start-network.sh 2>&1 >/dev/null)
+NETWORK=$($DIR/../docker/start-network.sh 2>&1 >/dev/tty)
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
 AUTO_REGISTER_KEY="29a6415d-cfe8-40c7-9c46-37cf5612c995"
@@ -42,7 +42,7 @@ docker run  --detach \
             --volume /$GIT_ROOT:/source \
             --privileged \
             --net $NETWORK \
-            --env GO_SERVER_URL=$SERVER_URL \
+            --env GO_SERVER_URL=$SERVER_LOCAL_URL \
             --env AGENT_AUTO_REGISTER_KEY=$AUTO_REGISTER_KEY \
             --env AGENT_AUTO_REGISTER_ENVIRONMENTS=$AUTO_REGISTER_ENVIRONMENTS \
             $AGENT_IMAGE

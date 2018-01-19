@@ -26,11 +26,15 @@ cp $CURRENT_DIR/$CONFIG_FILE $GODATA_PATH/config/
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
 
+# Make sure network is started (used to enable communication by container-name)
+NETWORK=$($CURRENT_DIR/../docker/start-network.sh 2>&1 >/dev/tty)
+
 # Start gocd-agent and forward socket (so that the host-docker engine can be invoked from inside)
 docker run  --detach \
             --rm \
             --volume /$GODATA_PATH:/godata \
             --volume /$GIT_ROOT:/source \
+            --net $NETWORK \
             --publish 8153:8153 \
             --publish 8154:8154 \
             --name $SERVER_IMAGE \
