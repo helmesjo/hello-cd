@@ -57,3 +57,5 @@ CONTAINER_ID=$( docker create \
 docker start -i $CONTAINER_ID
 
 echo -e "\n-- DONE running script '$SCRIPT' inside container (Image: '$IMAGE_TAG')...\n"
+
+sleep 3
