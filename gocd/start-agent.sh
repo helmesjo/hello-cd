@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euxo pipefail
+set -euo pipefail
 
 function onExit {
     $SHELL
@@ -41,7 +41,7 @@ docker run  --detach \
             --restart always \
             --volume /$GIT_ROOT:/source \
             --privileged \
-            --net $NETWORK
+            --net $NETWORK \
             --env GO_SERVER_URL=$SERVER_URL \
             --env AGENT_AUTO_REGISTER_KEY=$AUTO_REGISTER_KEY \
             --env AGENT_AUTO_REGISTER_ENVIRONMENTS=$AUTO_REGISTER_ENVIRONMENTS \
