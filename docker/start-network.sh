@@ -17,4 +17,7 @@ if [ -z "${NETWORK_ID-}" ]; then
     NETWORK_ID=$(docker network create $NETWORK_NAME)
 fi
 
+echo "Docker network '$NETWORK_NAME' is up and running"
 echo $NETWORK_NAME >&2
+
+sleep 2
