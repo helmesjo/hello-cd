@@ -1,6 +1,6 @@
 FROM gocd/gocd-agent-debian-8:v17.11.0
 
-LABEL maintainer Fred Helmesjö <helmesjo@live.com>
+LABEL maintainer "Fred Helmesjö <helmesjo@live.com>"
 
 ENV DOCKER_VERSION 17.03.1
 
