@@ -24,8 +24,8 @@ if [[ $# -eq 0 ]] ; then
     exit 1
 fi
 
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-REPO_ROOT_DIR="$(dirname "$CURRENT_DIR")"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+REPO_ROOT_DIR="$(dirname "$DIR")"
 REPO_NAME=$(basename `git rev-parse --show-toplevel`)
 COMMIT_HASH=$(git rev-parse --short HEAD)
 CONTAINER_WDIR=//source
@@ -35,23 +35,24 @@ CONTAINER_WDIR=//source
 # 2. Dockerfile (optional)
 # 3. Image-tag  (optional)
 SCRIPT=${1}
-DOCKERFILE="${2:-$CURRENT_DIR/Dockerfile.build}"
+DOCKERFILE="${2:-$DIR/Dockerfile.build}"
 IMAGE_TAG="${3:-$REPO_NAME:build}"
 
 # Make sure network is started (used to enable communication by container-name)
-NETWORK=$($CURRENT_DIR/../docker/start-network.sh 2>&1 >/dev/tty)
+NETWORK=$($REPO_ROOT_DIR/docker/start-network.sh 2>&1 >/dev/tty)
 
 # Make sure image is built
-IMAGE_ID=$($CURRENT_DIR/build-image.sh $DOCKERFILE $IMAGE_TAG 2>&1 >/dev/tty)
+IMAGE_ID=$($DIR/build-image.sh $DOCKERFILE $IMAGE_TAG 2>&1 >/dev/tty)
 
-echo -e "\n-- Running script '$SCRIPT' inside container (image (Image: '$IMAGE_TAG')...\n"
+echo -e "\n-- Running script '$SCRIPT' inside container (Image: '$IMAGE_TAG')...\n"
 
 # Create build container & compile (create+start instead of run because of issues with logs)
 CONTAINER_ID=$( docker create \
-                --net $NETWORK \
-                --volume /$REPO_ROOT_DIR:$CONTAINER_WDIR \
-                --workdir $CONTAINER_WDIR \
-                $IMAGE_ID sh -c "$SCRIPT" \
+                        --net $NETWORK \
+                        --volume /$REPO_ROOT_DIR:$CONTAINER_WDIR \
+                        --workdir $CONTAINER_WDIR \
+                        $IMAGE_ID \
+                        sh -c "$SCRIPT" \
                 )
 
 docker start -i $CONTAINER_ID

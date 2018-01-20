@@ -12,8 +12,8 @@ function cleanup {
 }
 trap cleanup EXIT
 
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-REPO_ROOT_DIR="$(dirname "$CURRENT_DIR")"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+REPO_ROOT_DIR="$(dirname "$DIR")"
 REPO_NAME=$(basename `git rev-parse --show-toplevel`)
 COMMIT_HASH=$(git rev-parse --short HEAD)
 CONTAINER_WDIR=//source
@@ -24,9 +24,9 @@ CONTAINER_WDIR=//source
 # 3. Dockerfile (optional)
 DOCKER_REPO="${1:-"localhost:5000"}"
 IMAGE_TAG="${2:-$REPO_NAME:$COMMIT_HASH}"
-DOCKERFILE="${3:-$CURRENT_DIR/Dockerfile.build}"
+DOCKERFILE="${3:-$DIR/Dockerfile.build}"
 
-IMAGE_ID=$($CURRENT_DIR/build-image.sh $DOCKERFILE $IMAGE_TAG 2>&1 >/dev/null)
+IMAGE_ID=$($DIR/build-image.sh $DOCKERFILE $IMAGE_TAG 2>&1 >/dev/null)
 
 echo "Pushing image '$IMAGE_TAG' to repository '$DOCKER_REPO'..."
 

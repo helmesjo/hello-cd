@@ -10,15 +10,18 @@ trap on_error ERR
 
 NETWORK_NAME="hello-cd"
 
+echo -e "\n-- Starting docker network '$NETWORK_NAME'..."
+
 NETWORK_ID=$(docker network ls --quiet --filter name=$NETWORK_NAME)
 
 # If network doesn't exist yet, start it
 if [ -z "${NETWORK_ID-}" ]; then
-    echo -e "\n-- Starting docker network '$NETWORK_NAME'..."
     NETWORK_ID=$(docker network create $NETWORK_NAME)
+    echo -e "\n-- Docker network '$NETWORK_NAME' started.\n"
+else
+    echo -e "\n-- Docker network '$NETWORK_NAME' already started."
 fi
 
-echo -e "\n-- Docker network '$NETWORK_NAME' is up and running\n"
 echo $NETWORK_NAME >&2
 
 sleep 2

@@ -9,20 +9,19 @@ function on_error {
 }
 trap on_error ERR
 
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-COMMIT_HASH=$(git rev-parse --short HEAD)
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_NAME=$(basename `git rev-parse --show-toplevel`)
 
-DOCKERFILE="${1:-$CURRENT_DIR/Dockerfile.build}"
+DOCKERFILE="${1:-$DIR/Dockerfile.build}"
 IMAGE_NAME="${2:-$REPO_NAME:build}"
 
-echo -e "\n-- Building image '$DOCKERFILE'...\n"
+echo -e "\n-- Building docker image '$DOCKERFILE'...\n"
 
 # Build environment
 docker build    --tag $IMAGE_NAME \
                 --file $DOCKERFILE .
 
-echo -e "\n-- Built image '$IMAGE_NAME'\n"
+echo -e "\n-- Built docker image '$IMAGE_NAME'\n"
 echo $IMAGE_NAME >&2
 
 sleep 2
