@@ -11,28 +11,25 @@ trap on_error ERR
 
 SERVER_NAME="conan-server"
 
+REPO_ROOT=$(git rev-parse --show-toplevel)
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
 DOCKERFILE="$DIR/server/Dockerfile"
-IMAGE_NAME="conan-server"
 
 # Make sure network is started (used to enable communication by container-name)
-NETWORK=$($DIR/../docker/start-network.sh 2>&1 >/dev/tty)
+NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >/dev/tty)
 
-echo -e "\n-- Starting conan server, connecting it to network '$NETWORK'...\n"
-
-# Build docker image for the conan-server
-docker build    --tag $IMAGE_NAME \
-                --file $DOCKERFILE .
+# Build docker image for the conan server
+IMAGE_ID=$($REPO_ROOT/docker/build-image.sh $DOCKERFILE $SERVER_NAME 2>&1 >/dev/tty)
 
 # Copy server-config into to-be-mounted conan server-folder
-DATA_DIR="$DIR/server/_data"
+DATA_DIR="$DIR/_data"
 CONFIG_FILE="$DIR/server/server.conf"
 CONFIG_CONAN_PATH="$DATA_DIR/.conan_server/"
 mkdir -p $CONFIG_CONAN_PATH && cp $CONFIG_FILE $CONFIG_CONAN_PATH
 
-# Start conan server and mount _data sub-directory to conan storage path
+echo -e "\n-- Starting conan server & connecting it to network '$NETWORK'...\n"
 
+# Start conan server and mount _data sub-directory to conan storage path
 ID=$(docker run  --detach \
             --restart always \
             --net $NETWORK \
@@ -40,7 +37,7 @@ ID=$(docker run  --detach \
             --volume /$DATA_DIR:/var/lib/conan \
             --name $SERVER_NAME \
             --hostname $SERVER_NAME \
-            $IMAGE_NAME \
+            $IMAGE_ID \
     )
 
 echo $ID >&2

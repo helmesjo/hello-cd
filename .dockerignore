@@ -3,3 +3,4 @@ build
 output
 docker/_registry
 gocd/_godata
+conan/_data
