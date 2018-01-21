@@ -22,14 +22,15 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_ROOT=$(git rev-parse --show-toplevel)
 REPO_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
 
-SERVER_NAME="${REPO_NAME}_conan-server"
 DOCKERFILE="$DIR/server/Dockerfile"
 
 # Make sure network is started (used to enable communication by container-name)
 NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >&3)
 
 # Build docker image for the conan server
-IMAGE_ID=$($REPO_ROOT/docker/build-image.sh $DOCKERFILE $SERVER_NAME 2>&1 >&3)
+IMAGE_ID=$($REPO_ROOT/docker/build-image.sh $DOCKERFILE "conan-server" 2>&1 >&3)
+
+SERVER_NAME="${REPO_NAME}_conan-server"
 
 # Copy server-config into to-be-mounted conan server-folder
 DATA_DIR="$DIR/_data"

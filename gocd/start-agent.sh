@@ -35,7 +35,7 @@ SERVER_URL=${1:-"https://$SERVER_NAME:8154/go"}
 DOCKERFILE=$DIR/agent/"Dockerfile"
 
 # Build docker image for the gocd agent
-IMAGE_ID=$($REPO_ROOT/docker/build-image.sh $DOCKERFILE $AGENT_NAME 2>&1 >&3)
+IMAGE_ID=$($REPO_ROOT/docker/build-image.sh $DOCKERFILE "gocd-agent" 2>&1 >&3)
 
 # Make sure network is started (used to enable communication by container-name)
 NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >&3)

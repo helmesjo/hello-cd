@@ -15,9 +15,10 @@ ARCH="${2:-x86_64}"
 BUILD_SHARED="${3:-FALSE}"
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+REPO_ROOT="$(git rev-parse --show-toplevel)"
 TOOLCHAIN=$($CURRENT_DIR/determine-toolchain.sh $ARCH 2>&1 >/dev/null)
-TOOLCHAIN_DIR="$CURRENT_DIR/../cmake/toolchain"
-BUILD_DIR="$CURRENT_DIR/../build"
+TOOLCHAIN_DIR="$REPO_ROOT/cmake/toolchain"
+BUILD_DIR="$REPO_ROOT/build"
 
 # Install dependencies
 $CURRENT_DIR/install-dependencies.sh $CONFIG $ARCH
