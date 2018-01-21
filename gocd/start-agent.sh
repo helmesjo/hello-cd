@@ -42,6 +42,9 @@ ID=$(docker run \
             $IMAGE_ID \
     )
 
+# Join network as manager
+$REPO_ROOT/docker/start-network.sh $ID
+
 echo $ID >&2
 echo -e "\n-- GoCD agent '$AGENT_NAME' started & connected to network '$NETWORK'\n"
 
