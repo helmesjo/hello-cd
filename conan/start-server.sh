@@ -4,17 +4,24 @@ set -euo pipefail
 
 exec 3>&1
 
+function cleanup {
+    if [ "${CONTAINER_ID-}" ]; then
+        docker rm $CONTAINER_ID
+    fi
+}
+
 function on_error {
     echo "Could not start conan server '$SERVER_NAME'" >&2
+    cleanup
     sleep 5
     exit 1
 }
 trap on_error ERR
 
-SERVER_NAME="conan-server"
-
-REPO_ROOT=$(git rev-parse --show-toplevel)
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+REPO_ROOT=$(git rev-parse --show-toplevel)
+
+SERVER_NAME="conan-server"
 DOCKERFILE="$DIR/server/Dockerfile"
 
 # Make sure network is started (used to enable communication by container-name)
@@ -32,17 +39,18 @@ mkdir -p $CONFIG_CONAN_PATH && cp $CONFIG_FILE $CONFIG_CONAN_PATH
 echo -e "\n-- Starting conan server & connecting it to network '$NETWORK'...\n"
 
 # Start conan server and mount _data sub-directory to conan storage path
-ID=$(docker run  --detach \
-            --restart always \
-            --net $NETWORK \
-            --publish 9300:9300 \
-            --volume /$DATA_DIR:/var/lib/conan \
-            --name $SERVER_NAME \
-            --hostname $SERVER_NAME \
-            $IMAGE_ID \
-    )
+CONTAINER_ID=$(docker run \
+                        --detach \
+                        --restart always \
+                        --net $NETWORK \
+                        --publish 9300:9300 \
+                        --volume /$DATA_DIR:/var/lib/conan \
+                        --name $SERVER_NAME \
+                        --hostname $SERVER_NAME \
+                        $IMAGE_ID \
+)
 
-echo $ID >&2
+echo $CONTAINER_ID >&2
 echo -e "\n-- Conan server '$SERVER_NAME' started & connected to network '$NETWORK'\n"
 
 sleep 5

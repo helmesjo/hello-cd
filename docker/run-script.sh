@@ -27,8 +27,8 @@ if [[ $# -eq 0 ]] ; then
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-REPO_ROOT_DIR="$(dirname "$DIR")"
-REPO_NAME=$(basename `git rev-parse --show-toplevel`)
+REPO_ROOT_DIR="$(git rev-parse --show-toplevel)"
+REPO_NAME=$(basename $REPO_ROOT_DIR)
 COMMIT_HASH=$(git rev-parse --short HEAD)
 CONTAINER_WDIR=//source
 

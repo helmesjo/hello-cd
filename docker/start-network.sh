@@ -9,7 +9,8 @@ function on_error {
 }
 trap on_error ERR
 
-NETWORK_NAME="hello-cd"
+REPO_NAME=$(basename `git rev-parse --show-toplevel`)
+NETWORK_NAME=$REPO_NAME
 
 echo -e "\n-- Starting docker network '$NETWORK_NAME'..."
 

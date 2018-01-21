@@ -29,6 +29,7 @@ echo -e "\n-- Installing dependencies for '$CONFIG $ARCH' with profile '$PROFILE
 conan remote add conan_community https://api.bintray.com/conan/conan-community/conan 2>&1 > /dev/null || true
 # Add conan-server repository
 conan remote add --insert 0 docker http://conan-server:9300 2>&1 > /dev/null || true
+conan remote add --insert 1 local http://localhost:9300 2>&1 > /dev/null || true
 
 cmake -E make_directory $BUILD_DIR
 
