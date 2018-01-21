@@ -34,8 +34,10 @@ IMAGE_ID=$($REPO_ROOT/docker/build-image.sh $DOCKERFILE $SERVER_NAME 2>&1 >&3)
 # Copy server-config into to-be-mounted conan server-folder
 DATA_DIR="$DIR/_data"
 CONFIG_FILE="$DIR/server/server.conf"
-CONFIG_CONAN_PATH="$DATA_DIR/.conan_server/"
+CONFIG_CONAN_PATH="$DATA_DIR/.conan_server/server.conf"
 mkdir -p $CONFIG_CONAN_PATH && cp $CONFIG_FILE $CONFIG_CONAN_PATH
+# Set correct hostname used by the server
+sed -i "s/host_name:.*/host_name: $SERVER_NAME/g" $CONFIG_CONAN_PATH
 
 echo -e "\n-- Starting conan server & connecting it to network '$NETWORK'...\n"
 
