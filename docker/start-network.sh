@@ -20,7 +20,8 @@ if [ -z "${NETWORK_ID-}" ]; then
     docker node ls >/dev/null 2>&1 || FAILED=$? || true
     if [ "${FAILED-}" ]; then
         echo -e "\n-- Initiating swarm and joining as manager...\n"
-        docker swarm init
+        docker swarm init --force-new-cluster >/dev/null
+        echo -e "-- Swarm started."
     fi
 
     NETWORK_ID=$(docker network create \
@@ -31,19 +32,21 @@ if [ -z "${NETWORK_ID-}" ]; then
     
     echo -e "\n-- Docker network '$NETWORK_NAME' started.\n"
 else
-    echo -e "\n-- Docker network '$NETWORK_NAME' already started."
+    echo -e "-- Docker network '$NETWORK_NAME' already started."
 fi
 
 # Container id/name passed is added as swarm managers
 CONTAINER="${1:-}"
 if [ "${CONTAINER-}" ]; then
-    echo -e "\n-- Adding container '$CONTAINER' as manager to swarm.\n"
+    echo -e "\n-- Adding container '$CONTAINER' to swarm as manager.\n"
     SWARM_IP=$(docker node inspect self --format '{{ .Status.Addr  }}')
     JOIN_TOKEN=$(docker swarm join-token manager --quiet)
-    
+
+    # Make sure docker is available & docker service has started before joining swarm as manager
+    docker exec $CONTAINER command -v docker >/dev/null && until /etc/init.d/docker status >/dev/null; do :; sleep 2; done
     docker exec $CONTAINER docker swarm join --token $JOIN_TOKEN $SWARM_IP:2377 >/dev/null
 
-    echo -e "-- Container '$CONTAINER' added as manager to swarm.\n"
+    echo -e "-- Container '$CONTAINER' added to swarm as manager.\n"
 fi
 
 echo $NETWORK_NAME >&2
