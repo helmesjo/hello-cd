@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+exec 3>&1
+
 function on_error {
     echo "Could not start conan server '$SERVER_NAME'" >&2
     sleep 5
@@ -16,10 +18,10 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DOCKERFILE="$DIR/server/Dockerfile"
 
 # Make sure network is started (used to enable communication by container-name)
-NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >/dev/tty)
+NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >&3)
 
 # Build docker image for the conan server
-IMAGE_ID=$($REPO_ROOT/docker/build-image.sh $DOCKERFILE $SERVER_NAME 2>&1 >/dev/tty)
+IMAGE_ID=$($REPO_ROOT/docker/build-image.sh $DOCKERFILE $SERVER_NAME 2>&1 >&3)
 
 # Copy server-config into to-be-mounted conan server-folder
 DATA_DIR="$DIR/_data"

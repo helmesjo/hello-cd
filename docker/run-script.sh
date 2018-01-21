@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+exec 3>&1
+
 # Clean up leftovers before exit
 function cleanup {
     if [ "${CONTAINER_ID-}" ]; then
@@ -39,15 +41,16 @@ DOCKERFILE="${2:-$DIR/Dockerfile.build}"
 IMAGE_TAG="${3:-$REPO_NAME:build}"
 
 # Make sure network is started (used to enable communication by container-name)
-NETWORK=$($REPO_ROOT_DIR/docker/start-network.sh 2>&1 >/dev/tty)
+NETWORK=$($REPO_ROOT_DIR/docker/start-network.sh 2>&1 >&3)
 
 # Make sure image is built
-IMAGE_ID=$($DIR/build-image.sh $DOCKERFILE $IMAGE_TAG 2>&1 >/dev/tty)
+IMAGE_ID=$($DIR/build-image.sh $DOCKERFILE $IMAGE_TAG 2>&1 >&3)
 
 echo -e "\n-- Running script '$SCRIPT' inside container (Image: '$IMAGE_TAG')...\n"
 
 # Create build container & compile (create+start instead of run because of issues with logs)
 CONTAINER_ID=$( docker create \
+                        --tty \
                         --net $NETWORK \
                         --volume /$REPO_ROOT_DIR:$CONTAINER_WDIR \
                         --workdir $CONTAINER_WDIR \
@@ -55,7 +58,7 @@ CONTAINER_ID=$( docker create \
                         sh -c "$SCRIPT" \
                 )
 
-docker start -i $CONTAINER_ID
+docker start --interactive $CONTAINER_ID
 
 echo -e "\n-- DONE running script '$SCRIPT' inside container (Image: '$IMAGE_TAG')...\n"
 

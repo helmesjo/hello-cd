@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+exec 3>&1
+
 function on_error {
     echo "Could not start GoCD server '$SERVER_NAME'" >&2
     sleep 5
@@ -18,10 +20,10 @@ CONFIG_FILE="cruise-config.xml"
 DOCKERFILE=$DIR/server/"Dockerfile"
 
 # Build docker image for the gocd server
-IMAGE_ID=$($REPO_ROOT/docker/build-image.sh $DOCKERFILE $SERVER_NAME 2>&1 >/dev/tty)
+IMAGE_ID=$($REPO_ROOT/docker/build-image.sh $DOCKERFILE $SERVER_NAME 2>&1 >&3)
 
 # Make sure network is started (used to enable communication by container-name)
-NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >/dev/tty)
+NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >&3)
 
 # Copy server-config into mounted godata folder (don't want the actual config-file altered by the server)
 GODATA_PATH=$DIR/_godata

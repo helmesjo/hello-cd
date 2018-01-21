@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+exec 3>&1
+
 function on_error {
     echo "Could not start GoCD agent '$AGENT_NAME'" >&2
     sleep 5
@@ -19,10 +21,10 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 DOCKERFILE=$DIR/agent/"Dockerfile"
 
 # Build docker image for the gocd agent
-IMAGE_ID=$($REPO_ROOT/docker/build-image.sh $DOCKERFILE $AGENT_NAME 2>&1 >/dev/tty)
+IMAGE_ID=$($REPO_ROOT/docker/build-image.sh $DOCKERFILE $AGENT_NAME 2>&1 >&3)
 
 # Make sure network is started (used to enable communication by container-name)
-NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >/dev/tty)
+NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >&3)
 
 echo -e "\n-- Starting GoCD agent '$AGENT_NAME' & connecting it to network '$NETWORK'...\n"
 
