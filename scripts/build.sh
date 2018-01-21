@@ -12,6 +12,7 @@ trap on_error ERR
 # Read arguments
 CONFIG="${1:-Release}"
 ARCH="${2:-x86_64}"
+BUILD_SHARED="${3:-FALSE}"
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TOOLCHAIN=$($CURRENT_DIR/determine-toolchain.sh $ARCH 2>&1 >/dev/null)
@@ -25,7 +26,7 @@ echo "Building for '$CONFIG $ARCH' with toolchain '$TOOLCHAIN'..."
 cmake -E make_directory $BUILD_DIR
 # Generate
 cmake -E chdir $BUILD_DIR \
-    cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_DIR/$TOOLCHAIN.cmake" -DCMAKE_INSTALL_PREFIX=output -DDOWNLOAD_ENABLED=FALSE
+    cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DBUILD_SHARED_LIBS=$BUILD_SHARED -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_DIR/$TOOLCHAIN.cmake" -DCMAKE_INSTALL_PREFIX=output -DDOWNLOAD_ENABLED=FALSE
 
 # Build
 cmake -E chdir $BUILD_DIR \
