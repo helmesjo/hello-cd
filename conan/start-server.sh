@@ -20,8 +20,9 @@ trap on_error ERR
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_ROOT=$(git rev-parse --show-toplevel)
+REPO_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
 
-SERVER_NAME="conan-server"
+SERVER_NAME="${REPO_NAME}_conan-server"
 DOCKERFILE="$DIR/server/Dockerfile"
 
 # Make sure network is started (used to enable communication by container-name)

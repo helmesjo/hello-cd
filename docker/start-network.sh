@@ -9,8 +9,8 @@ function on_error {
 }
 trap on_error ERR
 
-REPO_NAME=$(basename `git rev-parse --show-toplevel`)
-NETWORK_NAME=$REPO_NAME
+REPO_ROOT=$(git rev-parse --show-toplevel)
+NETWORK_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
 
 echo -e "\n-- Starting docker network '$NETWORK_NAME'..."
 

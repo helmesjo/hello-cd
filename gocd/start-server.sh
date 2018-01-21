@@ -20,7 +20,7 @@ trap on_error ERR
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_ROOT=$(git rev-parse --show-toplevel)
-REPO_NAME=$(basename $REPO_ROOT)
+REPO_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
 
 SERVER_NAME="${REPO_NAME}_gocd-server"
 

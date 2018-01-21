@@ -20,7 +20,6 @@ trap on_error ERR
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_ROOT=$(git rev-parse --show-toplevel)
-REPO_NAME=$(basename $REPO_ROOT)
 
 AGENT_NAME="gocd-agent"
 SERVER_NAME="$(docker ps --filter name=gocd-server --format '{{.Names}}')"

@@ -27,8 +27,8 @@ if [[ $# -eq 0 ]] ; then
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-REPO_ROOT_DIR="$(git rev-parse --show-toplevel)"
-REPO_NAME=$(basename $REPO_ROOT_DIR)
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+REPO_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
 COMMIT_HASH=$(git rev-parse --short HEAD)
 CONTAINER_WDIR=//source
 
@@ -41,7 +41,7 @@ DOCKERFILE="${2:-$DIR/Dockerfile.build}"
 IMAGE_TAG="${3:-$REPO_NAME:build}"
 
 # Make sure network is started (used to enable communication by container-name)
-NETWORK=$($REPO_ROOT_DIR/docker/start-network.sh 2>&1 >&3)
+NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >&3)
 
 # Make sure image is built
 IMAGE_ID=$($DIR/build-image.sh $DOCKERFILE $IMAGE_TAG 2>&1 >&3)
@@ -52,7 +52,7 @@ echo -e "\n-- Running script '$SCRIPT' inside container (Image: '$IMAGE_TAG')...
 CONTAINER_ID=$( docker create \
                         --tty \
                         --net $NETWORK \
-                        --volume /$REPO_ROOT_DIR:$CONTAINER_WDIR \
+                        --volume /$REPO_ROOT:$CONTAINER_WDIR \
                         --workdir $CONTAINER_WDIR \
                         $IMAGE_ID \
                         sh -c "$SCRIPT" \

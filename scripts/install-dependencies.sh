@@ -17,10 +17,14 @@ command -v conan >/dev/null 2>&1 ||
 CONFIG="${1:-Release}"
 ARCH="${2:-x86_64}"
 
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-OS="$($CURRENT_DIR/get-os.sh 2>&1 >/dev/null)"
-PROFILE="$CURRENT_DIR/../conan/profile-$OS.txt"
-BUILD_DIR="$CURRENT_DIR/../build"
+REPO_ROOT=$(git rev-parse --show-toplevel)
+REPO_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
+
+OS="$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"
+PROFILE="$REPO_ROOT/conan/profile-$OS.txt"
+BUILD_DIR="$REPO_ROOT/build"
+
+SERVER_NAME="${REPO_NAME}_conan-server"
 
 echo -e "\n-- Installing dependencies for '$CONFIG $ARCH' with profile '$PROFILE'...n"
 
@@ -28,7 +32,7 @@ echo -e "\n-- Installing dependencies for '$CONFIG $ARCH' with profile '$PROFILE
 # Fails if already added. If so, just swollow error.
 conan remote add conan_community https://api.bintray.com/conan/conan-community/conan 2>&1 > /dev/null || true
 # Add conan-server repository
-conan remote add --insert 0 docker http://conan-server:9300 2>&1 > /dev/null || true
+conan remote add --insert 0 docker http://$SERVER_NAME:9300 2>&1 > /dev/null || true
 conan remote add --insert 1 local http://localhost:9300 2>&1 > /dev/null || true
 
 cmake -E make_directory $BUILD_DIR

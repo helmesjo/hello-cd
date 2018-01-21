@@ -8,7 +8,8 @@ function on_error {
 }
 trap on_error ERR
 
-GIT_URL=$(git config --get remote.origin.url)
-REPO_NAME=$(basename "${GIT_URL%.*}")
+REPO_ROOT="$(git rev-parse --show-toplevel)"
 
-echo $REPO_NAME >&2
+source "$REPO_ROOT/repo.config"
+
+echo "$REPO_NAME" >&2
