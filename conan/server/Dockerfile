@@ -6,7 +6,7 @@ LABEL maintainer "Fred Helmesjö <helmesjo@live.com>"
 
 RUN apk update &&\
     apk add py2-pip=9.0.1-r1 &&\
-    pip install --no-cache-dir conan==0.30.2
+    pip install --no-cache-dir conan==1.0.2
 
 RUN adduser -S conan -h /var/lib/conan -s /bin/sh
 
