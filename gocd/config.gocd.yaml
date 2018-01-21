@@ -20,10 +20,6 @@ pipelines:
                    destination: "tests"
               tasks:
                 - exec: # type of task
-                    command: ./docker/build-image.sh
-                    arguments:
-                     - "./docker/Dockerfile.build"
-                - exec: # type of task
                     command: ./docker/run-script.sh
                     arguments:
                      - "./scripts/build.sh"
@@ -44,10 +40,6 @@ pipelines:
                 mylib-analys: reports/mylib_static_analysis_html/index.html
                 myutils-analys: reports/myutils_static_analysis_html/index.html
               tasks:
-                - exec: # type of task
-                    command: ./docker/build-image.sh
-                    arguments:
-                     - "./docker/Dockerfile.build"
                 - exec:
                     command: ./docker/run-script.sh
                     arguments:
