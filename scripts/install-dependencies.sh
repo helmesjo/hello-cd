@@ -31,9 +31,13 @@ echo -e "\n-- Installing dependencies for '$CONFIG $ARCH' with profile '$PROFILE
 # Add conan-community as remote. Needed until more packages are available in the official repository.
 # Fails if already added. If so, just swollow error.
 conan remote add conan_community https://api.bintray.com/conan/conan-community/conan 2>&1 > /dev/null || true
-# Add conan-server repository
-conan remote add --insert 0 docker http://$SERVER_NAME:9300 2>&1 > /dev/null || true
-conan remote add --insert 1 local http://localhost:9300 2>&1 > /dev/null || true
+
+# Add private repository (only if reachable)
+if ping -c 1 $SERVER_NAME 2>&1 >/dev/null; then
+    conan remote add --insert 0 docker http://$SERVER_NAME:9300 2>&1 >/dev/null || true
+else
+    conan remote remove docker 2>&1 >/dev/null || true
+fi
 
 cmake -E make_directory $BUILD_DIR
 
