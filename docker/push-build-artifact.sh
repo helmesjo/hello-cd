@@ -24,7 +24,7 @@ CONTAINER_WDIR=//source
 # 3. Dockerfile (optional)
 DOCKER_REPO="${1:-"localhost:5000"}"
 IMAGE_TAG="${2:-$REPO_NAME:$COMMIT_HASH}"
-DOCKERFILE="${3:-$DIR/Dockerfile.build}"
+DOCKERFILE="${3:-$DIR/build.Dockerfile}"
 
 IMAGE_ID=$($DIR/build-image.sh $DOCKERFILE $IMAGE_TAG 2>&1 >/dev/null)
 

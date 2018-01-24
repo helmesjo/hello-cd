@@ -13,7 +13,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_ROOT=$(git rev-parse --show-toplevel)
 REPO_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
 
-DOCKERFILE="${1:-$DIR/Dockerfile.build}"
+DOCKERFILE="${1:-$DIR/build.Dockerfile}"
 IMAGE_NAME="$REPO_NAME/${2:-$REPO_NAME:build}"
 
 echo -e "\n-- Building docker image '$DOCKERFILE'...\n"

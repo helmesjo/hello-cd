@@ -37,7 +37,7 @@ CONTAINER_WDIR=//source
 # 2. Dockerfile (optional)
 # 3. Image-tag  (optional)
 SCRIPT=${1}
-DOCKERFILE="${2:-$DIR/Dockerfile.build}"
+DOCKERFILE="${2:-$DIR/build.Dockerfile}"
 IMAGE_TAG="${3:-$REPO_NAME:build}"
 
 # Make sure network is started (used to enable communication by container-name)
