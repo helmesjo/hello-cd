@@ -44,7 +44,7 @@ if [ "${CONTAINER-}" ]; then
     JOIN_TOKEN=$(docker swarm join-token manager --quiet)
 
     # Make sure docker is available & docker service has started before joining swarm as manager
-    docker exec $CONTAINER sh -c "command -v docker && until docker ps >/dev/null 2>&1; do :; sleep 2; done"
+    docker exec $CONTAINER sh -c "command -v docker >/dev/null && until docker ps >/dev/null 2>&1; do :; sleep 2; done"
     docker exec $CONTAINER sh -c "docker swarm join --token $JOIN_TOKEN $SWARM_IP:2377 >/dev/null"
 
     echo -e "-- Container '$CONTAINER' added to swarm as manager.\n"
