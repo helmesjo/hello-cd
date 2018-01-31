@@ -6,7 +6,7 @@ exec 3>&1
 
 function cleanup {
     if [ "${CONTAINER_ID-}" ]; then
-        docker rm $CONTAINER_ID
+        docker rm -f $CONTAINER_ID
     fi
 }
 
