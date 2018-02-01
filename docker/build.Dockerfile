@@ -4,7 +4,6 @@ FROM debian:9.1
 RUN     apt-get update && \
         apt-get install --no-install-recommends -y \ 
         software-properties-common && \
-
         # Install from default
         apt-get install --no-install-recommends -y \
         automake=1:1.15-6 \
@@ -19,21 +18,18 @@ RUN     apt-get update && \
         python-pygments=2.2.0+dfsg-1 \
         python-setuptools=33.1.1-1 \
         ruby=1:2.3.3 && \
-
         # Install from buster main
         add-apt-repository "deb http://httpredir.debian.org/debian buster main" && \
         apt-get update && \
         apt-get -t buster install --no-install-recommends -y \
         cmake=3.9.5-1 \
         git=1:2.15.1-3 && \
-
         # Gem
         gem install cucumber --version 2.4.0 && \
         # pip
         pip install wheel && \
         pip install cppcheck-junit==1.4.0 && \
         pip install conan==1.0.2 && \
-
         # Clean up
         apt-get clean -y && \
         apt-get autoclean -y && \
