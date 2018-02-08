@@ -21,7 +21,7 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 REPO_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
 
 OS="$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"
-PROFILE="$REPO_ROOT/conan/profile-$OS.txt"
+PROFILE="$($REPO_ROOT/conan/determine-profile.sh 2>&1 >/dev/null)"
 BUILD_DIR="$REPO_ROOT/build"
 
 SERVER_NAME="${REPO_NAME}_conan-server"
