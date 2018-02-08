@@ -30,19 +30,19 @@ echo -e "\n-- Installing dependencies for '$CONFIG $ARCH' with profile '$PROFILE
 
 # Add conan-community as remote. Needed until more packages are available in the official repository.
 # Fails if already added. If so, just swollow error.
-conan remote add conan_community https://api.bintray.com/conan/conan-community/conan 2>&1 > /dev/null || true
+conan remote add conan_community https://api.bintray.com/conan/conan-community/conan >/dev/null 2>&1 || true
 
 # Add private repository (only if reachable)
-if ping -c 1 $SERVER_NAME 2>&1 >/dev/null; then
-    conan remote add --insert 0 docker http://$SERVER_NAME:9300 2>&1 >/dev/null || true
+if ping -w 1 -c 1 $SERVER_NAME >/dev/null 2>&1; then
+    conan remote add --insert 0 docker http://$SERVER_NAME:9300 >/dev/null 2>&1 || true
 else
-    conan remote remove docker 2>&1 >/dev/null || true
+    conan remote remove docker >/dev/null 2>&1 || true
 fi
 
 cmake -E make_directory $BUILD_DIR
 
 # Generate default profile. It is inherited inside profiles to autofill settings
-conan profile new default --detect 2>&1 > /dev/null || true
+conan profile new default --detect >/dev/null 2>&1 || true
 
 # Install dependencies. Build if pre-built is missing.
 cmake -E chdir $BUILD_DIR \
