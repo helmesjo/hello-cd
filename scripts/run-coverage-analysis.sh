@@ -9,13 +9,13 @@ function on_error {
 }
 trap on_error ERR
 
-CONFIG="Debug"
-ARCH="x86_64"
+CONFIG="${1:-Debug}"
+ARCH="${2:-x86_64}"
 
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BUILD_DIR="$CURRENT_DIR/../build"
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+BUILD_DIR="$REPO_ROOT/build"
 
-$CURRENT_DIR/build.sh $CONFIG $ARCH
+$REPO_ROOT/scripts/build.sh $CONFIG $ARCH
 
 echo "Running code coverage analysis for '$CONFIG $ARCH'..."
 

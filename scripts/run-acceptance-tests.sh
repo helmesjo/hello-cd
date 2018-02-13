@@ -7,9 +7,12 @@ function on_error {
 }
 trap on_error ERR
 
-CONFIG="${1:-RelWithDebInfo}"
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CONFIG="${1:-Release}"
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+BUILD_DIR="$REPO_ROOT/build"
 
 echo "Running acceptance tests for build '$CONFIG'..."
-cmake -E chdir $CURRENT_DIR/../build \
-    ctest  --label-regex "acceptance" --build-config $CONFIG --parallel 2 --output-on-failure
+cmake -E chdir $BUILD_DIR \
+    ctest --label-regex "acceptance" --build-config $CONFIG --parallel 2 --output-on-failure
+
+sleep 3
