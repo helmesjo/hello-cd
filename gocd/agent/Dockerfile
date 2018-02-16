@@ -1,4 +1,4 @@
-FROM gocd/gocd-agent-debian-8:v17.11.0
+FROM gocd/gocd-agent-debian-8:v18.1.0
 
 LABEL maintainer "Fred Helmesjö <helmesjo@live.com>"
 
