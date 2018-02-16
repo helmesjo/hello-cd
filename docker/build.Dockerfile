@@ -22,8 +22,9 @@ RUN     apt-get update && \
         add-apt-repository "deb http://httpredir.debian.org/debian buster main" && \
         apt-get update && \
         apt-get -t buster install --no-install-recommends -y \
-        cmake=3.9.5-1 \
-        git=1:2.15.1-3 && \
+        # No specific versions. Available versions may change from 'buster' (is in testing)
+        cmake \
+        git && \
         # Gem
         gem install cucumber --version 2.4.0 && \
         # pip
