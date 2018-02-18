@@ -1,5 +1,6 @@
 [requires]
 Boost/1.64.0@conan/stable
+gtest/1.8.0@bincrafters/stable
 
 [options]
 Boost:shared=True # false

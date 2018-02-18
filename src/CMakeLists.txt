@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 3.2.2)
 add_subdirectory(external/catch)
 add_subdirectory(external/cucumber-cpp)
 add_subdirectory(external/fakeit)
-add_subdirectory(external/googletest)
 
 # Targets that we develop here
 add_subdirectory(myutils)
