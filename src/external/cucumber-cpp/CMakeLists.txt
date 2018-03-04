@@ -11,14 +11,18 @@ download_repo(
     SUBMODULES features/cucumber-tck
 )
 
+find_package(GTest REQUIRED)
 find_package(Boost REQUIRED
     COMPONENTS
-        thread 
-        system 
-        regex 
+        asio 
+        assign 
         date_time 
-        program_options 
         filesystem    
+        multi_array 
+        program_options 
+        regex 
+        system 
+        thread 
 )
 if(NOT MSVC)
     find_package(Threads QUIET)
@@ -30,14 +34,16 @@ add_definitions(-DBOOST_THREAD_USES_DATETIME=1)
 set(CUKE_INCLUDE_DIR "${REPO_DIR}/include")
 set(CUKE_DEPENDENCIES
     ${CMAKE_THREAD_LIBS_INIT}
-    Boost::boost 
-    Boost::thread 
-    Boost::system 
-    Boost::regex 
+    Boost::asio
+    Boost::assign
     Boost::date_time 
-    Boost::program_options 
     Boost::filesystem
-    gtest
+    Boost::multi_array 
+    Boost::regex 
+    Boost::program_options 
+    Boost::system 
+    Boost::thread 
+    GTest::GTest
 )
 set(CUKE_SOURCE_DIR "${REPO_DIR}/src")
 

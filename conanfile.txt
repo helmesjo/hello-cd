@@ -1,9 +1,17 @@
 [requires]
-Boost/1.64.0@conan/stable
+# boost
+cmake_findboost_modular/1.65.1@bincrafters/stable
+boost_asio/1.65.1@bincrafters/stable
+boost_assign/1.65.1@bincrafters/stable
+boost_date_time/1.65.1@bincrafters/stable
+boost_filesystem/1.65.1@bincrafters/stable
+boost_multi_array/1.65.1@bincrafters/stable
+boost_regex/1.65.1@bincrafters/stable
+boost_program_options/1.65.1@bincrafters/stable
+boost_system/1.65.1@bincrafters/stable
+boost_thread/1.65.1@bincrafters/stable
+# other
 gtest/1.8.0@bincrafters/stable
-
-[options]
-Boost:shared=True # false
 
 [generators]
 cmake
