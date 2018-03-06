@@ -2,6 +2,7 @@
 #include <cucumber-cpp/autodetect.hpp>
 
 #include <mylib/calculator.hpp>
+#include <test_info.h>
 
 using cucumber::ScenarioScope;
 
@@ -37,4 +38,8 @@ THEN("^the result should be (.*) on the screen$") {
     ScenarioScope<CalcCtx> context;
 
     EXPECT_EQ(expected, context->result);
+}
+
+THEN("^the project name is also known$") {
+    EXPECT_EQ("end_to_end_tests", hello_cd::test_info::PROJECT_NAME);
 }

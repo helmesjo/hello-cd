@@ -1,0 +1,9 @@
+#pragma once
+
+namespace @PROJECT_NAMESPACE@ {
+	using const_char = const char * const;
+	
+	namespace test_info {
+		const_char PROJECT_NAME = "@PROJECT_NAME@";
+	}
+}

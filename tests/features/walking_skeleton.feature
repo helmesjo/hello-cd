@@ -9,6 +9,7 @@ Feature: A Walking Skeleton
     And I then entered <input_2> into the calculator
     When I press sum
     Then the result should be <output> on the screen
+    And the project name is also known
 
   Examples:
     | input_1 | input_2 | output |
