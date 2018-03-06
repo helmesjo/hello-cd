@@ -39,6 +39,10 @@ function(add_cucumber_test)
             ${arg_TARGETS}
             cucumber-cpp
     )
+    target_include_directories( ${FEATURE_NAME}
+        PRIVATE
+            "$<TARGET_FILE_DIR:${FEATURE_NAME}>"
+    )
 
     if(NOT arg_FEATURES_ROOT)
         set(arg_FEATURES_ROOT "${CMAKE_CURRENT_SOURCE_DIR}")
