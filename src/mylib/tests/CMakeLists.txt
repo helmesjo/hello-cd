@@ -6,8 +6,8 @@ include(testing)
 add_unit_test(
 	TEST_TARGET ${TEST_TARGET}
 	TEST_NAME ${PROJECT_NAME}
-	SOURCES "${CMAKE_CURRENT_LIST_DIR}/calculator_tests.cpp"
-	INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/include"
+	SOURCES "tests/calculator_tests.cpp"
+	INCLUDE_DIRS "tests/include"
 )
 
 include(code-coverage)
