@@ -10,6 +10,9 @@ endif()
 if(NOT CUCUMBER)
     message("TESTING - Cucumber not found, skipping acceptance tests.")
     set(SKIP true)
+elseif(WIN32)
+    # CTest fails to run ruby gems directly, but works using the .bat equivalent
+    set(CUCUMBER "${CUCUMBER}.bat")
 endif()
 
 set(PATH_TO_THIS ${CMAKE_CURRENT_LIST_FILE})
@@ -24,8 +27,9 @@ function(add_cucumber_test)
     )
     set(options "")
     set(multiValueArgs
+        INCLUDE_DIRS
         STEP_DEFINITIONS
-        TARGETS
+        LINK_TARGETS
     )
     cmake_parse_arguments(arg "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
@@ -36,12 +40,12 @@ function(add_cucumber_test)
     )
     target_link_libraries( ${FEATURE_NAME}
         PRIVATE
-            ${arg_TARGETS}
+            ${arg_LINK_TARGETS}
             cucumber-cpp
     )
     target_include_directories( ${FEATURE_NAME}
         PRIVATE
-            "$<TARGET_FILE_DIR:${FEATURE_NAME}>"
+            "${arg_INCLUDE_DIRS}"
     )
 
     if(NOT arg_FEATURES_ROOT)
@@ -60,8 +64,8 @@ function(add_cucumber_test)
     
     add_test(
         NAME ${FEATURE_NAME}
-        COMMAND ${CUCUMBER} --strict "${CMAKE_CURRENT_SOURCE_DIR}/${arg_FEATURE}"
-        WORKING_DIRECTORY ${arg_FEATURES_ROOT}
+        COMMAND "${CUCUMBER}" --strict "${arg_FEATURES_ROOT}/${arg_FEATURE}"
+        WORKING_DIRECTORY "${arg_FEATURES_ROOT}"
     )
     decrement_cost_and_set_for_test( TEST ${FEATURE_NAME} )
 
