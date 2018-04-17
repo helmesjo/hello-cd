@@ -2,7 +2,7 @@ FROM gocd/gocd-agent-debian-8:v18.1.0
 
 LABEL maintainer "Fred Helmesjö <helmesjo@live.com>"
 
-ENV DOCKER_VERSION 17.12.0
+ENV DOCKER_VERSION 18.03.0~ce-0~debian
 
 RUN     apt-get update && apt-get install --no-install-recommends -y \
         apt-transport-https \
@@ -20,7 +20,7 @@ RUN     apt-get update && apt-get install --no-install-recommends -y \
         apt-cache madison docker-ce && \
         # Update package list again
         apt-get update && apt-get install --no-install-recommends -y \
-            docker-ce=$DOCKER_VERSION~ce-0~debian && \
+            docker-ce=$DOCKER_VERSION && \
         # Clean up
         apt-get clean -y && \
         apt-get autoclean -y && \
