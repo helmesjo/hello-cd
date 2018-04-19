@@ -26,7 +26,7 @@ BUILD_DIR="$REPO_ROOT/build"
 
 SERVER_NAME="${REPO_NAME}_conan-server"
 
-echo -e "\n-- Installing dependencies for '$CONFIG $ARCH' with profile '$PROFILE'...n"
+echo -e "\n-- Installing dependencies for '$CONFIG $ARCH' with profile '$PROFILE'..."
 
 # Add conan-public as remotes. Needed until more packages are available in the official repository.
 # Fails if already added. If so, just swollow error.
