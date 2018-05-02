@@ -61,6 +61,7 @@ Each run can be inspected, and stuff like [code coverage](http://localhost:8153/
         
         
 ## **TODO**
+- Consider moving over to python & behave for end-to-end tests. See [this](https://arne-mertz.de/2016/12/bdd-python-behave/).
 - Fix docker-compose for GoCD setup, including registry.
 - ~~Add test-result output (tests passed/failed, details of failes etc), perferably in HTML-friendly format.~~
 - ~~Add support for test coverage, result perferably in HTML-friendly format.~~
