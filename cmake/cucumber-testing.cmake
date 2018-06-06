@@ -28,7 +28,7 @@ function(add_cucumber_test)
     set(options "")
     set(multiValueArgs
         INCLUDE_DIRS
-        STEP_DEFINITIONS
+        SOURCES
         LINK_TARGETS
     )
     cmake_parse_arguments(arg "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -36,7 +36,7 @@ function(add_cucumber_test)
     get_filename_component(FEATURE_NAME ${arg_FEATURE} NAME_WE)
 
     add_executable( ${FEATURE_NAME}
-        ${arg_STEP_DEFINITIONS}
+        ${arg_SOURCES}
     )
     target_link_libraries( ${FEATURE_NAME}
         PRIVATE

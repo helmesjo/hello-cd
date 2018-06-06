@@ -18,7 +18,7 @@ set(TEST_INFO "${PROJECT_BINARY_DIR}/test_info.h")
 
 add_cucumber_test(
 	FEATURE "features/walking_skeleton.feature"
-    STEP_DEFINITIONS 
+    SOURCES 
         "features/step_definitions/walking_skeleton.cpp"
         "${TEST_INFO}"
 	INCLUDE_DIRS "${PROJECT_BINARY_DIR}"
