@@ -7,7 +7,6 @@ set(THIS_FILE_PATH "${CMAKE_CURRENT_LIST_FILE}")
 
 function(configure_file_buildtime)
     set(oneValueArgs
-        TARGET
         FILE_IN
         FILE_OUT
     )
@@ -28,15 +27,8 @@ function(configure_file_buildtime)
                 -DARG_FILE_IN="${arg_FILE_IN}"
                 -DARG_FILE_OUT="${arg_FILE_OUT}" 
                 -P "${THIS_FILE_PATH}"
+        DEPENDS "${arg_FILE_IN}"
+        COMMENT "Configuring file ${arg_FILE_IN}"
     )
-
-    # If target is specified, add output file as 'source' &
-    # above custom target will run before target
-    if(arg_TARGET)
-        target_sources( ${arg_TARGET} 
-            PRIVATE
-                ${arg_FILE_OUT}
-        )
-    endif()
 
 endfunction()
