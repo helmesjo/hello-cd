@@ -1,11 +1,23 @@
+# If variables are defined, persume we are in script mode ('cmake -P this_file.cmake TEST_TARGET_PATH')
+if(CUCUMBER_PATH AND TEST_TARGET_PATH AND TEST_FEATURE_PATH)
+    execute_process(
+        COMMAND ${TEST_TARGET_PATH}
+        COMMAND ${CUCUMBER_PATH} --strict ${TEST_FEATURE_PATH}
+        OUTPUT_VARIABLE OUT
+        ERROR_VARIABLE ERROR
+        RESULT_VARIABLE RESULT
+    )
+
+    if(RESULT)
+        message(FATAL_ERROR "Return code: ${RESULT}\nError: ${ERROR}\nOutput: ${OUT}")
+    endif()
+
+    return()
+endif()
+
 find_program(CUCUMBER cucumber)
 
-# Tests are run in descending order (higher cost first)
-# We use this to make sure steprunner is started before cucumber-feature when run in parallel
-# (steprunner blocks & waits for cucumber-feature to send steps to execute)
-if(NOT TEST_COST)
-    set(TEST_COST "100000000")
-endif()
+set(cucumber_testing_path "${CMAKE_CURRENT_LIST_FILE}")
 
 if(NOT CUCUMBER)
     message("TESTING - Cucumber not found, skipping acceptance tests.")
@@ -53,44 +65,34 @@ function(add_cucumber_test)
     endif()
 
     # Cucumber is run in 2 steps: 
-    #   1: Start step executer (blocking)
-    #   2: Run cucumber which sends step-commands to executer
-    # NOTE: ctest must be run in parallel mode (`ctest --parallel 2`), else it will freeze.
-    add_test(
-        NAME ${FEATURE_NAME}_steprunner
-        COMMAND ${FEATURE_NAME}
-    )
-    decrement_cost_and_set_for_test( TEST ${FEATURE_NAME}_steprunner )
-    
-    add_test(
-        NAME ${FEATURE_NAME}
-        COMMAND "${CUCUMBER}" --strict "${arg_FEATURES_ROOT}/${arg_FEATURE}"
+    #   1: Start step executer (blocking) - server
+    #   2: Run cucumber which sends step-commands to executer - client
+    #   This is done by executing cmake in script mode & do execute_process 
+    #   with multiple (paralell) commands.
+    #   NOTE: See top of file (invoked by test)
+
+    set(FEATURE_TEST ${FEATURE_NAME}_tests)
+    add_test( 
+        NAME ${FEATURE_TEST}
+        COMMAND 
+            "${CMAKE_COMMAND}"
+                "-DCUCUMBER_PATH=${CUCUMBER}"
+                "-DTEST_TARGET_PATH=$<TARGET_FILE:${FEATURE_NAME}>"
+                "-DTEST_FEATURE_PATH=${arg_FEATURES_ROOT}/${arg_FEATURE}"
+                -P ${cucumber_testing_path}
         WORKING_DIRECTORY "${arg_FEATURES_ROOT}"
     )
-    decrement_cost_and_set_for_test( TEST ${FEATURE_NAME} )
 
     # Shared settings
-    set_tests_properties( ${FEATURE_NAME} ${FEATURE_NAME}_steprunner 
+    set_tests_properties( ${FEATURE_TEST}
         PROPERTIES 
             TIMEOUT 10
-            PARALLEL_LEVEL 2
-            PROCESSORS 1
+            RUN_SERIAL ON
             LABELS "acceptance"
     )
+
+    get_test_property(${FEATURE_TEST} LABELS TAGS)
+
+    message("CUCUMBER - Feature '${FEATURE_NAME}' setup as test '${FEATURE_TEST}'. Tags: ${TAGS}")
     
-endfunction()
-
-function(decrement_cost_and_set_for_test)
-    set(oneValueArgs
-        TEST
-    )
-    cmake_parse_arguments(arg "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
-    math(EXPR TEST_COST "${TEST_COST}-1")
-    set(TEST_COST ${TEST_COST} PARENT_SCOPE)
-
-    set_tests_properties( ${arg_TEST}
-        PROPERTIES 
-            COST ${TEST_COST}
-    )
-
 endfunction()
