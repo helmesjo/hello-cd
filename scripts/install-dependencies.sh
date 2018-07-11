@@ -28,9 +28,10 @@ SERVER_NAME="${REPO_NAME}_conan-server"
 
 echo -e "\n-- Installing dependencies for '$CONFIG $ARCH' with profile '$PROFILE'..."
 
-# Add conan-public as remotes. Needed until more packages are available in the official repository.
-# Fails if already added. If so, just swollow error.
-conan remote add --insert 0 conan-public https://api.bintray.com/conan/bincrafters/public-conan >/dev/null 2>&1 || true
+# Add bincrafters remote
+conan remote add --insert 0 bincrafters https://api.bintray.com/conan/bincrafters/public-conan >/dev/null 2>&1 || true
+# Add personal remote
+conan remote add --insert 0 helmesjo https://api.bintray.com/conan/helmesjo/public >/dev/null 2>&1 || true
 
 # Add private repository (only if reachable)
 if ping -w 1 -c 1 $SERVER_NAME >/dev/null 2>&1; then
