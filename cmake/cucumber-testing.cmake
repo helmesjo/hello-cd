@@ -16,6 +16,7 @@ if(CUCUMBER_PATH AND TEST_TARGET_PATH AND TEST_FEATURE_PATH)
 endif()
 
 find_program(CUCUMBER cucumber)
+find_package(cucumber-cpp REQUIRED)
 
 set(cucumber_testing_path "${CMAKE_CURRENT_LIST_FILE}")
 
@@ -53,7 +54,7 @@ function(add_cucumber_test)
     target_link_libraries( ${FEATURE_NAME}
         PRIVATE
             ${arg_LINK_TARGETS}
-            cucumber-cpp
+            cucumber-cpp::cucumber-cpp
     )
     target_include_directories( ${FEATURE_NAME}
         PRIVATE
