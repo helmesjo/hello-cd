@@ -31,7 +31,7 @@ echo -e "\n-- Installing dependencies for '$CONFIG $ARCH' with profile '$PROFILE
 # Add bincrafters remote
 conan remote add --insert 0 bincrafters https://api.bintray.com/conan/bincrafters/public-conan >/dev/null 2>&1 || true
 # Add personal remote
-conan remote add --insert 0 helmesjo https://api.bintray.com/conan/helmesjo/public >/dev/null 2>&1 || true
+conan remote add --insert 0 helmesjo https://api.bintray.com/conan/helmesjo/public-conan >/dev/null 2>&1 || true
 
 # Add private repository (only if reachable)
 if ping -w 1 -c 1 $SERVER_NAME >/dev/null 2>&1; then
