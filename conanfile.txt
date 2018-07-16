@@ -7,3 +7,4 @@ cucumber-cpp:test_framework=gtest
 
 [generators]
 cmake_find_package
+virtualenv

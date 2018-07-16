@@ -22,6 +22,9 @@ BUILD_DIR="$REPO_ROOT/build"
 # Install dependencies
 $CURRENT_DIR/install-dependencies.sh $CONFIG $ARCH
 
+# Make all environment variables from upstream conan packages available to current session
+source "$REPO_ROOT/conan/activate-envars.sh"
+
 echo "Building for '$CONFIG $ARCH' with toolchain '$TOOLCHAIN'..."
 cmake -E make_directory $BUILD_DIR
 # Generate
