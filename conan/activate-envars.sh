@@ -17,7 +17,7 @@ then
     # Make available all environment variables from upstream conan packages
     old_setting=${-//[^u]/}
     set +u
-    source $BUILD_DIR/activate.sh
+    source $ACTIVATE_FILE
     if [[ -n "$old_setting" ]]; then set -u; fi
     echo -e "-- Environment variables now available.\n"
 else
