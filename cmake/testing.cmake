@@ -1,5 +1,5 @@
-find_package(catch QUIET)
-find_package(fakeit QUIET)
+find_package(catch REQURIED)
+find_package(fakeit REQURIED)
 
 function(add_test_internal)
     set(oneValueArgs
@@ -18,9 +18,18 @@ function(add_test_internal)
     add_executable( ${arg_TEST_NAME}
         ${arg_SOURCES}
     )
+
+    # Extract properties and apply to test-target
+    get_target_property(CXX_STANDARD ${arg_TEST_TARGET} CXX_STANDARD)
+    get_target_property(CXX_STANDARD_REQUIRED ${arg_TEST_TARGET} CXX_STANDARD_REQUIRED)
+    get_target_property(CXX_EXTENSIONS ${arg_TEST_TARGET} CXX_EXTENSIONS)
     get_target_property(DEBUG_POSTFIX ${arg_TEST_TARGET} DEBUG_POSTFIX)
+
     set_target_properties( ${arg_TEST_NAME} 
         PROPERTIES 
+            CXX_STANDARD ${CXX_STANDARD}
+            CXX_EXTENSIONS ${CXX_EXTENSIONS}
+            CXX_STANDARD_REQUIRED ${CXX_STANDARD_REQUIRED}
             DEBUG_POSTFIX ${DEBUG_POSTFIX}
     )
     target_include_directories( ${arg_TEST_NAME}
