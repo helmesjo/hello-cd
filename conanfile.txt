@@ -1,9 +1,11 @@
 [requires]
-# boost
+catch2/2.0.1@bincrafters/stable
 cucumber-cpp/0.5@helmesjo/stable
+FakeIt/2.0.4@gasuketsu/stable
 
 [options]
 cucumber-cpp:test_framework=gtest
+FakeIt:integration=standalone
 
 [generators]
 cmake_find_package

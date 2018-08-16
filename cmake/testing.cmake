@@ -1,5 +1,5 @@
-find_package(catch REQURIED)
-find_package(fakeit REQURIED)
+find_package(catch2 REQUIRED)
+find_package(FakeIt REQUIRED)
 
 function(add_test_internal)
     set(oneValueArgs
@@ -39,8 +39,12 @@ function(add_test_internal)
     target_link_libraries( ${arg_TEST_NAME}
         PRIVATE
             ${arg_TEST_TARGET}
-            catch
-            fakeit
+            catch2::catch2
+            FakeIt::FakeIt
+    )
+    target_compile_definitions( ${arg_TEST_NAME}
+        PRIVATE 
+            CATCH_CONFIG_MAIN=1
     )
 
     add_test(

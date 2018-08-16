@@ -1,7 +1,7 @@
 #include "calculator_tests.hpp"
 #include "mylib/calculator.hpp"
 
-#include <catch_with_main.hpp>
+#include <catch.hpp>
 #include <fakeit.hpp>
 
 using namespace fakeit;
