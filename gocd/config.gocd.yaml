@@ -22,7 +22,11 @@ pipelines:
                 - exec: # type of task
                     command: ./docker/run-script.sh
                     arguments:
-                     - "./scripts/install-dependencies.sh && ./scripts/build.sh"
+                     - > 
+                          ./scripts/install-dependencies.sh &&
+                          ./scripts/build.sh &&
+                          ./scripts/run-unit-tests.sh &&
+                          ./scripts/install.sh
       - analyze: # stage name
           clean_workspace: true
           jobs:
@@ -43,4 +47,9 @@ pipelines:
                 - exec:
                     command: ./docker/run-script.sh
                     arguments:
-                     - "./scripts/run-coverage-analysis.sh && ./scripts/run-static-analysis.sh"
+                     - >
+                          ./scripts/install-dependencies.sh Debug &&
+                          ./scripts/build.sh Debug &&
+                          ./scripts/run-coverage-analysis.sh Debug &&
+                          ./scripts/run-static-analysis.sh Debug &&
+                          ./scripts/install.sh

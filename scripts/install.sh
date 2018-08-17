@@ -10,8 +10,8 @@ function on_error {
 }
 trap on_error ERR
 
+# Read arguments
 CONFIG="${1:-Release}"
-ARCH="${2:-x86_64}"
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 BUILD_DIR="$REPO_ROOT/build"
@@ -21,12 +21,9 @@ if [ ! -d "$BUILD_DIR" ]; then
     on_error
 fi
 
-echo "Running static analysis for '$CONFIG $ARCH'..."
+echo "Installing..."
 
-# Generate
-cmake -E chdir $BUILD_DIR \
-    cmake --build . --target static_analysis_all --config $CONFIG
-# Install result
+# Install
 cmake -E chdir $BUILD_DIR \
     cmake --build . --target install --config $CONFIG
 
