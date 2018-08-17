@@ -19,9 +19,6 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 TOOLCHAIN=$($REPO_ROOT/cmake/determine-toolchain.sh $ARCH 2>&1 >/dev/null)
 BUILD_DIR="$REPO_ROOT/build"
 
-# Install dependencies
-$CURRENT_DIR/install-dependencies.sh $CONFIG $ARCH
-
 # Make all environment variables from upstream conan packages available to current session
 source "$REPO_ROOT/conan/activate-envars.sh"
 

@@ -22,7 +22,7 @@ pipelines:
                 - exec: # type of task
                     command: ./docker/run-script.sh
                     arguments:
-                     - "./scripts/build.sh"
+                     - "./scripts/install-dependencies.sh && ./scripts/build.sh"
       - analyze: # stage name
           clean_workspace: true
           jobs:
