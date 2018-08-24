@@ -14,12 +14,12 @@ OS="$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"
 # Determine OS & compiler
 COMPILER="compiler_not_found"
 
-if command -v gcc >/dev/null; then
-    COMPILER="gcc"
+if [ $OS = "windows" ]; then
+    COMPILER="msvc"
 elif command -v clang >/dev/null; then
     COMPILER="clang"
-elif [ $OS = "windows" ]; then
-    COMPILER="msvc"
+elif command -v gcc >/dev/null; then
+    COMPILER="gcc"
 fi
 
 (>&2 echo "$COMPILER")
