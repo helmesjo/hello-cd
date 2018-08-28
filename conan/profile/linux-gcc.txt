@@ -3,3 +3,8 @@ include(default)
 [settings]
 compiler=gcc
 compiler.libcxx=libstdc++11
+os=Linux
+
+[env]
+CC=/usr/bin/gcc
+CXX=/usr/bin/g++

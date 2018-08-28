@@ -12,11 +12,11 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROFILE_DIR="$CURRENT_DIR/profile"
 
-# Determine OS & compiler
-OS="$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"
+# Determine TARGET_OS & compiler
+TARGET_OS="${1:-"$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"}"
 COMPILER="$($REPO_ROOT/scripts/get-compiler.sh 2>&1 >/dev/null)"
 
-PROFILE="$PROFILE_DIR/$OS-$COMPILER.txt"
+PROFILE="$PROFILE_DIR/$TARGET_OS-$COMPILER.txt"
 
 # If toolchain doesn't exist
 if [ ! -f "$PROFILE" ]; then

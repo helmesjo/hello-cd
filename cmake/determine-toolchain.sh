@@ -12,11 +12,9 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TOOLCHAIN_DIR="$CURRENT_DIR/toolchain"
 
-# Get arch from argument, or determine from environment
-ARCH="$($REPO_ROOT/scripts/get-arch.sh 2>&1 >/dev/null)"
-ARCH="${1:-$ARCH}"
+ARCH="${1:-"$($REPO_ROOT/scripts/get-arch.sh 2>&1 >/dev/null)"}"
+OS="${2:-"$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"}"
 
-OS="$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"
 COMPILER="$($REPO_ROOT/scripts/get-compiler.sh 2>&1 >/dev/null)"
 
 TOOLCHAIN="$TOOLCHAIN_DIR/$OS-$COMPILER-$ARCH.cmake"

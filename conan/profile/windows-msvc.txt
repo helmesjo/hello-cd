@@ -2,3 +2,4 @@ include(default)
 
 [settings]
 compiler=Visual Studio
+os=Windows

@@ -14,14 +14,16 @@ command -v conan >/dev/null 2>&1 ||
     on_error
 }
 
-CONFIG="${1:-Release}"
-ARCH="${2:-x86_64}"
-
 REPO_ROOT=$(git rev-parse --show-toplevel)
 REPO_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
 
-OS="$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"
-PROFILE="$($REPO_ROOT/conan/determine-profile.sh 2>&1 >/dev/null)"
+CONFIG="${1:-Release}"
+ARCH="${2:-x86_64}"
+TARGET_OS="${3:-"$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"}"
+HOST_OS="$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"
+HOST_ARCH="$($REPO_ROOT/scripts/get-arch.sh 2>&1 >/dev/null)"
+
+PROFILE="$($REPO_ROOT/conan/determine-profile.sh $TARGET_OS 2>&1 >/dev/null)"
 BUILD_DIR="$REPO_ROOT/build"
 
 SERVER_NAME="${REPO_NAME}_conan-server"
@@ -47,7 +49,7 @@ conan profile new default --detect >/dev/null 2>&1 || true
 
 # Install dependencies. Build if pre-built is missing.
 cmake -E chdir $BUILD_DIR \
-    conan install .. --build=missing -s arch=$ARCH -s build_type=$CONFIG --profile=$PROFILE
+    conan install .. --build=missing -s arch=$ARCH -s build_type=$CONFIG -s arch_build=$HOST_ARCH -s os_build="${HOST_OS^}" --profile=$PROFILE
 
 echo -e "\n-- Dependencies installed.\n"
 sleep 2
