@@ -71,6 +71,10 @@ function(setup_target_for_coverage_internal)
     set(TARGET_COVERAGE ${args_TARGET}_coverage_analysis)
     set(OUTPUT_DIR "${TARGET_BINARY_DIR}/${TARGET_COVERAGE}")
     set(GCOV_INFO_FILE "${args_TARGET}_coverage.info")
+    set(GCOV_INFO_FILE_FILTERED "${args_TARGET}_coverage_filtered.info")
+
+    # Root dir use to extract relevant coverage info (only include this targets sources' in report)
+    get_target_property(TARGET_SOURCE_DIR ${args_TARGET} SOURCE_DIR)
 
     add_custom_target( ${TARGET_COVERAGE}
         COMMAND ${CMAKE_COMMAND} -E make_directory ${TARGET_COVERAGE}
@@ -79,7 +83,9 @@ function(setup_target_for_coverage_internal)
         # Run tests
         COMMAND "./$<TARGET_FILE_NAME:${args_TEST_RUNNER}>"
         # Create test coverage data
-        COMMAND ${LCOV} --capture --directory . --output-file "${GCOV_INFO_FILE}"
+        COMMAND ${LCOV} --directory . --capture --output-file "${GCOV_INFO_FILE}"
+        # Filter out relevant info
+        COMMAND ${LCOV} --directory . --extract "${GCOV_INFO_FILE}" "${TARGET_SOURCE_DIR}/*" --output-file "${GCOV_INFO_FILE_FILTERED}"
         # Generating report
         COMMAND ${GENHTML} --output-directory "${OUTPUT_DIR}" "${GCOV_INFO_FILE}"
         # Cleanup
@@ -87,7 +93,7 @@ function(setup_target_for_coverage_internal)
 
         DEPENDS ${args_TEST_RUNNER}
         WORKING_DIRECTORY ./ # Relative to the build tree directory corresponding to the current source directory
-        COMMENT "Running code coverage analysis (gcov) and generating report."
+        COMMENT "Running code coverage analysis (gcov) and generating HTML report (genhtml)."
     )
 
     add_dependencies( ${COVERAGE_ALL} 

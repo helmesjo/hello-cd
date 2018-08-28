@@ -12,7 +12,6 @@ RUN     apt-get update && \
         gcc=4:6.3.0-4 \
         g++=4:6.3.0-4 \
         g++-multilib=4:6.3.0-4 \
-        lcov=1.13-1 \
         make=4.1-9.1 \
         python-pip=9.0.1-2 \
         python-pygments=2.2.0+dfsg-1 \
@@ -24,7 +23,9 @@ RUN     apt-get update && \
         apt-get -t buster install --no-install-recommends -y \
         # No specific versions. Available versions may change from 'buster' (is in testing)
         cmake \
-        git && \
+        git \
+        lcov \
+        && \
         # Gem
         gem install cucumber --version 2.4.0 && \
         # pip
