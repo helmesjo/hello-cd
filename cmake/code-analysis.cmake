@@ -71,21 +71,21 @@ function(setup_target_for_analysis_internal TARGET)
     # -- CLEANUP INCLUDES
 
     set(TARGET_ANALYSIS ${TARGET}_static_analysis)
-    set(OUTPUT_FILE ${TARGET_BINARY_DIR}/${TARGET_ANALYSIS}.xml)
-    set(OUTPUT_FILE_JUNIT ${TARGET_BINARY_DIR}/${TARGET_ANALYSIS}-junit.xml)
+    set(OUTPUT_FILE "${TARGET_BINARY_DIR}/${TARGET_ANALYSIS}.xml")
+    set(OUTPUT_FILE_JUNIT "${TARGET_BINARY_DIR}/${TARGET_ANALYSIS}-junit.xml")
     set(OUTPUT_DIR_HTML "${CMAKE_CURRENT_BINARY_DIR}/${TARGET_ANALYSIS}_html")
     
     add_custom_target( ${TARGET_ANALYSIS}
         # Run cppcheck
-        COMMAND ${CPPCHECK} --xml-version=2 --enable=all --suppress=missingIncludeSystem --force -I${TARGET_INCLUDES} "${TARGET_SOURCES}" 2> "${OUTPUT_FILE}"
+        COMMAND ${CPPCHECK} --xml-version=2 --enable=all --suppress=missingIncludeSystem --force -I${TARGET_INCLUDES} ${TARGET_SOURCES} 2> "${OUTPUT_FILE}"
         # Below should (optionally? or always do both?) convert cppcheck format -> junit format. 
         COMMAND ${CPPCHECK_JUNIT} "${OUTPUT_FILE}" "${OUTPUT_FILE_JUNIT}"
         COMMAND ${CPPCHECK_HTML} --report-dir=${OUTPUT_DIR_HTML};--title=${TARGET};--source-dir=${SOURCE_DIR};--file=${OUTPUT_FILE}
 
         DEPENDS ${TARGET}
-        WORKING_DIRECTORY ${TARGET_SOURCE_DIR}
+        WORKING_DIRECTORY "${TARGET_SOURCE_DIR}"
         VERBATIM
-        COMMENT "Running static analysis (cppcheck) on target '${TARGET}' and generating report."
+        COMMENT "Running static analysis (cppcheck) on target '${TARGET}' and generating report (cppcheck_junit, cppcheck-htmlreport)."
     )
 
     add_dependencies( ${ANALYSIS_ALL} 
