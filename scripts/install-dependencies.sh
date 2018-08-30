@@ -30,6 +30,9 @@ SERVER_NAME="${REPO_NAME}_conan-server"
 
 echo -e "\n-- Installing dependencies for '$CONFIG $ARCH' with profile '$PROFILE'..."
 
+# Use a local cache for dependencies
+export CONAN_USER_HOME=$BUILD_DIR
+
 # Add bincrafters remote
 conan remote add --insert 0 bincrafters https://api.bintray.com/conan/bincrafters/public-conan >/dev/null 2>&1 || true
 # Add personal remote
