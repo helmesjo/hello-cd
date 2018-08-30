@@ -55,8 +55,11 @@ CONTAINER_ID=$( docker create \
                         --volume /$REPO_ROOT:$CONTAINER_WDIR \
                         --workdir $CONTAINER_WDIR \
                         $IMAGE_ID \
-                        sh -c "$SCRIPT" \
+                        sh -c "chmod -R +x $CONTAINER_WDIR && $SCRIPT" \
                 )
+
+# chmod above is to work around issues with gocd 'fetch artifact'-tasks which internally uses zip
+# which in turn does not perserve the executable bit. So we manually add it to all folders & files (yuck).
 
 docker start --interactive $CONTAINER_ID
 
