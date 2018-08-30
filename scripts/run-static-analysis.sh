@@ -26,8 +26,5 @@ echo "Running static analysis for '$CONFIG $ARCH'..."
 # Generate
 cmake -E chdir $BUILD_DIR \
     cmake --build . --target static_analysis_all --config $CONFIG
-# Install result
-cmake -E chdir $BUILD_DIR \
-    cmake --build . --target install --config $CONFIG
 
 sleep 3
