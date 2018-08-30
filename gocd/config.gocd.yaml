@@ -2,6 +2,7 @@ environments:
   linux:
     pipelines:
       - build-artifact
+      - analyze
 pipelines:
   build-artifact:
     group: hello-cd
@@ -29,7 +30,7 @@ pipelines:
       - run-unit-tests:
           clean_workspace: true
           jobs:
-            code-analysis:
+            run-unit-tests:
               artifacts:
                 - test:
                     source: build/output/reports/*tests.xml
@@ -47,29 +48,58 @@ pipelines:
                      - >
                           ./scripts/run-unit-tests.sh &&
                           ./scripts/install.sh
-      # - analyze: # stage name
-      #     clean_workspace: true
-      #     jobs:
-      #       code-analysis:
-      #         artifacts:
-      #           - build:
-      #               source: build/output/reports/
-      #               destination: "reports"
-      #           - test:
-      #               source: build/output/reports/*junit*.xml
-      #               destination: "tests"
-      #         tabs:
-      #           mylib-cov: reports/mylib_coverage_analysis/index.html
-      #           myutils-cov: reports/myutils_coverage_analysis/index.html
-      #           mylib-analys: reports/mylib_static_analysis_html/index.html
-      #           myutils-analys: reports/myutils_static_analysis_html/index.html
-      #         tasks:
-      #           - exec:
-      #               command: ./docker/run-script.sh
-      #               arguments:
-      #                - >
-      #                     ./scripts/install-dependencies.sh Debug &&
-      #                     ./scripts/build.sh Debug &&
-      #                     ./scripts/run-coverage-analysis.sh Debug &&
-      #                     ./scripts/run-static-analysis.sh Debug &&
-      #                     ./scripts/install.sh
+  analyze:
+    group: hello-cd
+    materials:
+      git-repo:
+        git: /source
+        branch: cross-compile-gcc
+      upstream:
+        pipeline: build-artifact
+        stage: run-unit-tests
+    stages:
+      - code-coverage:
+          jobs:
+            code-coverage:
+              artifacts:
+                - build:
+                    source: build/output/reports/
+                    destination: "reports"
+              tabs:
+                mylib-cov: reports/mylib_coverage_analysis/index.html
+                myutils-cov: reports/myutils_coverage_analysis/index.html
+              tasks:
+                - exec:
+                    command: ./docker/run-script.sh
+                    arguments:
+                      - >
+                          ./scripts/install-dependencies.sh Debug &&
+                          ./scripts/build.sh Debug &&
+                          ./scripts/run-coverage-analysis.sh Debug &&
+                          ./scripts/install.sh Debug
+      - static-analysis:
+          jobs:
+            static-analysis:
+              artifacts:
+                - build:
+                    source: build/output/reports/
+                    destination: "reports"
+                - test:
+                    source: build/output/reports/*junit*.xml
+                    destination: "tests"
+              tabs:
+                mylib-analys: reports/mylib_static_analysis_html/index.html
+                myutils-analys: reports/myutils_static_analysis_html/index.html
+              tasks:
+                - fetch:
+                    pipeline: build-artifact
+                    stage: build
+                    job: build
+                    source: build
+                    destination: ./
+                - exec:
+                    command: ./docker/run-script.sh
+                    arguments:
+                      - >
+                          ./scripts/run-static-analysis.sh &&
+                          ./scripts/install.sh
