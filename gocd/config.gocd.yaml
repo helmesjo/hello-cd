@@ -8,7 +8,7 @@ pipelines:
     materials:
       git-repo:  # material name
         git: /source
-        branch: master
+        branch: cross-compile-gcc
     stages:
       - build: # stage name
           clean_workspace: true
