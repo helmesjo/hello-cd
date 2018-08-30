@@ -1,9 +1,9 @@
 environments:
-  docker:
+  linux:
     pipelines:
-      - build-on-docker-agent
+      - build
 pipelines:
-  build-on-docker-agent:
+  build:
     group: hello-cd
     materials:
       git-repo:  # material name

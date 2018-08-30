@@ -43,7 +43,7 @@ NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >&3)
 echo -e "\n-- Starting GoCD agent '$AGENT_NAME' & connecting it to network '$NETWORK' and server '$SERVER_NAME'...\n"
 
 AUTO_REGISTER_KEY="29a6415d-cfe8-40c7-9c46-37cf5612c995"
-AUTO_REGISTER_ENVIRONMENTS="docker"
+AUTO_REGISTER_ENVIRONMENTS="linux"
 # Start gocd-agent and forward socket (so that the host-docker engine can be invoked from inside)
 # Git-repo is added to agent and used as clone-url (will change this to point to a docker http server)
 CONTAINER_ID=$(docker run \
