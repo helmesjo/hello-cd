@@ -3,7 +3,7 @@
   <server artifactsdir="artifacts" agentAutoRegisterKey="29a6415d-cfe8-40c7-9c46-37cf5612c995" commandRepositoryLocation="default" serverId="efe90634-cb1b-4308-a2ec-9b175a9ff5bf" />
   <config-repos>
     <config-repo plugin="yaml.config.plugin">
-      <git url="/source" />
+      <git url="/source" branch="master" />
     </config-repo>
   </config-repos>
 </cruise>

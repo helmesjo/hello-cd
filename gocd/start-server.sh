@@ -35,8 +35,16 @@ NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >&3)
 
 # Copy server-config into mounted godata folder (don't want the actual config-file altered by the server)
 GODATA_PATH=$DIR/_godata
-mkdir -p $GODATA_PATH/config
-cp $DIR/$CONFIG_FILE $GODATA_PATH/config/
+CONFIG_DEST=$GODATA_PATH/config
+mkdir -p $CONFIG_DEST
+cp $DIR/$CONFIG_FILE $CONFIG_DEST/
+
+# Replace branch in config to the current branch (defaults is master)
+CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
+cmake   -DFILE="$CONFIG_DEST/$CONFIG_FILE" \
+        -DOLD="branch=\"master\"" \
+        -DNEW="branch=\"$CURRENT_BRANCH\"" \
+        -P "$REPO_ROOT/cmake/replace_in_file.cmake"
 
 echo -e "\n-- Starting GoCD server '$SERVER_NAME' & connecting it to network '$NETWORK'...\n"
 
