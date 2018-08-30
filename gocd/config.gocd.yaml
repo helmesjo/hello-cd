@@ -1,9 +1,9 @@
 environments:
   linux:
     pipelines:
-      - build
+      - build-artifact
 pipelines:
-  build:
+  build-artifact:
     group: hello-cd
     materials:
       git-repo:  # material name
@@ -13,11 +13,11 @@ pipelines:
       - build: # stage name
           clean_workspace: true
           jobs:
-            build-artifact: # job name
+            build: # job name
               artifacts:
-                - test:
-                   source: build/output/reports/*tests.xml
-                   destination: "tests"
+                - build:
+                    source: build
+                    destination: ./
               tasks:
                 - exec: # type of task
                     command: ./docker/run-script.sh
@@ -25,31 +25,51 @@ pipelines:
                      - > 
                           ./scripts/install-dependencies.sh &&
                           ./scripts/build.sh &&
-                          ./scripts/run-unit-tests.sh &&
                           ./scripts/install.sh
-      - analyze: # stage name
+      - run-unit-tests:
           clean_workspace: true
           jobs:
             code-analysis:
               artifacts:
-                - build:
-                   source: build/output/reports/
-                   destination: "reports"
                 - test:
-                   source: build/output/reports/*junit*.xml
-                   destination: "tests"
-              tabs:
-                mylib-cov: reports/mylib_coverage_analysis/index.html
-                myutils-cov: reports/myutils_coverage_analysis/index.html
-                mylib-analys: reports/mylib_static_analysis_html/index.html
-                myutils-analys: reports/myutils_static_analysis_html/index.html
+                    source: build/output/reports/*junit*.xml
+                    destination: "tests"
               tasks:
+                - fetch:
+                   pipeline: build-artifact
+                   stage: build
+                   job: build
+                   source: build
+                   destination: ./
                 - exec:
                     command: ./docker/run-script.sh
                     arguments:
                      - >
-                          ./scripts/install-dependencies.sh Debug &&
-                          ./scripts/build.sh Debug &&
-                          ./scripts/run-coverage-analysis.sh Debug &&
-                          ./scripts/run-static-analysis.sh Debug &&
+                          ./scripts/run-unit-tests.sh &&
                           ./scripts/install.sh
+      # - analyze: # stage name
+      #     clean_workspace: true
+      #     jobs:
+      #       code-analysis:
+      #         artifacts:
+      #           - build:
+      #               source: build/output/reports/
+      #               destination: "reports"
+      #           - test:
+      #               source: build/output/reports/*junit*.xml
+      #               destination: "tests"
+      #         tabs:
+      #           mylib-cov: reports/mylib_coverage_analysis/index.html
+      #           myutils-cov: reports/myutils_coverage_analysis/index.html
+      #           mylib-analys: reports/mylib_static_analysis_html/index.html
+      #           myutils-analys: reports/myutils_static_analysis_html/index.html
+      #         tasks:
+      #           - exec:
+      #               command: ./docker/run-script.sh
+      #               arguments:
+      #                - >
+      #                     ./scripts/install-dependencies.sh Debug &&
+      #                     ./scripts/build.sh Debug &&
+      #                     ./scripts/run-coverage-analysis.sh Debug &&
+      #                     ./scripts/run-static-analysis.sh Debug &&
+      #                     ./scripts/install.sh
