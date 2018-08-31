@@ -46,9 +46,9 @@ IMAGE_TAG="${IMAGE_TAG:-$REPO_NAME:build}"
 NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >&3)
 
 # Make sure image is built
-IMAGE_ID=$($DIR/build-image.sh --file=$DOCKERFILE --name=$IMAGE_TAG 2>&1 >&3)
+IMAGE_ID=$($DIR/build-image.sh --file=$DOCKERFILE --tag=$IMAGE_TAG 2>&1 >&3)
 
-echo -e "\n-- Running comman '$COMMAND' inside container (Image: '$IMAGE_TAG' File: '$DOCKERFILE')...\n"
+echo -e "\n-- Running command '$COMMAND' inside container (Image: '$IMAGE_TAG' File: '$DOCKERFILE')...\n"
 
 # Create build container & compile (create+start instead of run because of issues with logs)
 CONTAINER_ID=$( docker create \
@@ -57,7 +57,7 @@ CONTAINER_ID=$( docker create \
                         --volume /$REPO_ROOT:$CONTAINER_WDIR \
                         --workdir $CONTAINER_WDIR \
                         $IMAGE_ID \
-                        sh -c "chmod -R +x $CONTAINER_WDIR && $COMMAND" \
+                        sh -c "chmod -R +x $CONTAINER_WDIR/build && $COMMAND" \
                 )
 
 # chmod above is to work around issues with gocd 'fetch artifact'-tasks which internally uses zip

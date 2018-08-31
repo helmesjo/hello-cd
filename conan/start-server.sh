@@ -28,7 +28,7 @@ DOCKERFILE="$DIR/server/Dockerfile"
 NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >&3)
 
 # Build docker image for the conan server
-IMAGE_ID=$($REPO_ROOT/docker/build-image.sh --file=$DOCKERFILE --name="conan-server" 2>&1 >&3)
+IMAGE_ID=$($REPO_ROOT/docker/build-image.sh --file=$DOCKERFILE --tag="conan-server" 2>&1 >&3)
 
 SERVER_NAME="${REPO_NAME}_conan-server"
 

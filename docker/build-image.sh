@@ -18,7 +18,7 @@ ARGS="$@"
 
 DOCKERFILE="$($SCRIPT_DIR/get-arg.sh "$ARGS" --file 2>&1 >/dev/null)"
 DOCKERFILE="${DOCKERFILE:-$DIR/build.Dockerfile}"
-IMAGE_NAME="$($SCRIPT_DIR/get-arg.sh "$ARGS" --name 2>&1 >/dev/null)"
+IMAGE_NAME="$($SCRIPT_DIR/get-arg.sh "$ARGS" --tag 2>&1 >/dev/null)"
 IMAGE_NAME="${IMAGE_NAME:-"$REPO_NAME/$REPO_NAME:build"}"
 
 echo -e "\n-- Building docker image '$IMAGE_NAME' from file '$DOCKERFILE'...\n"
