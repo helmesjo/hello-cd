@@ -22,7 +22,7 @@ pipelines:
                     destination: ./
               tasks:
                 - exec: # type of task
-                    command: ./docker/run-script.sh
+                    command: ./docker/run-command.sh
                     arguments:
                      - > 
                           ./scripts/install-dependencies.sh &&
@@ -44,7 +44,7 @@ pipelines:
                    source: build
                    destination: ./
                 - exec:
-                    command: ./docker/run-script.sh
+                    command: ./docker/run-command.sh
                     arguments:
                      - >
                           ./scripts/run-unit-tests.sh &&
@@ -74,7 +74,7 @@ pipelines:
                     source: build
                     destination: ./
                 - exec:
-                    command: ./docker/run-script.sh
+                    command: ./docker/run-command.sh
                     arguments:
                       - >
                           ./scripts/run-acceptance-tests.sh &&
@@ -101,7 +101,7 @@ pipelines:
                 myutils-cov: reports/myutils_coverage_analysis/index.html
               tasks:
                 - exec:
-                    command: ./docker/run-script.sh
+                    command: ./docker/run-command.sh
                     arguments:
                       - >
                           ./scripts/install-dependencies.sh Debug &&
@@ -129,7 +129,7 @@ pipelines:
                     source: build
                     destination: ./
                 - exec:
-                    command: ./docker/run-script.sh
+                    command: ./docker/run-command.sh
                     arguments:
                       - >
                           ./scripts/run-static-analysis.sh &&
