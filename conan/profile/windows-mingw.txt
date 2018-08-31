@@ -1,0 +1,32 @@
+# https://docs.conan.io/en/latest/systems_cross_building/cross_building.html?highlight=cross%20building
+include(default)
+
+$toolchain=/usr/x86_64-w64-mingw32
+target_host=x86_64-w64-mingw32
+cc_compiler=gcc
+cxx_compiler=g++
+
+[env]
+CONAN_CMAKE_FIND_ROOT_PATH=$toolchain
+CHOST=$target_host
+AR=$target_host-ar
+AS=$target_host-as
+RANLIB=$target_host-ranlib
+CC=$target_host-$cc_compiler
+CXX=$target_host-$cxx_compiler
+STRIP=$target_host-strip
+RC=$target_host-windres
+
+[settings]
+os=Windows
+compiler=gcc
+
+# Adjust to the gcc version of your MinGW package
+compiler.version=7.3
+compiler.libcxx=libstdc++11
+
+# Currently Boost.Context does not build on MinGW, so we explicitly disable it
+# Boost.Coroutine depends on context and must also be disabled
+[options]
+boost:without_context=True
+boost:without_coroutine=True
