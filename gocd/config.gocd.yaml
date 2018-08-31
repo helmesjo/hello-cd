@@ -2,6 +2,7 @@ environments:
   linux:
     pipelines:
       - build-artifact
+      - acceptance-tests
       - analyze
 pipelines:
   build-artifact:
@@ -47,6 +48,36 @@ pipelines:
                     arguments:
                      - >
                           ./scripts/run-unit-tests.sh &&
+                          ./scripts/install.sh
+  acceptance-tests:
+    group: hello-cd
+    materials:
+      git-repo:
+        git: /source
+        branch: cross-compile-gcc
+      upstream:
+        pipeline: build-artifact
+        stage: run-unit-tests
+    stages:
+      - run-tests:
+          jobs:
+            run-tests:
+              artifacts:
+                - build:
+                    source: build/output/reports/
+                    destination: "reports"
+              tasks:
+                - fetch:
+                    pipeline: build-artifact
+                    stage: build
+                    job: build
+                    source: build
+                    destination: ./
+                - exec:
+                    command: ./docker/run-script.sh
+                    arguments:
+                      - >
+                          ./scripts/run-acceptance-tests.sh &&
                           ./scripts/install.sh
   analyze:
     group: hello-cd
