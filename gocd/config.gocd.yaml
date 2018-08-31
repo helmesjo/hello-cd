@@ -104,10 +104,10 @@ pipelines:
                     command: ./docker/run-command.sh
                     arguments:
                       - >
-                          ./scripts/install-dependencies.sh Debug &&
-                          ./scripts/build.sh Debug &&
-                          ./scripts/run-coverage-analysis.sh Debug &&
-                          ./scripts/install.sh Debug
+                          ./scripts/install-dependencies.sh --config=Debug &&
+                          ./scripts/build.sh --config=Debug &&
+                          ./scripts/run-coverage-analysis.sh --config=Debug &&
+                          ./scripts/install.sh --config=Debug
       - static-analysis:
           jobs:
             static-analysis:
