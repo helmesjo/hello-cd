@@ -30,5 +30,4 @@ do
             ;;
         *)
     esac
-  shift
 done
