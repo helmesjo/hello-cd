@@ -3,7 +3,7 @@ environments:
     pipelines:
       - build-artifact
       - acceptance-tests
-      - analyze
+      - code-analysis
 pipelines:
   build-artifact:
     group: hello-cd
@@ -79,7 +79,7 @@ pipelines:
                       - >
                           ./scripts/run-acceptance-tests.sh &&
                           ./scripts/install.sh
-  analyze:
+  code-analysis:
     group: hello-cd
     materials:
       git-repo:
