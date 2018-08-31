@@ -51,17 +51,18 @@ IMAGE_ID=$($DIR/build-image.sh --file=$DOCKERFILE --tag=$IMAGE_TAG 2>&1 >&3)
 echo -e "\n-- Running command '$COMMAND' inside container (Image: '$IMAGE_TAG' File: '$DOCKERFILE')...\n"
 
 # Create build container & compile (create+start instead of run because of issues with logs)
+
+# HACK: chmod below is to work around issues with gocd 'fetch artifact'-tasks which internally uses zip
+# HACK: which in turn does not perserve the executable bit. So we manually add it to all folders & files in build (yuck).
+FIX_EXECUTE_BITS="chmod -R +x $CONTAINER_WDIR/build >/dev/null 2>&1 || true"
 CONTAINER_ID=$( docker create \
                         --tty \
                         --net $NETWORK \
                         --volume /$REPO_ROOT:$CONTAINER_WDIR \
                         --workdir $CONTAINER_WDIR \
                         $IMAGE_ID \
-                        sh -c "chmod -R +x $CONTAINER_WDIR/build && $COMMAND" \
+                        sh -c "$FIX_EXECUTE_BITS && $COMMAND" \
                 )
-
-# chmod above is to work around issues with gocd 'fetch artifact'-tasks which internally uses zip
-# which in turn does not perserve the executable bit. So we manually add it to all folders & files (yuck).
 
 docker start --interactive $CONTAINER_ID
 
