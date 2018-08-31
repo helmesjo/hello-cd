@@ -1,4 +1,4 @@
-FROM gocd/gocd-server:v18.1.0
+FROM gocd/gocd-server:v18.7.0
 
 LABEL maintainer "Fred Helmesjö <helmesjo@live.com>"
 
