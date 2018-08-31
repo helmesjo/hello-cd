@@ -26,7 +26,7 @@ DOCKER_REPO="${1:-"localhost:5000"}"
 IMAGE_TAG="${2:-$REPO_NAME:$COMMIT_HASH}"
 DOCKERFILE="${3:-$DIR/build.Dockerfile}"
 
-IMAGE_ID=$($DIR/build-image.sh $DOCKERFILE $IMAGE_TAG 2>&1 >/dev/null)
+IMAGE_ID=$($DIR/build-image.sh --file=$DOCKERFILE --name=$IMAGE_TAG 2>&1 >/dev/null)
 
 echo "Pushing image '$IMAGE_TAG' to repository '$DOCKER_REPO'..."
 

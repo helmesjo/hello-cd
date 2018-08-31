@@ -9,13 +9,17 @@ function on_error {
 trap on_error ERR
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
-HOST_OS="$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"
+TARGET_OS="${1:-$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)}"
 
-# Determine HOST_OS & compiler
+# Determine TARGET_OS & compiler
 COMPILER="compiler_not_found"
 
-if [ $HOST_OS = "windows" ]; then
-    COMPILER="msvc"
+if [ $TARGET_OS = "windows" ]; then
+    if command -v gcc >/dev/null; then
+        COMPILER="mingw"
+    else
+        COMPILER="msvc"
+    fi
 elif command -v clang >/dev/null; then
     COMPILER="clang"
 elif command -v gcc >/dev/null; then

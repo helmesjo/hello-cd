@@ -8,8 +8,13 @@ function on_error {
 }
 trap on_error ERR
 
-CONFIG="${1:-Release}"
 REPO_ROOT="$(git rev-parse --show-toplevel)"
+SCRIPT_DIR="$REPO_ROOT/scripts"
+ARGS="$@"
+
+CONFIG="$($SCRIPT_DIR/get-arg.sh "$ARGS" --config 2>&1 >/dev/null)"
+CONFIG="${CONFIG:-Release}"
+
 BUILD_DIR="$REPO_ROOT/build"
 
 if [ ! -d "$BUILD_DIR" ]; then
@@ -17,8 +22,11 @@ if [ ! -d "$BUILD_DIR" ]; then
     on_error
 fi
 
-echo "Running unit tests for build '$CONFIG'..."
+echo -e "\n-- Running unit tests for build '$CONFIG'..."
+
 cmake -E chdir $BUILD_DIR \
     ctest --build-config $CONFIG --parallel 2 --label-regex "unit" --output-on-failure
+
+echo -e "\n-- Finished running unit tests for build '$CONFIG'."
 
 sleep 3

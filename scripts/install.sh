@@ -10,9 +10,6 @@ function on_error {
 }
 trap on_error ERR
 
-# Read arguments
-CONFIG="${1:-Release}"
-
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 BUILD_DIR="$REPO_ROOT/build"
 
@@ -21,10 +18,11 @@ if [ ! -d "$BUILD_DIR" ]; then
     on_error
 fi
 
-echo "Installing..."
+echo -e "\n-- Installing build..."
 
-# Install
 cmake -E chdir $BUILD_DIR \
-    cmake --build . --target install --config $CONFIG
+    cmake --build . --target install
+
+echo -e "\n-- Finished installing build."
 
 sleep 3

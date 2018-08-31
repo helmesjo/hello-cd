@@ -10,6 +10,11 @@ function on_error {
 trap on_error ERR
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
+SCRIPT_DIR="$REPO_ROOT/scripts"
+ARGS="$@"
+# Container id/name passed is added as swarm managers
+CONTAINER="$($SCRIPT_DIR/get-arg.sh "$ARGS" --join 2>&1 >/dev/null)"
+
 NETWORK_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
 
 echo -e "\n-- Starting docker network '$NETWORK_NAME'..."
@@ -36,8 +41,7 @@ else
     echo -e "-- Docker network '$NETWORK_NAME' already started."
 fi
 
-# Container id/name passed is added as swarm managers
-CONTAINER="${1:-}"
+
 if [ "${CONTAINER-}" ]; then
     echo -e "\n-- Adding container '$CONTAINER' to swarm as manager.\n"
     SWARM_IP=$(docker node inspect self --format '{{ .Status.Addr  }}')

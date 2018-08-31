@@ -28,7 +28,7 @@ CONFIG_FILE="cruise-config.xml"
 DOCKERFILE=$DIR/server/"Dockerfile"
 
 # Build docker image for the gocd server
-IMAGE_ID=$($REPO_ROOT/docker/build-image.sh $DOCKERFILE "gocd-server" 2>&1 >&3)
+IMAGE_ID=$($REPO_ROOT/docker/build-image.sh --file=$DOCKERFILE --name="gocd-server" 2>&1 >&3)
 
 # Make sure network is started (used to enable communication by container-name)
 NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >&3)

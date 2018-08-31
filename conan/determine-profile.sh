@@ -12,9 +12,12 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROFILE_DIR="$CURRENT_DIR/profile"
 
-# Determine TARGET_OS & compiler
-TARGET_OS="${1:-"$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"}"
-COMPILER="$($REPO_ROOT/scripts/get-compiler.sh 2>&1 >/dev/null)"
+SCRIPT_DIR="$REPO_ROOT/scripts"
+ARGS="$@"
+TARGET_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-os 2>&1 >/dev/null)"
+TARGET_OS="${TARGET_OS:-"$($SCRIPT_DIR/get-os.sh 2>&1 >/dev/null)"}"
+COMPILER="$($SCRIPT_DIR/get-arg.sh "$ARGS" --compiler 2>&1 >/dev/null)"
+COMPILER="${COMPILER:-"$($SCRIPT_DIR/get-compiler.sh 2>&1 >/dev/null)"}"
 
 PROFILE="$PROFILE_DIR/$TARGET_OS-$COMPILER.txt"
 

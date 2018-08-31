@@ -12,12 +12,13 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TOOLCHAIN_DIR="$CURRENT_DIR/toolchain"
 
-ARCH="${1:-"$($REPO_ROOT/scripts/get-arch.sh 2>&1 >/dev/null)"}"
-OS="${2:-"$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"}"
+SCRIPT_DIR="$REPO_ROOT/scripts"
+ARGS="$@"
+TARGET_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-os 2>&1 >/dev/null)"
+ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-arch 2>&1 >/dev/null)"
 
-COMPILER="$($REPO_ROOT/scripts/get-compiler.sh 2>&1 >/dev/null)"
-
-TOOLCHAIN="$TOOLCHAIN_DIR/$OS-$COMPILER-$ARCH.cmake"
+COMPILER="$($REPO_ROOT/scripts/get-compiler.sh $TARGET_OS 2>&1 >/dev/null)"
+TOOLCHAIN="$TOOLCHAIN_DIR/$TARGET_OS-$COMPILER-$ARCH.cmake"
 
 # If toolchain doesn't exist
 if [ ! -f "$TOOLCHAIN" ]; then

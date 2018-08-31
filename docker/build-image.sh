@@ -13,16 +13,22 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_ROOT=$(git rev-parse --show-toplevel)
 REPO_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
 
-DOCKERFILE="${1:-$DIR/build.Dockerfile}"
-IMAGE_NAME="$REPO_NAME/${2:-$REPO_NAME:build}"
+SCRIPT_DIR="$REPO_ROOT/scripts"
+ARGS="$@"
 
-echo -e "\n-- Building docker image '$DOCKERFILE'...\n"
+DOCKERFILE="$($SCRIPT_DIR/get-arg.sh "$ARGS" --file 2>&1 >/dev/null)"
+DOCKERFILE="${DOCKERFILE:-$DIR/build.Dockerfile}"
+IMAGE_NAME="$($SCRIPT_DIR/get-arg.sh "$ARGS" --name 2>&1 >/dev/null)"
+IMAGE_NAME="${IMAGE_NAME:-"$REPO_NAME/$REPO_NAME:build"}"
+
+echo -e "\n-- Building docker image '$IMAGE_NAME' from file '$DOCKERFILE'...\n"
 
 # Build environment
 docker build    --tag $IMAGE_NAME \
                 --file $DOCKERFILE .
 
-echo -e "\n-- Built docker image '$IMAGE_NAME'\n"
+echo -e "\n-- Built docker image '$IMAGE_NAME' from file '$DOCKERFILE'.\n"
+
 echo $IMAGE_NAME >&2
 
 sleep 2

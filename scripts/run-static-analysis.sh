@@ -10,10 +10,13 @@ function on_error {
 }
 trap on_error ERR
 
-CONFIG="${1:-Release}"
-ARCH="${2:-x86_64}"
-
 REPO_ROOT="$(git rev-parse --show-toplevel)"
+SCRIPT_DIR="$REPO_ROOT/scripts"
+ARGS="$@"
+
+CONFIG="$($SCRIPT_DIR/get-arg.sh "$ARGS" --config 2>&1 >/dev/null)"
+CONFIG="${CONFIG:-Release}"
+
 BUILD_DIR="$REPO_ROOT/build"
 
 if [ ! -d "$BUILD_DIR" ]; then
@@ -21,10 +24,11 @@ if [ ! -d "$BUILD_DIR" ]; then
     on_error
 fi
 
-echo "Running static analysis for '$CONFIG $ARCH'..."
+echo -e "\n-- Running static analysis for build '$CONFIG'..."
 
-# Generate
 cmake -E chdir $BUILD_DIR \
     cmake --build . --target static_analysis_all --config $CONFIG
+
+echo -e "\n-- Finished running static analysis for build '$CONFIG'."
 
 sleep 3
