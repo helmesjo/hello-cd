@@ -14,11 +14,17 @@ TOOLCHAIN_DIR="$CURRENT_DIR/toolchain"
 
 SCRIPT_DIR="$REPO_ROOT/scripts"
 ARGS="$@"
-TARGET_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-os 2>&1 >/dev/null)"
-ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-arch 2>&1 >/dev/null)"
 
-COMPILER="$($REPO_ROOT/scripts/get-compiler.sh $TARGET_OS 2>&1 >/dev/null)"
-TOOLCHAIN="$TOOLCHAIN_DIR/$TARGET_OS-$COMPILER-$ARCH.cmake"
+TARGET_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-os 2>&1 >/dev/null)"
+TARGET_OS="${TARGET_OS:-"$($SCRIPT_DIR/get-os.sh 2>&1 >/dev/null)"}"
+
+TARGET_ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-arch 2>&1 >/dev/null)"
+TARGET_ARCH="${TARGET_ARCH:-"$($SCRIPT_DIR/get-arch.sh 2>&1 >/dev/null)"}"
+
+COMPILER="$($SCRIPT_DIR/get-arg.sh "$ARGS" --compiler 2>&1 >/dev/null)"
+COMPILER="${COMPILER:-"$($SCRIPT_DIR/get-compiler.sh --target-os=$TARGET_OS 2>&1 >/dev/null)"}"
+
+TOOLCHAIN="$TOOLCHAIN_DIR/$TARGET_OS-$COMPILER-$TARGET_ARCH.cmake"
 
 # If toolchain doesn't exist
 if [ ! -f "$TOOLCHAIN" ]; then
