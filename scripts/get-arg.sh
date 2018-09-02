@@ -4,6 +4,7 @@ set -euo pipefail
 
 function on_error {
     echo "Something failed while looking for flag '${EXPECTED_ARG-}' in '${ARGS-}'"
+    sleep 3
     exit 1
 }
 trap on_error ERR
@@ -33,4 +34,4 @@ do
 done
 
 # If a value was found, or if a fallback was specified, output it
-( [ -z "$VALUE" ] || >&2 echo $VALUE )
+[ -z "$VALUE" ] || echo $VALUE >&2

@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -euo pipefail
-
 exec 3>&1
 
 function cleanup {
@@ -11,9 +10,9 @@ function cleanup {
 }
 
 function on_error {
-    echo "Could not start GoCD server '$SERVER_NAME'" >&2
+    echo "Failed to start GoCD server '$SERVER_NAME'..."
     cleanup
-    sleep 5
+    sleep 3
     exit 1
 }
 trap on_error ERR

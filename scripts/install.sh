@@ -5,7 +5,7 @@ set -euo pipefail
 
 function on_error {
     echo "Something failed..."
-    sleep 5
+    sleep 3
     exit 1
 }
 trap on_error ERR
@@ -14,7 +14,7 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 BUILD_DIR="$REPO_ROOT/build"
 
 if [ ! -d "$BUILD_DIR" ]; then
-    echo -e "-- Build directory not found at '$BUILD_DIR'\n - Please first build project with './scripts/build.sh'" 1>&2
+    echo -e "-- Build directory not found at '$BUILD_DIR'\n - Please first build project with './scripts/build.sh'"
     on_error
 fi
 

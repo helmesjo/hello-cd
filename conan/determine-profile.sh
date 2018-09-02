@@ -1,8 +1,9 @@
 #!/bin/bash
 set -euo pipefail
+exec 3>&1
 
 function on_error {
-    (>&2 echo "Could not determine conan profile")
+    echo "Failed to determine conan profile..."
     sleep 3
     exit 1
 }
@@ -15,18 +16,15 @@ PROFILE_DIR="$CURRENT_DIR/profile"
 SCRIPT_DIR="$REPO_ROOT/scripts"
 ARGS="$@"
 
-TARGET_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-os 2>&1 >/dev/null)"
-TARGET_OS="${TARGET_OS:-"$($SCRIPT_DIR/get-os.sh 2>&1 >/dev/null)"}"
-
-COMPILER="$($SCRIPT_DIR/get-arg.sh "$ARGS" --compiler 2>&1 >/dev/null)"
-COMPILER="${COMPILER:-"$($SCRIPT_DIR/get-compiler.sh --target-os=$TARGET_OS 2>&1 >/dev/null)"}"
+TARGET_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-os "$($SCRIPT_DIR/get-os.sh 2>&1 >&3)" 2>&1 >&3)"
+COMPILER="$($SCRIPT_DIR/get-arg.sh "$ARGS" --compiler "$($SCRIPT_DIR/get-compiler.sh --target-os=$TARGET_OS 2>&1 >&3)" 2>&1 >&3)"
 
 PROFILE="$PROFILE_DIR/$TARGET_OS-$COMPILER.txt"
 
 # If toolchain doesn't exist
 if [ ! -f "$PROFILE" ]; then
-    (>&2 echo "No toolchain found matching '$PROFILE'")
+    echo "No toolchain found matching '$PROFILE'"
     on_error
 fi
 
-(>&2 echo "$PROFILE")
+echo "$PROFILE" >&2

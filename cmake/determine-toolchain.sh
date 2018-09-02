@@ -1,8 +1,9 @@
 #!/bin/bash
 set -euo pipefail
+exec 3>&1
 
 function on_error {
-    (>&2 echo "Could not determine cmake toolchain")
+    echo "Failed to determine cmake toolchain..."
     sleep 3
     exit 1
 }
@@ -15,21 +16,16 @@ TOOLCHAIN_DIR="$CURRENT_DIR/toolchain"
 SCRIPT_DIR="$REPO_ROOT/scripts"
 ARGS="$@"
 
-TARGET_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-os 2>&1 >/dev/null)"
-TARGET_OS="${TARGET_OS:-"$($SCRIPT_DIR/get-os.sh 2>&1 >/dev/null)"}"
-
-TARGET_ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-arch 2>&1 >/dev/null)"
-TARGET_ARCH="${TARGET_ARCH:-"$($SCRIPT_DIR/get-arch.sh 2>&1 >/dev/null)"}"
-
-COMPILER="$($SCRIPT_DIR/get-arg.sh "$ARGS" --compiler 2>&1 >/dev/null)"
-COMPILER="${COMPILER:-"$($SCRIPT_DIR/get-compiler.sh --target-os=$TARGET_OS 2>&1 >/dev/null)"}"
+TARGET_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-os "$($SCRIPT_DIR/get-os.sh 2>&1 >&3)" 2>&1 >&3)"
+TARGET_ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-arch "$($SCRIPT_DIR/get-arch.sh 2>&1 >&3)" 2>&1 >&3)"
+COMPILER="$($SCRIPT_DIR/get-arg.sh "$ARGS" --compiler "$($SCRIPT_DIR/get-compiler.sh --target-os=$TARGET_OS 2>&1 >&3)" 2>&1 >&3)"
 
 TOOLCHAIN="$TOOLCHAIN_DIR/$TARGET_OS-$COMPILER-$TARGET_ARCH.cmake"
 
 # If toolchain doesn't exist
 if [ ! -f "$TOOLCHAIN" ]; then
-    (>&2 echo "No toolchain found matching '$TOOLCHAIN'")
+    "No toolchain found matching '$TOOLCHAIN'"
     on_error
 fi
 
-(>&2 echo "$TOOLCHAIN")
+echo "$TOOLCHAIN" >&2

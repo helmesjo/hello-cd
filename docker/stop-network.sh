@@ -1,16 +1,17 @@
 #!/bin/bash
 
 set -euo pipefail
+exec 3>&1
 
 function on_error {
-    echo "Could not stop network $NETWORK_NAME" >&2
+    echo "Could not stop network $NETWORK_NAME"
     sleep 5
     exit 1
 }
 trap on_error ERR
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
-NETWORK_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
+NETWORK_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1 >&3)
 
 echo -e "\n-- Stopping docker network '$NETWORK_NAME'..."
 

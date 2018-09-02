@@ -2,7 +2,7 @@
 set -euo pipefail
 
 function on_error {
-    (>&2 echo "Could not determine OS")
+    echo "Failed to determine OS..."
     sleep 3
     exit 1
 }
@@ -27,4 +27,4 @@ if [ -z "${OS-}" ]; then
     on_error
 fi
 
-(>&2 echo "$OS")
+echo "$OS" >&2

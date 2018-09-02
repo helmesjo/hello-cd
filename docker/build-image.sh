@@ -1,9 +1,10 @@
 #!/bin/bash
 
 set -euo pipefail
+exec 3>&1
 
 function on_error {
-    echo "Could not build dockerfile $DOCKERFILE" >&2
+    echo "Failed to build dockerfile '${DOCKERFILE:-}'..."
     sleep 5
     exit 1
 }
@@ -16,10 +17,8 @@ REPO_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
 SCRIPT_DIR="$REPO_ROOT/scripts"
 ARGS="$@"
 
-DOCKERFILE="$($SCRIPT_DIR/get-arg.sh "$ARGS" --file 2>&1 >/dev/null)"
-DOCKERFILE="${DOCKERFILE:-$DIR/build.Dockerfile}"
-IMAGE_NAME="$($SCRIPT_DIR/get-arg.sh "$ARGS" --tag 2>&1 >/dev/null)"
-IMAGE_NAME="${IMAGE_NAME:-"$REPO_NAME/$REPO_NAME:build"}"
+DOCKERFILE="$($SCRIPT_DIR/get-arg.sh "$ARGS" --file "$DIR/build.Dockerfile" 2>&1 >&3)"
+IMAGE_NAME="$($SCRIPT_DIR/get-arg.sh "$ARGS" --tag "$REPO_NAME/$REPO_NAME:build" 2>&1 >&3)"
 
 echo -e "\n-- Building docker image '$IMAGE_NAME' from file '$DOCKERFILE'...\n"
 

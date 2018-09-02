@@ -2,7 +2,7 @@
 set -euo pipefail
 
 function on_error {
-    (>&2 echo "Could not determine architecture given: $(arch)")
+    echo "Could not determine architecture given: $(arch)"
     sleep 3
     exit 1
 }
@@ -21,4 +21,4 @@ if [ -z "${ARCH-}" ]; then
     on_error
 fi
 
-(>&2 echo "$ARCH")
+echo "$ARCH" >&2

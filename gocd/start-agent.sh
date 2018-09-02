@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -euo pipefail
-
 exec 3>&1
 
 function cleanup {
@@ -11,9 +10,9 @@ function cleanup {
 }
 
 function on_error {
-    echo "Could not start GoCD agent '$AGENT_NAME'" >&2
+    echo "Failed to start GoCD agent '$AGENT_NAME'..."
     cleanup
-    sleep 5
+    sleep 3
     exit 1
 }
 trap on_error ERR
@@ -25,7 +24,7 @@ AGENT_NAME="gocd-agent"
 SERVER_NAME="$(docker ps --filter name=gocd-server --format '{{.Names}}')"
 
 if [ -z "${SERVER_NAME-}" ]; then
-    echo -e "-- No container found with name containing 'gocd-server'.\n--- Make sure gocd-server is started." >&2
+    echo -e "-- No container found with name containing 'gocd-server'.\n--- Make sure gocd-server is started."
     sleep 5
     exit 1
 fi

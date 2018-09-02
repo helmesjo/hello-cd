@@ -13,20 +13,20 @@ OS="$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"
 
 # Linux required
 if ! [ $OS == "linux" ]; then
-    echo -e "-- This script can only be run on Linux, not $OS" 1>&2  
+    echo -e "-- This script can only be run on Linux, not $OS"
     on_error
 fi
 
 # Root required
 if ! [ $(id -u) = 0 ]; then
-    echo -e "-- This script must be run as root\n - Please run with 'sudo <shell> <script>'" 1>&2
+    echo -e "-- This script must be run as root\n - Please run with 'sudo <shell> <script>'"
     on_error
 fi
 
 # UFW required
 command -v ufw >/dev/null 2>&1 || 
 { 
-    echo -e "-- UFW is used to open ports on linux\n - Please install with 'sudo apt install ufw'" 1>&2
+    echo -e "-- UFW is used to open ports on linux\n - Please install with 'sudo apt install ufw'"
     on_error
 }
 

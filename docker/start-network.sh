@@ -1,9 +1,10 @@
 #!/bin/bash
 
 set -euo pipefail
+exec 3>&1
 
 function on_error {
-    echo "Could not start network $NETWORK_NAME" >&2
+    echo "Failed to start network '$NETWORK_NAME'..."
     sleep 5
     exit 1
 }
@@ -13,7 +14,7 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 SCRIPT_DIR="$REPO_ROOT/scripts"
 ARGS="$@"
 # Container id/name passed is added as swarm managers
-CONTAINER="$($SCRIPT_DIR/get-arg.sh "$ARGS" --join 2>&1 >/dev/null)"
+CONTAINER="$($SCRIPT_DIR/get-arg.sh "$ARGS" --join 2>&1 >&3)"
 
 NETWORK_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
 

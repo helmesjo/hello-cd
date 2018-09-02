@@ -1,13 +1,14 @@
 #!/bin/bash
 
 set -euo pipefail
+exec 3>&1
 
 # Clean up leftovers before exit (don't delete build image, it might be shared. I don't like this though!)
 function cleanup {
     docker rm $CONTAINER_ID
     docker rmi $ARTIFACT_ID
 
-    (>&2 echo $IMAGE_TAG)
+    echo $IMAGE_TAG >&2
     sleep 3
 }
 trap cleanup EXIT
@@ -26,7 +27,7 @@ DOCKER_REPO="${1:-"localhost:5000"}"
 IMAGE_TAG="${2:-$REPO_NAME:$COMMIT_HASH}"
 DOCKERFILE="${3:-$DIR/build.Dockerfile}"
 
-IMAGE_ID=$($DIR/build-image.sh --file=$DOCKERFILE --tag=$IMAGE_TAG 2>&1 >/dev/null)
+IMAGE_ID=$($DIR/build-image.sh --file=$DOCKERFILE --tag=$IMAGE_TAG 2>&1 >&3)
 
 echo "Pushing image '$IMAGE_TAG' to repository '$DOCKER_REPO'..."
 

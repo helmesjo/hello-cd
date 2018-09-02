@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+exec 3>&1
 
 function on_error {
     echo -e "\n-- Dependencies NOT installed.\n"
@@ -10,7 +11,7 @@ trap on_error ERR
 
 command -v conan >/dev/null 2>&1 || 
 { 
-    echo -e "-- CONAN PACKAGE MANAGER is used to install dependencies\n - Please install with 'pip install conan'" 1>&2
+    echo -e "-- CONAN PACKAGE MANAGER is used to install dependencies\n - Please install with 'pip install conan'"
     on_error
 }
 
@@ -19,22 +20,15 @@ REPO_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
 
 SCRIPT_DIR="$REPO_ROOT/scripts"
 ARGS="$@"
-CONFIG="$($SCRIPT_DIR/get-arg.sh "$ARGS" --config 2>&1 >/dev/null)"
+CONFIG="$($SCRIPT_DIR/get-arg.sh "$ARGS" --config 2>&1 >&3)"
 CONFIG="${CONFIG:-Release}"
 
-TARGET_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-os 2>&1 >/dev/null)"
-TARGET_OS="${TARGET_OS:-"$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"}"
+TARGET_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-os "$($SCRIPT_DIR/get-os.sh 2>&1 >&3)" 2>&1 >&3)"
+TARGET_ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-arch "$($SCRIPT_DIR/get-arch.sh 2>&1 >&3)" 2>&1 >&3)"
+HOST_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --host-os "$($REPO_ROOT/scripts/get-os.sh 2>&1 >&3)" 2>&1 >&3)"
+HOST_ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --host-arch "$($REPO_ROOT/scripts/get-arch.sh 2>&1 >&3)" 2>&1 >&3)"
 
-TARGET_ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-arch 2>&1 >/dev/null)"
-TARGET_ARCH="${TARGET_ARCH:-x86_64}"
-
-HOST_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --host-os 2>&1 >/dev/null)"
-HOST_OS="${HOST_OS:-"$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"}"
-
-HOST_ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --host-arch 2>&1 >/dev/null)"
-HOST_ARCH="${HOST_ARCH:-"$($REPO_ROOT/scripts/get-arch.sh 2>&1 >/dev/null)"}"
-
-PROFILE="$($REPO_ROOT/conan/determine-profile.sh --target-os=$TARGET_OS 2>&1 >/dev/null)"
+PROFILE="$($REPO_ROOT/conan/determine-profile.sh --target-os=$TARGET_OS 2>&1 >&3)"
 BUILD_DIR="$REPO_ROOT/build"
 
 SERVER_NAME="${REPO_NAME}_conan-server"

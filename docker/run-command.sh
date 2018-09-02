@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -euo pipefail
-
 exec 3>&1
 
 # Clean up leftovers before exit
@@ -13,16 +12,16 @@ function cleanup {
 trap cleanup EXIT
 
 function on_error {
-    echo "Could not run command '$COMMAND' inside container" >&2
+    echo "Failed to run command '$COMMAND' inside container..."
     cleanup
-    sleep 5
+    sleep 3
     exit 1
 }
 trap on_error ERR
 
-# Check that argument was supplied
+# Check that argument was specified
 if [[ $# -eq 0 ]] ; then
-    echo "No argument supplied"
+    echo "No arguments specified"
     exit 1
 fi
 
@@ -37,10 +36,8 @@ COMMAND="${1}"
 SCRIPT_DIR="$REPO_ROOT/scripts"
 ARGS="$@"
 
-DOCKERFILE="$($SCRIPT_DIR/get-arg.sh "$ARGS" --dockerfile 2>&1)"
-DOCKERFILE="${DOCKERFILE:-$DIR/build.Dockerfile}"
-IMAGE_TAG="$($SCRIPT_DIR/get-arg.sh "$ARGS" --image-tag 2>&1)"
-IMAGE_TAG="${IMAGE_TAG:-$REPO_NAME:build}"
+DOCKERFILE="$($SCRIPT_DIR/get-arg.sh "$ARGS" --dockerfile "$DIR/build.Dockerfile" 2>&1 >&3)"
+IMAGE_TAG="$($SCRIPT_DIR/get-arg.sh "$ARGS" --image-tag "$REPO_NAME:build" 2>&1 >&3)"
 
 # Make sure network is started (used to enable communication by container-name)
 NETWORK=$($REPO_ROOT/docker/start-network.sh 2>&1 >&3)

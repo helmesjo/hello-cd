@@ -2,7 +2,7 @@
 set -euo pipefail
 
 function on_error {
-    (>&2 echo "Could not determine repository name")
+    echo "Failed to determine repository name..."
     sleep 3
     exit 1
 }

@@ -2,6 +2,7 @@
 
 # Read here: https://coderwall.com/p/fkfaqq/safer-bash-scripts-with-set-euxo-pipefail
 set -euo pipefail
+exec 3>&1
 
 function on_error {
     echo "Something failed..."
@@ -15,19 +16,12 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 SCRIPT_DIR="$REPO_ROOT/scripts"
 ARGS="$@"
 
-CONFIG="$($SCRIPT_DIR/get-arg.sh "$ARGS" --config 2>&1 >/dev/null)"
-CONFIG="${CONFIG:-Release}"
+CONFIG="$($SCRIPT_DIR/get-arg.sh "$ARGS" --config "Release" 2>&1 >&3)"
 
-TARGET_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-os 2>&1 >/dev/null)"
-TARGET_OS="${TARGET_OS:-"$($REPO_ROOT/scripts/get-os.sh 2>&1 >/dev/null)"}"
-
-TARGET_ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-arch 2>&1 >/dev/null)"
-TARGET_ARCH="${TARGET_ARCH:-x86_64}"
-
-BUILD_SHARED="$($SCRIPT_DIR/get-arg.sh "$ARGS" --shared 2>&1 >/dev/null)"
-
-INSTALL_DIR="$($SCRIPT_DIR/get-arg.sh "$ARGS" --install-dir 2>&1 >/dev/null)"
-INSTALL_DIR="${INSTALL_DIR:-"./output"}"
+TARGET_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-os "$($SCRIPT_DIR/get-os.sh 2>&1 >&3)" 2>&1 >&3)"
+TARGET_ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-arch "$($SCRIPT_DIR/get-arch.sh 2>&1 >&3)" 2>&1 >&3)"
+BUILD_SHARED="$($SCRIPT_DIR/get-arg.sh "$ARGS" --shared 2>&1 >&3)"
+INSTALL_DIR="$($SCRIPT_DIR/get-arg.sh "$ARGS" --install-dir "./output" 2>&1 >&3)"
 
 TOOLCHAIN=$($REPO_ROOT/cmake/determine-toolchain.sh --target-os=$TARGET_OS --target-arch=$TARGET_ARCH 2>&1 >/dev/null)
 BUILD_DIR="$REPO_ROOT/build"
