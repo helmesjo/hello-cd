@@ -64,7 +64,9 @@ function(setup_target_for_analysis_internal TARGET)
     )
 
     # -- CLEANUP INCLUDES
-    # Prepend -I (cppcheck include-command)
+    # Remove any includes not in source dir (to avoid irrelevant noise)
+    list(FILTER TARGET_INCLUDES INCLUDE REGEX "${TARGET_SOURCE_DIR}.*")
+    # Prepend -I (cppcheck include-command) to all but first (added in argument below)
     string(REPLACE ";" ";-I" TARGET_INCLUDES "${TARGET_INCLUDES}")
     # Add trailing '/' to all generator expression in case evaluated to empty (eg. '-I/' instead of '-I', since the latter will fail in cppcheck)
     string(REPLACE ":>;" ":>/;" TARGET_INCLUDES "${TARGET_INCLUDES}")
