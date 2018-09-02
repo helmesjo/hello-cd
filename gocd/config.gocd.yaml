@@ -10,7 +10,7 @@ pipelines:
     materials:
       git-repo:  # material name
         git: /source
-        branch: cross-compile-gcc
+        branch: master
     stages:
       - build: # stage name
           clean_workspace: true
@@ -54,7 +54,7 @@ pipelines:
     materials:
       git-repo:
         git: /source
-        branch: cross-compile-gcc
+        branch: master
       upstream:
         pipeline: build-artifact
         stage: run-unit-tests
@@ -84,7 +84,7 @@ pipelines:
     materials:
       git-repo:
         git: /source
-        branch: cross-compile-gcc
+        branch: master
       upstream:
         pipeline: build-artifact
         stage: run-unit-tests
