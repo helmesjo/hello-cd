@@ -22,8 +22,9 @@ TARGET_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-os "$($SCRIPT_DIR/get-os.sh
 TARGET_ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-arch "$($SCRIPT_DIR/get-arch.sh 2>&1 >&3)" 2>&1 >&3)"
 BUILD_SHARED="$($SCRIPT_DIR/get-arg.sh "$ARGS" --shared 2>&1 >&3)"
 INSTALL_DIR="$($SCRIPT_DIR/get-arg.sh "$ARGS" --install-dir "./output" 2>&1 >&3)"
+COMPILER="$($SCRIPT_DIR/get-arg.sh "$ARGS" --compiler "$($SCRIPT_DIR/get-compiler.sh --target-os=$TARGET_OS 2>&1 >&3)" 2>&1 >&3)"
 
-TOOLCHAIN=$($REPO_ROOT/cmake/determine-toolchain.sh --target-os=$TARGET_OS --target-arch=$TARGET_ARCH 2>&1 >/dev/null)
+TOOLCHAIN=$($REPO_ROOT/cmake/determine-toolchain.sh  --compiler=$COMPILER --target-os=$TARGET_OS --target-arch=$TARGET_ARCH 2>&1 >/dev/null)
 BUILD_DIR="$REPO_ROOT/build"
 
 # Make all environment variables from upstream conan packages available to current session

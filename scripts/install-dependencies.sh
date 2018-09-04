@@ -20,15 +20,15 @@ REPO_NAME=$($REPO_ROOT/scripts/get-reponame.sh 2>&1)
 
 SCRIPT_DIR="$REPO_ROOT/scripts"
 ARGS="$@"
-CONFIG="$($SCRIPT_DIR/get-arg.sh "$ARGS" --config 2>&1 >&3)"
-CONFIG="${CONFIG:-Release}"
 
+CONFIG="$($SCRIPT_DIR/get-arg.sh "$ARGS" --config "Release" 2>&1 >&3)"
 TARGET_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-os "$($SCRIPT_DIR/get-os.sh 2>&1 >&3)" 2>&1 >&3)"
 TARGET_ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-arch "$($SCRIPT_DIR/get-arch.sh 2>&1 >&3)" 2>&1 >&3)"
 HOST_OS="$($SCRIPT_DIR/get-arg.sh "$ARGS" --host-os "$($REPO_ROOT/scripts/get-os.sh 2>&1 >&3)" 2>&1 >&3)"
 HOST_ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --host-arch "$($REPO_ROOT/scripts/get-arch.sh 2>&1 >&3)" 2>&1 >&3)"
+COMPILER="$($SCRIPT_DIR/get-arg.sh "$ARGS" --compiler "$($SCRIPT_DIR/get-compiler.sh --target-os=$TARGET_OS 2>&1 >&3)" 2>&1 >&3)"
 
-PROFILE="$($REPO_ROOT/conan/determine-profile.sh --target-os=$TARGET_OS 2>&1 >&3)"
+PROFILE="$($REPO_ROOT/conan/determine-profile.sh --compiler=$COMPILER --target-os=$TARGET_OS 2>&1 >&3)"
 BUILD_DIR="$REPO_ROOT/build"
 
 SERVER_NAME="${REPO_NAME}_conan-server"
