@@ -6,6 +6,7 @@ function(add_test_internal)
         TEST_TARGET
         TEST_NAME
         REPORT_FILE
+        NO_MAIN
     )
     set(multiValueArgs
         TEST_ARGS
@@ -42,10 +43,10 @@ function(add_test_internal)
             catch2::catch2
             FakeIt::FakeIt
     )
-    target_compile_definitions( ${arg_TEST_NAME}
-        PRIVATE 
-            CATCH_CONFIG_MAIN=1
-    )
+
+    if(NOT arg_NO_MAIN)
+        define_catch_main_for_target(${arg_TEST_NAME})
+    endif()
 
     add_test(
         NAME ${arg_TEST_NAME} 
@@ -86,4 +87,19 @@ endfunction()
 
 function(add_performance_test)
     add_catch_test(${ARGV} TAGS "performance")
+endfunction()
+
+
+
+# We generate an include a header that defines CATCH_CONFIG_MAIN, includes catch then undefines CATCH_CONFIG_MAIN
+function(define_catch_main_for_target TARGET)
+    set(CPP_SOURCE "\
+    #define CATCH_CONFIG_MAIN \n
+    #include <catch.hpp> \n
+    #undef CATCH_CONFIG_MAIN")
+    get_target_property(TARGET_BINARY_DIR ${TARGET} BINARY_DIR)
+    set(CPP_FILE "${TARGET_BINARY_DIR}/define_catch_main.cpp")
+    file(WRITE "${CPP_FILE}" "${CPP_SOURCE}")
+
+    target_sources(${TARGET} PRIVATE ${CPP_FILE})
 endfunction()

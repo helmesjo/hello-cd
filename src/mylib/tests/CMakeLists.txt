@@ -6,7 +6,9 @@ include(testing)
 add_unit_test(
 	TEST_TARGET ${TEST_TARGET}
 	TEST_NAME ${PROJECT_NAME}
-	SOURCES "tests/calculator_tests.cpp"
+	SOURCES 
+		"tests/calculator_tests.cpp"
+		"tests/misc_tests.cpp"
 	INCLUDE_DIRS "tests/include"
 )
 
