@@ -26,7 +26,7 @@ pipelines:
                     arguments:
                      - > 
                           ./scripts/install-dependencies.sh &&
-                          ./scripts/build.sh &&
+                          ./scripts/build.sh --generate-test-reports=ON &&
                           ./scripts/install.sh
       - run-unit-tests:
           clean_workspace: true

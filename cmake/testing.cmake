@@ -1,6 +1,8 @@
 find_package(catch2 REQUIRED)
 find_package(FakeIt REQUIRED)
 
+option(TESTING_GENERATE_JUNIT_REPORTS "If true, tests will generate a junit report to a .xml file instead of writing to console" FALSE )
+
 function(add_test_internal)
     set(oneValueArgs
         TEST_TARGET
@@ -71,8 +73,12 @@ function(add_catch_test)
     )
     cmake_parse_arguments(arg "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
     
+    if(TESTING_GENERATE_JUNIT_REPORTS)
+        set(REPORTER_ARGS --reporter junit --out "${arg_TEST_NAME}.xml")
+    endif()
+
     add_test_internal( ${ARGV}
-        TEST_ARGS --reporter junit --out "${arg_TEST_NAME}.xml"
+        TEST_ARGS ${REPORTER_ARGS}
         REPORT_FILE "${arg_TEST_NAME}.xml"
     )
 endfunction()

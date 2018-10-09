@@ -23,6 +23,7 @@ TARGET_ARCH="$($SCRIPT_DIR/get-arg.sh "$ARGS" --target-arch "$($SCRIPT_DIR/get-a
 BUILD_SHARED="$($SCRIPT_DIR/get-arg.sh "$ARGS" --shared 2>&1 >&3)"
 INSTALL_DIR="$($SCRIPT_DIR/get-arg.sh "$ARGS" --install-dir "./output" 2>&1 >&3)"
 COMPILER="$($SCRIPT_DIR/get-arg.sh "$ARGS" --compiler "$($SCRIPT_DIR/get-compiler.sh --target-os=$TARGET_OS 2>&1 >&3)" 2>&1 >&3)"
+GENERATE_TEST_REPORT="$($SCRIPT_DIR/get-arg.sh "$ARGS" --generate-test-reports "FALSE" 2>&1 >&3)"
 
 TOOLCHAIN=$($REPO_ROOT/cmake/determine-toolchain.sh  --compiler=$COMPILER --target-os=$TARGET_OS --target-arch=$TARGET_ARCH 2>&1 >/dev/null)
 BUILD_DIR="$REPO_ROOT/build"
@@ -37,7 +38,7 @@ echo -e "\n-- Building for '$TARGET_OS-$TARGET_ARCH-$CONFIG-$BUILD_TYPE' with to
 cmake -E make_directory $BUILD_DIR
 # Generate
 cmake -E chdir $BUILD_DIR \
-    cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DBUILD_SHARED_LIBS=$BUILD_SHARED -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DDOWNLOAD_ENABLED=FALSE
+    cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DBUILD_SHARED_LIBS=$BUILD_SHARED -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DDOWNLOAD_ENABLED=FALSE -DTESTING_OUTPUT_JUNIT_REPORT=$GENERATE_TEST_REPORT
 
 # Build
 cmake -E chdir $BUILD_DIR \
