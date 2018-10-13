@@ -31,7 +31,7 @@ BUILD_DIR="$REPO_ROOT/build"
 # Make all environment variables from upstream conan packages available to current session
 source "$REPO_ROOT/conan/activate-envars.sh"
 
-BUILD_TYPE=`if [ -z "${BUILD_SHARED-}" ]; then echo "Static"; else echo "Shared"; fi`
+BUILD_TYPE=`if [ -z "${BUILD_SHARED-}" ] || [ "${BUILD_SHARED,,}" == "false" ]; then echo "Static"; else echo "Shared"; fi`
 
 echo -e "\n-- Building for '$TARGET_OS-$TARGET_ARCH-$CONFIG-$BUILD_TYPE' with toolchain '$TOOLCHAIN'..."
 
