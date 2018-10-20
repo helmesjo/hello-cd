@@ -99,13 +99,17 @@ endfunction()
 
 # We generate an include a header that defines CATCH_CONFIG_MAIN, includes catch then undefines CATCH_CONFIG_MAIN
 function(define_catch_main_for_target TARGET)
-    set(CPP_SOURCE "\
-    #define CATCH_CONFIG_MAIN \n
-    #include <catch.hpp> \n
-    #undef CATCH_CONFIG_MAIN")
+
     get_target_property(TARGET_BINARY_DIR ${TARGET} BINARY_DIR)
     set(CPP_FILE "${TARGET_BINARY_DIR}/define_catch_main.cpp")
-    file(WRITE "${CPP_FILE}" "${CPP_SOURCE}")
+
+    if(NOT EXISTS "${CPP_FILE}")
+        set(CPP_SOURCE "\
+        #define CATCH_CONFIG_MAIN \n
+        #include <catch.hpp> \n
+        #undef CATCH_CONFIG_MAIN")
+        file(WRITE "${CPP_FILE}" "${CPP_SOURCE}")
+    endif()
 
     target_sources(${TARGET} PRIVATE ${CPP_FILE})
 endfunction()
