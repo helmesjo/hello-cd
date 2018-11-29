@@ -55,6 +55,8 @@ function(add_test_internal)
         COMMAND ${arg_TEST_NAME} ${arg_TEST_ARGS}
     )
     set_tests_properties(${arg_TEST_NAME} PROPERTIES LABELS ${arg_TAGS})
+    # FakeIt is not reliable with optimizations
+    target_compile_options(${arg_TEST_NAME} PUBLIC "$<$<CONFIG:RELEASE>:-O0>")
 
     get_target_property(OUT_DIR ${arg_TEST_NAME} BINARY_DIR)
     install(
