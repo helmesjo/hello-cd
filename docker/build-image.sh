@@ -24,7 +24,8 @@ echo -e "\n-- Building docker image '$IMAGE_NAME' from file '$DOCKERFILE'...\n"
 
 # Build environment
 docker build    --tag $IMAGE_NAME \
-                --file $DOCKERFILE .
+                --file $DOCKERFILE . \
+                2>&1 >&3
 
 echo -e "\n-- Built docker image '$IMAGE_NAME' from file '$DOCKERFILE'.\n"
 
