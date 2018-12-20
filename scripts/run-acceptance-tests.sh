@@ -25,7 +25,7 @@ fi
 echo -e "\n-- Running acceptance tests for build '$CONFIG'..."
 
 cmake -E chdir $BUILD_DIR \
-    ctest --label-regex "acceptance" --build-config $CONFIG --parallel 2 --output-on-failure
+    ctest --label-regex "acceptance" --build-config $CONFIG --output-on-failure
 
 echo -e "\n-- Finished running acceptance tests for build '$CONFIG'."
 
